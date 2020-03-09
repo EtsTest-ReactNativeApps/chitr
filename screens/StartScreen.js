@@ -1,5 +1,10 @@
 import * as React from 'react';
-import {StyleSheet, Text, View,Button,TextInput,Alert,KeyboardAvoidingView } from 'react-native';
+import {StyleSheet, ActivityIndicator,StatusBar,Text, View,Button,TextInput,Alert,KeyboardAvoidingView } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import {createSwitchNavigator } from 'react-navigation';
+import Newsfeed from './Newsfeed'
+
+const userinfo ={username : 'admin', password : 'pass'}
 
 export default class ChittrApp extends React.Component {
 
@@ -20,6 +25,7 @@ export default class ChittrApp extends React.Component {
         latitude: ''
         }
         };  
+
     }
 
     handleGivenName = (text) => {
@@ -67,49 +73,95 @@ createAccount(){
 Show =()=>{
     this.props.navigation.navigate('Home');
 }
-getToken() {
-  return fetch("http://10.0.2.2:3333/api/v0.0.5/",
-    {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + TOKEN
-          },
-    })
-    .then((response) => response.text())
-    .then((response)=>{
-    Alert.alert("Token generated!");
-    })
-    .catch((error) => {
-    console.error(error);
-    });
-  }
+
   
   userLogin() {
-    return   fetch("http://10.0.2.2:3333/api/v0.0.5/login", {
+    return  fetch("http://10.0.2.2:3333/api/v0.0.5/login", {
         method: "POST",
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          loginEmail: value.loginEmail,
-          loginPass: value.loginPass,
+        body: JSON.stringify({  
+          loginEmail: this.state.loginEmail,
+          loginPass: this.state.loginPass,
         })
       })
       .then((response) => response.json())
       .then((responseData) => {
         AlertIOS.alert(
           "Login Success!",
-        ),
-        this._onValueChange(STORAGE_KEY, responseData.id_token)
+        )
       })
       .done();
+
     }
 
+    login (){
+
+      // let data = {
+      //   token : responseData.token,
+      //   loginEmail : this.state.loginEmail,
+      //   loginPass : this.state.loginPass,
+      // }
+      //AsyncStorage.setItem('token',JSON.stringify(data));
+        fetch("http://10.0.2.2:3333/api/v0.0.5/login", {
+          
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },      
+        body: JSON.stringify({  
+           loginEmail: 'khaled@gmail.com',
+           loginPass: 'khaled',
+          //  loginEmail: this.state.loginEmail,
+          //  loginPass: this.state.loginPass,
+          
+        })
+      })
+      .then((response) => response.json())
+      .then((response)=>{
+        console.log ("response", response)
+        if (response.status === 200){
+          console.log ("YOU'RE iN")
+          const token = responseData.token;
+          AsyncStorage.setItem('token',token)
+          responseData.json();
+        } else if(response.status === 400){
+          console.log ("Something wrong")
+        }
+      })
+      console.log ("response", response)
+
+      .done();
+      
+      }
+  
+    displayData = async () =>{
+
+      try {
+        const token = await AsyncStorage.getItem('token');
+        //let parsed = JSON.parse(token);
+        // alert(parsed.token);
+        alert(token);
+      }
+      catch(error){
+        alert(error);
+      }
+    }
+
+    
+
+    _signOutAsync = async () => {
+      await AsyncStorage.clear();
+      this.props.navigation.navigate('Auth');
+    };
  render(){
  return (
 <View>    
     <KeyboardAvoidingView behavior ="position" enabled style = {styles.contain}>
+        <Text>Sign up for an account </Text>
         <TextInput style = {styles.input} placeholder="First name" onChangeText={this.handleGivenName} value={this.state.given_name}/>
         <TextInput style = {styles.input} placeholder="Last Name" onChangeText={this.handleLastName} value={this.state.family_name}/>
         <TextInput style = {styles.input} placeholder="Email" onChangeText={this.handleEmail} value={this.state.email} />
@@ -117,7 +169,8 @@ getToken() {
         secureTextEntry />
         <Button title="Create account"
         onPress={() => this.createAccount()}/>
-        
+
+        <Text>Log in into your account </Text>
         <TextInput
           value={this.state.loginEmail}
           onChangeText={this.handleLoginEmail}
@@ -134,7 +187,8 @@ getToken() {
         <Button
           title={'Login'}
           style={styles.loginBtn}
-        />
+          onPress={() => this.displayData()}/>
+        
     </KeyboardAvoidingView>
 
     <View style = {{alignItems:'center'}}>
@@ -144,6 +198,17 @@ getToken() {
 </View> 
   );
  }
+
+ _login = async()=>{
+  if (userinfo.username === this.state.loginEmail && userinfo.password === this.state.loginPass){
+    await AsyncStorage.setItem('isLoggedIn','1')
+  this.props.navigation.navigate('Newsfeed');//navigate to a page
+    alert('Logged in');
+  }
+  else{
+    alert('username or password is incorrect');
+  }
+}
 }
 
 const styles = StyleSheet.create({
@@ -153,15 +218,18 @@ const styles = StyleSheet.create({
      justifyContent: 'center',
   },
   input: {
-    margin: 15,
+    margin: 13,
     height: 40,
     borderBottomWidth: 1,
     borderBottomColor: 'gray',
+    marginVertical : 15
   },
 
   contain : {
-    padding : 20,
-    margin : 40,
+    padding : 30,
+    margin : 10,
+    marginTop:0
+    
   }
   
 })

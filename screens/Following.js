@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
+import { TouchableOpacity,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 class HomeScreen extends Component{
     constructor(props){
         super(props);
         this.state = {
+        user_id: '',
         given_name: '',
         family_name: '',
         text : '',
@@ -31,25 +32,22 @@ class HomeScreen extends Component{
         this.setState({ given_name: text })
     }
     
-//     handleSearch = (value) => {
-//     this.setState({ given_name: value}, this.search)
-//    }
     getChits(){
-        return fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
-        .then((response) => response.json())
-        .then((responseJson) => {
-        this.setState({
-        isLoading: false,
-        chitsContent: responseJson,
-        });
-        })
-        .catch((error) =>{
-        console.log(error);
-        });
-      }
-
-      search(){
-        return fetch('http://10.0.2.2:3333/api/v0.0.5/search_user?q='+this.state.given_name)
+      return fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
+      .then((response) => response.json())
+      .then((responseJson) => {
+      this.setState({
+      isLoading: false,
+      chitsContent: responseJson,
+      });
+      })
+      .catch((error) =>{
+      console.log(error);
+      });
+    }
+      following(){
+        console.log('http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.user_id+'/following')
+        return fetch('http://10.0.2.2:3333/api/v0.0.5/user/2/following')
         .then((response) => response.json())
         .then((responseJson) => {
         this.setState({
@@ -74,13 +72,33 @@ class HomeScreen extends Component{
         </View>
         )
     }
-return(
- <View style = {{ flex : 1, alignItems :'stretch'}}> 
-    <TextInput style = {styles.input} placeholder="Search for users" onChangeText={this.handleSearch} value={this.state.given_name}/>
-    <Button style = {styles.input} title="Search" 
-    onPress={() => this.search()}/>
- 
+return(   
+<View style = {{ flex : 1, justifyContent :'center'}}> 
+    <Text style= {styles.title}>Most recent chits</Text>
     <FlatList
+    data={this.state.chitsContent}
+    renderItem={({item})=>
+  <View style={{flexDirection: 'row',flex:1,justifyContent:'space-between' }}>
+    
+    <Text style= {styles.chits}>{item.user.given_name +
+     ' '+ item.user.family_name + '\n'+item.chit_content}</Text>
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => this.following()}>
+      <Text>Following</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => this.following()}>
+      <Text>Followers</Text>
+    </TouchableOpacity>
+  </View>
+  }
+  keyExtractor={({id}, index) => id}
+ />
+
+<FlatList
     data={this.state.userInfo}
     renderItem={({item})=>
   <View style={{flexDirection: 'row',flex:1,justifyContent:'space-evenly', alignItems : 'center' }}>
@@ -91,24 +109,6 @@ return(
   }
   keyExtractor={({id}, index) => id}
  />
- 
- <View style = {{ flex : 10, justifyContent :'center'}}> 
-    <Text style= {styles.title}>Most recent chits</Text>
-    <FlatList
-    data={this.state.chitsContent}
-    renderItem={({item})=>
-  <View style={{flexDirection: 'row',flex:1,justifyContent:'space-evenly', alignItems : 'center' }}>
-    <Text style= {styles.chits}>{item.user.given_name}</Text>
-    <Text style= {styles.chits}>{item.user.family_name}</Text>
-    <Text style= {styles.chits}>{item.chit_content}</Text>
-  </View>
-  }
-  keyExtractor={({id}, index) => id}
- />
- </View>
- <View style = {{  alignItems : 'flex-start', justifyContent : 'flex-start'}}> 
- </View>
- 
  </View>
  );
  }
@@ -134,4 +134,9 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: 'gray',
       },
+      button: {
+        backgroundColor: '#DDDDDD',
+        padding: 5,
+        margin : 10
+      }
 });

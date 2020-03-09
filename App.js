@@ -3,17 +3,20 @@ import { createStackNavigator } from 'react-navigation-stack';
 import Homescreen from './screens/Homescreen'
 import Newsfeed from './screens/Newsfeed'
 import Startscreen from './screens/StartScreen'
+import following from './screens/Following'
+
 import 'react-native-gesture-handler';
 
 
 const AppStackNav = createStackNavigator({
   
+  
+  StartPage: {
+    screen: following
+      },
   Newsfeed: {
     screen: Newsfeed
     },
-  StartPage: {
-    screen: Startscreen
-      },
   Home: {
   screen: Homescreen
   },

@@ -10,6 +10,7 @@ class NewsFeed extends Component{
 
     static navigationOptions = {
         drawerLabel: 'NewsFeed',
+        header : null,
       };
     constructor(props){
         super(props);
@@ -37,7 +38,7 @@ class NewsFeed extends Component{
         this.setState({ chit_content: text })
     }
     search(){
-        return fetch('http://10.0.2.2:3333/api/v0.0.5/search_user?q='+this.state.given_name+' ')
+        return fetch('http://10.0.2.2:3333/api/v0.0.5/search_user?q='+this.state.given_name)
         .then((response) => response.json())
         .then((responseJson) => {
         this.setState({
@@ -50,7 +51,24 @@ class NewsFeed extends Component{
         });
     }
 
-
+    postChit(){
+        return fetch("http://10.0.2.2:3333/api/v0.0.5/chits",
+        {
+        method: 'POST',
+        body: JSON.stringify({
+        chit: this.state.chit_content,
+        longitude: this.state.longitude,
+        latitude: this.state.latitude
+        })
+        })
+        .then((response) => {
+        Alert.alert("Item Added!");
+        })
+        .catch((error) => {
+        console.error(error);
+        });
+        }
+    
  render(){
  return(
 <View style = {{ flex : 1, alignItems :'stretch'}}> 
@@ -59,18 +77,14 @@ class NewsFeed extends Component{
     onPress={() => this.search()}/>
     <View style = {{ flex : 1, justifyContent : 'flex-start', alignItems:'baseline'}}> 
     <Text style = {styles.post}> what's on your mind</Text>
-    <TextInput style = {styles.input} placeholder="post a chit" onChangeText={this.handleChits} value={this.state.chit_content}/>
+    <TextInput style = {styles.input} placeholder="Type a chit" onChangeText={this.handleChits} value={this.state.chit_content}/>
     <Button style = {styles.input} title="Post" 
-    onPress={() => this.postChit()}/>
-
-    <Button style = {styles.input} title="Post" 
-    onPress={() =>this.props.navigation.toggleDrawer()}/>
-     </View>
+    onPress={() => this.postChit()}/>    
+    </View>
 
 </View>
  );
  }
- 
 }
 
 const MyDrawerNavigator = createDrawerNavigator({
@@ -79,13 +93,13 @@ const MyDrawerNavigator = createDrawerNavigator({
     },
     MyProfile: {
         screen: MyProfile,
-      },
+    },
     MyPhoto: {
         screen: MyPhoto,
-      },
+    },
     Logout: {
         screen: Homescreen,
-      },
+    },
   });
 
 const MyApp = createAppContainer(MyDrawerNavigator);
