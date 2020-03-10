@@ -1,9 +1,10 @@
 import React,{ Component} from 'react';
-import {Button,StyleSheet, Text, View,TextInput } from 'react-native';
+import {Alert,Button,StyleSheet, Text, View,TextInput } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
+import AsyncStorage from '@react-native-community/async-storage';
 import Homescreen from './Homescreen'
-import MyPhoto from './MyPhoto'
+import MyPhoto from './TakePhoto'
 import MyProfile from './MyProfile'
 
 class NewsFeed extends Component{
@@ -15,6 +16,7 @@ class NewsFeed extends Component{
     constructor(props){
         super(props);
         this.state = {
+        token :'',
         given_name: '',
         family_name: '',
         text : '',
@@ -23,10 +25,12 @@ class NewsFeed extends Component{
         loginEmail:'',
         loginPass:'',
         chit_id: '',
-        chit_content:'',
-        timestamp: '',
-        longitude: '',
-        latitude: ''
+        chit_content:'Hi there',
+        timestamp: '13',
+        location : {
+        longitude: '123',
+        latitude: '123'
+        }
         };  
     }
 
@@ -51,24 +55,64 @@ class NewsFeed extends Component{
         });
     }
 
+    getData = async () => {
+        try {
+          const value = await AsyncStorage.getItem('token')
+          if(value !== null) {
+            this.setState({
+                token: value
+              });
+          }
+        } catch(e) {
+          // error reading value
+        }
+      }
+
     postChit(){
         return fetch("http://10.0.2.2:3333/api/v0.0.5/chits",
         {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization':this.state.token ,
+          }, 
         body: JSON.stringify({
-        chit: this.state.chit_content,
+        // chit_content: 'Whats popping',
+        // longitude: '123',
+        // latitude: '12341',
+        // timestamp : '214',
+        chit_content: this.state.chit_content,
         longitude: this.state.longitude,
-        latitude: this.state.latitude
+        latitude: this.state.location.latitude,
+        timestamp : this.state.timestamp,
         })
         })
         .then((response) => {
+        console.log("response"+response)
+
+        if(response.status === 200){
         Alert.alert("Item Added!");
+        }
+        else{
+
+        console.log('no posts have been added') 
+        Alert.alert("This chit is not added");
+        }
         })
+        
         .catch((error) => {
         console.error(error);
         });
         }
-    
+
+        componentDidMount(){
+            this.getData();
+           }
+        logout = async  () => {
+             await AsyncStorage.clear();
+            this.props.navigation.navigate('StartPage');
+          }
+       
  render(){
  return(
 <View style = {{ flex : 1, alignItems :'stretch'}}> 
@@ -79,7 +123,10 @@ class NewsFeed extends Component{
     <Text style = {styles.post}> what's on your mind</Text>
     <TextInput style = {styles.input} placeholder="Type a chit" onChangeText={this.handleChits} value={this.state.chit_content}/>
     <Button style = {styles.input} title="Post" 
-    onPress={() => this.postChit()}/>    
+    onPress={() => this.postChit()}/>
+     
+    <Button style = {styles.input} title="Logout" 
+    onPress={this.logout}/> 
     </View>
 
 </View>
@@ -119,15 +166,18 @@ const styles = StyleSheet.create({
     textShadowRadius: 19,
     },
     input: {
-        margin: 10,
-        height: 40,
-        borderBottomWidth: 1,
-        borderBottomColor: 'gray',
+    height: 36,
+    backgroundColor: '#48BBEC',
+    borderColor: '#48BBEC',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 10,
+    alignSelf: 'stretch',
+    justifyContent: 'center'
       },
       post: {
-        margin: 2,
-        height: 25,
-        fontSize : 20,
-        borderBottomColor: 'gray',
+    fontSize: 30,
+    alignSelf: 'center',
+    marginBottom: 30
       },
 });

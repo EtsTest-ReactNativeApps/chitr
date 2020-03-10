@@ -45,9 +45,24 @@ class HomeScreen extends Component{
       console.log(error);
       });
     }
-      following(){
-        console.log('http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.user_id+'/following')
-        return fetch('http://10.0.2.2:3333/api/v0.0.5/user/2/following')
+
+      following(user_id){
+        console.log( 'Debug ' +`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}/following`)
+        return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}/following`)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        this.setState({
+        isLoading: false,
+        userInfo: responseJson,
+        });
+        })
+        .catch((error) =>{
+        console.log(error);
+        });
+      }
+
+      follower(user_id){
+        return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}/followers`)
         .then((response) => response.json())
         .then((responseJson) => {
         this.setState({
@@ -73,24 +88,25 @@ class HomeScreen extends Component{
         )
     }
 return(   
-<View style = {{ flex : 1, justifyContent :'center'}}> 
+<View style = {{ flex : 1}}> 
     <Text style= {styles.title}>Most recent chits</Text>
+    
     <FlatList
     data={this.state.chitsContent}
     renderItem={({item})=>
-  <View style={{flexDirection: 'row',flex:1,justifyContent:'space-between' }}>
+  <View style={{flexDirection: 'row',flex:1,justifyContent : 'space-around'}}>
     
     <Text style= {styles.chits}>{item.user.given_name +
-     ' '+ item.user.family_name + '\n'+item.chit_content}</Text>
-    <TouchableOpacity
+     ' '+ item.user.family_name + '\n' +item.chit_content}</Text>
+  <TouchableOpacity
       style={styles.button}
-      onPress={() => this.following()}>
+      onPress={() => this.following(item.user.user_id)}>
       <Text>Following</Text>
     </TouchableOpacity>
 
     <TouchableOpacity
       style={styles.button}
-      onPress={() => this.following()}>
+      onPress={() => this.follower(item.user.user_id)}>
       <Text>Followers</Text>
     </TouchableOpacity>
   </View>
@@ -102,9 +118,7 @@ return(
     data={this.state.userInfo}
     renderItem={({item})=>
   <View style={{flexDirection: 'row',flex:1,justifyContent:'space-evenly', alignItems : 'center' }}>
-    <Text style= {styles.chits}>{item.given_name}</Text>
-    <Text style= {styles.chits}>{item.family_name}</Text>
-    <Text style= {styles.chits}>{item.email}</Text>
+    <Text style= {styles.chits}>{item.given_name + ' '+ item.family_name + '- ' + item.email}</Text>
   </View>
   }
   keyExtractor={({id}, index) => id}
@@ -137,6 +151,6 @@ const styles = StyleSheet.create({
       button: {
         backgroundColor: '#DDDDDD',
         padding: 5,
-        margin : 10
+        margin : 10,
       }
 });

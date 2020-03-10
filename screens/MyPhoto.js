@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {StyleSheet, Text, View,Button,TextInput,Alert,KeyboardAvoidingView } from 'react-native';
 
-export default class MyProfile extends React.Component {
+export default class MyPhoto extends React.Component {
 
     constructor(props){
         super(props);
@@ -22,6 +22,9 @@ export default class MyProfile extends React.Component {
         };  
     }
 
+    Show =()=>{
+        this.props.navigation.navigate('TakePhoto');
+    }
     handleGivenName = (text) => {
         this.setState({ given_name: text })
       }
@@ -45,7 +48,15 @@ export default class MyProfile extends React.Component {
  render(){
  return (
 <View>    
-  <Text> MY Photo Page</Text>
+  <Text> MY PHOTO</Text>
+  <TouchableOpacity
+ onPress={this.Show}
+ style={styles.capture}
+ >
+ <Text style={{ fontSize: 16 }}>
+ Take a picture
+ </Text>
+ </TouchableOpacity>
 </View> 
   );
  }

@@ -5,6 +5,7 @@ import Newsfeed from './screens/Newsfeed'
 import Startscreen from './screens/StartScreen'
 import following from './screens/Following'
 
+
 import 'react-native-gesture-handler';
 
 
@@ -12,7 +13,7 @@ const AppStackNav = createStackNavigator({
   
   
   StartPage: {
-    screen: following
+    screen: Startscreen
       },
   Newsfeed: {
     screen: Newsfeed

@@ -4,13 +4,12 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {createSwitchNavigator } from 'react-navigation';
 import Newsfeed from './Newsfeed'
 
-const userinfo ={username : 'admin', password : 'pass'}
-
 export default class ChittrApp extends React.Component {
 
     constructor(props){
         super(props);
         this.state = {
+        token : '',
         given_name: '',
         family_name: '',
         email: '',
@@ -27,6 +26,7 @@ export default class ChittrApp extends React.Component {
         };  
 
     }
+    
 
     handleGivenName = (text) => {
         this.setState({ given_name: text })
@@ -56,13 +56,17 @@ createAccount(){
         "Content-Type": "application/json"
       },
     body: JSON.stringify({
+      
     given_name: this.state.given_name,
     family_name: this.state.family_name,
     email: this.state.email,
     password: this.state.password,
     })
     })
+    
     .then((response) => {
+      console.log(this.state.given_name)
+
     Alert.alert("Account created!");
     })
     .catch((error) => {
@@ -74,89 +78,56 @@ Show =()=>{
     this.props.navigation.navigate('Home');
 }
 
+storeToken = async (token) => {
+  try {
+    await AsyncStorage.setItem('token', token)
+    console.log("store token " + token);
+  } catch (e) {
+    // saving error
+  }
+}
   
-  userLogin() {
-    return  fetch("http://10.0.2.2:3333/api/v0.0.5/login", {
+  
+    login(){
+      var token = '';
+       fetch('http://10.0.2.2:3333/api/v0.0.5/login',{
         method: "POST",
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({  
-          loginEmail: this.state.loginEmail,
-          loginPass: this.state.loginPass,
-        })
-      })
-      .then((response) => response.json())
-      .then((responseData) => {
-        AlertIOS.alert(
-          "Login Success!",
-        )
-      })
-      .done();
-
-    }
-
-    login (){
-
-      // let data = {
-      //   token : responseData.token,
-      //   loginEmail : this.state.loginEmail,
-      //   loginPass : this.state.loginPass,
-      // }
-      //AsyncStorage.setItem('token',JSON.stringify(data));
-        fetch("http://10.0.2.2:3333/api/v0.0.5/login", {
-          
-        method: "POST",
-        headers: {
-          'Accept': 'application/json',
           'Content-Type': 'application/json',
-        },      
+          'X-Authorization': token
+        },     
         body: JSON.stringify({  
-           loginEmail: 'khaled@gmail.com',
-           loginPass: 'khaled',
-          //  loginEmail: this.state.loginEmail,
-          //  loginPass: this.state.loginPass,
-          
-        })
-      })
-      .then((response) => response.json())
-      .then((response)=>{
-        console.log ("response", response)
+          email: 'yamenedel@gmail.com',
+          password: 'yamen',
+       })
+    })
+    
+      .then((response) => {
+        return response.json()
+      .then((responseData) => {
+        const JsonToken = responseData.token;  
+        this.setState({
+          token: JsonToken
+        });
+        console.log(this.state.token)
+
+        // AsyncStorage.setItem('token', (JsonToken)); 
         if (response.status === 200){
+          this.storeToken(this.state.token);
+          this.props.navigation.navigate('Newsfeed');//navigate to a page
           console.log ("YOU'RE iN")
-          const token = responseData.token;
-          AsyncStorage.setItem('token',token)
-          responseData.json();
+
+          //AsyncStorage.setItem('token',token)
         } else if(response.status === 400){
           console.log ("Something wrong")
         }
-      })
-      console.log ("response", response)
-
-      .done();
-      
-      }
-  
-    displayData = async () =>{
-
-      try {
-        const token = await AsyncStorage.getItem('token');
-        //let parsed = JSON.parse(token);
-        // alert(parsed.token);
-        alert(token);
-      }
-      catch(error){
-        alert(error);
-      }
+    })
+  })
+    .catch((error) =>{
+      console.log(error);
+      });     
     }
-
-    
-
-    _signOutAsync = async () => {
-      await AsyncStorage.clear();
-      this.props.navigation.navigate('Auth');
-    };
+      
  render(){
  return (
 <View>    
@@ -187,7 +158,7 @@ Show =()=>{
         <Button
           title={'Login'}
           style={styles.loginBtn}
-          onPress={() => this.displayData()}/>
+          onPress={() => this.login()}/>
         
     </KeyboardAvoidingView>
 
@@ -199,16 +170,7 @@ Show =()=>{
   );
  }
 
- _login = async()=>{
-  if (userinfo.username === this.state.loginEmail && userinfo.password === this.state.loginPass){
-    await AsyncStorage.setItem('isLoggedIn','1')
-  this.props.navigation.navigate('Newsfeed');//navigate to a page
-    alert('Logged in');
-  }
-  else{
-    alert('username or password is incorrect');
-  }
-}
+ 
 }
 
 const styles = StyleSheet.create({
@@ -233,3 +195,11 @@ const styles = StyleSheet.create({
   }
   
 })
+
+
+      // let data = {
+      //   token : responseData.token,
+      //   loginEmail : this.state.loginEmail,
+      //   loginPass : this.state.loginPass,
+      // }
+      //AsyncStorage.setItem('token',JSON.stringify(data));
