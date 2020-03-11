@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
-import { HomeIconWithBadge,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
+import { Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 import Card from './Cards';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { createAppContainer } from 'react-navigation';
-// import Ionicons from 'react-native-vector-icons/Ionicons';
-import Search from './Search'
-
-
 
 class HomeScreen extends Component{
     constructor(props){
@@ -35,29 +29,13 @@ class HomeScreen extends Component{
     handleGivenName = (text) => {
         this.setState({ given_name: text })
     }
-
-    handleSearch = (text) => {
-        this.setState({ given_name: text })
-    }
     
-//     handleSearch = (value) => {
-//     this.setState({ given_name: value}, this.search)
-//    }
-    getChits(){
-        return fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
-        .then((response) => response.json())
-        .then((responseJson) => {
-        this.setState({
-        isLoading: false,
-        chitsContent: responseJson,
-        });
-        })
-        .catch((error) =>{
-        console.log(error);
-        });
-      }
+    handleSearch = (value) => {
+    this.setState({ given_name: value}, this.search)
+   }
+    
 
-      search(){
+    search(){
         return fetch('http://10.0.2.2:3333/api/v0.0.5/search_user?q='+this.state.given_name)
         .then((response) => response.json())
         .then((responseJson) => {
@@ -72,7 +50,7 @@ class HomeScreen extends Component{
       }
 
       componentDidMount(){
-        this.getChits();
+        this.search();
        } 
           
  render(){
@@ -83,47 +61,36 @@ class HomeScreen extends Component{
         </View>
         )
     }
-return( 
-<View> 
-    <Text style= {styles.textStyle}>Most recent chits</Text>
+return(
+ <View style = {{ flex : 1}}> 
+    <Text style = {styles.textStyle} >Search for a user </Text>
+    <TextInput style = {styles.buttonStyle} placeholder="user" onChangeText={this.handleSearch} value={this.state.given_name}/>
     <FlatList
-    data={this.state.chitsContent}
+    data={this.state.userInfo}
     renderItem={({item})=>
-  <View>
-<TouchableOpacity>
-<Card>
-<Text style= {styles.chits}>{item.user.given_name + ' '+ item.user.family_name}</Text>
-<Text style= {styles.chits}>{item.chit_content}</Text>
-</Card>
-</TouchableOpacity>
+  <View style={{flexDirection: 'row',justifyContent:'space-evenly', alignItems : 'center' }}>
+    <TouchableOpacity>
+    <Card>
+    <Text style= {styles.chits}>{item.given_name + ' '+ item.family_name}</Text>
+    <Text style= {styles.chits}>{item.email}</Text>
+    </Card>
+    </TouchableOpacity>
   </View>
   }
   keyExtractor={({id}, index) => id}
-  />
+ />
  </View>
  );
  }
 }
-
-const TabNavigator = createBottomTabNavigator({
-  Settings: HomeScreen,
-  Home: Search,
-});
-export default createAppContainer(TabNavigator);
-
-
-
-//  export default HomeScreen;
+export default HomeScreen;
 
 const styles = StyleSheet.create({
-  textStyle: {
-    fontSize : 30,
-    alignSelf:'center',
-    color : '#007aff',
-    fontWeight : '600',
-    paddingTop : 10,
-    paddingBottom : 10 
-  },
+    title: {
+    color: 'green',
+    fontSize: 50,
+    fontWeight: 'bold'
+    },
     chits: {
     color: 'black',
     fontSize: 20,
@@ -138,9 +105,26 @@ const styles = StyleSheet.create({
         borderBottomColor: 'gray',
       },
 
-      
+      buttonStyle: {
+        borderRadius : 25,
+        borderWidth: 2,
+        borderColor: '#007aff',
+        marginLeft : 20,
+        marginRight : 20,
+        padding : 30,
+        marginTop : 20,
+        fontSize : 20
+        },
+
+        textStyle: {
+            fontSize : 30,
+            alignSelf:'center',
+            color : '#007aff',
+            fontWeight : '600',
+            paddingTop : 10,
+            paddingBottom : 10,
+            marginTop : 30,
+          },
 });
-
-
 
 // style={{flexDirection: 'row',flex:1,justifyContent:'space-evenly', alignItems : 'center' }}
