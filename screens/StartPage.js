@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import {TouchableOpacity,StyleSheet, Text, View } from 'react-native';
+
+import CircleButton from 'react-native-circle-button';
 class StartPage extends Component {
+
+    show = ()=>{
+        this.props.navigation.navigate('Newsfeed');
+
+        }
+    
  render(){
  return (
+         
 <View style = {{ flex : 1,justifyContent:'space-evenly'}}> 
-     
+     {/* <CircleButton size ={105} onPressButtonTop={() =>this.show()} /> */}
      <Text style={styles.title}> Chittr App </Text>
      <TouchableOpacity  style = {styles.buttonStyle}
     onPress={() =>this.props.navigation.navigate('Signup')}>

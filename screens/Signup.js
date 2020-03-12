@@ -59,9 +59,12 @@ createAccount(){
     })
     
     .then((response) => {
-      console.log(this.state.given_name)
-
-    Alert.alert("Account created!");
+    if (response.status === 201){
+      Alert.alert("Account created!");
+    }
+    else if (response.status === 400){
+      Alert.alert(" Failed to create the account !");
+    }
     })
     .catch((error) => {
     console.error(error);
@@ -89,12 +92,14 @@ storeToken = async (token) => {
         <TextInput style = {styles.fields} placeholder="Password" onChangeText={this.handlePass} value={this.state.password}
         secureTextEntry /> 
 
-<TouchableOpacity  style = {styles.buttonStyle}
+{/* <Button  title = "poo" onPress={() =>this.createAccount()}> >
+</Button> */}
+  <TouchableOpacity  style = {styles.buttonStyle}
     onPress={() =>this.createAccount()}>
     <Text style={styles.textStyle}>
     Create account
-        </Text>
-    </TouchableOpacity>
+    </Text>
+  </TouchableOpacity>
 
 </View>
   );

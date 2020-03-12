@@ -38,7 +38,6 @@ storeToken = async (token) => {
   }
 }
   
-  
     login(){
       var token = '';
        fetch('http://10.0.2.2:3333/api/v0.0.5/login',{
@@ -48,8 +47,10 @@ storeToken = async (token) => {
           'X-Authorization': token
         },     
         body: JSON.stringify({  
-          email: 'yamenedel@gmail.com',
-          password: 'yamen',
+           email: 'yamenedel@gmail.com',
+           password: 'yamen',
+          // email: this.state.loginEmail,
+          // password: this.state.loginPass,
        })
     })
       .then((response) => {
@@ -61,7 +62,6 @@ storeToken = async (token) => {
         });
         console.log(this.state.token)
 
-        // AsyncStorage.setItem('token', (JsonToken)); 
         if (response.status === 200){
           this.storeToken(this.state.token);
           this.props.navigation.navigate('Newsfeed');//navigate to a page

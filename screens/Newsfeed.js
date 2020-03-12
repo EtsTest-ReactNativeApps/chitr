@@ -1,12 +1,17 @@
 import React,{ Component} from 'react';
-import {TouchableOpacity,FlatList,Alert,Button,StyleSheet, Text, View,TextInput,PermissionsAndroid } from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
+import {RefreshControl,TouchableOpacity,FlatList,Alert,Button,StyleSheet, Text, View,TextInput,PermissionsAndroid } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import AsyncStorage from '@react-native-community/async-storage';
-import Homescreen from './Homescreen'
+import GuestPage from './GuestPage'
 import MyPhoto from './TakePhoto'
 import MyProfile from './MyProfile'
+import Card from './Cards';
+import Search from './Search'
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+
+
+
 
 class NewsFeed extends Component{
 
@@ -15,8 +20,11 @@ class NewsFeed extends Component{
         header : null,
       };
     constructor(props){
+      
         super(props);
         this.state = {
+         refreshing: false,
+         setRefreshing : false,
         locationPermission : false,
         location : '',
         token :'',
@@ -28,14 +36,13 @@ class NewsFeed extends Component{
         loginEmail:'',
         loginPass:'',
         chit_id: '',
-        chit_content:'Hi there',
+        chit_content:'',
         timestamp: '',
         longitude: '',
         latitude: '',
-       
-        };  
+    
+        }; 
     }
-
 
     handleSearch = (text) => {
         this.setState({ given_name: text })
@@ -43,6 +50,12 @@ class NewsFeed extends Component{
     handleChits = (text) => {
         this.setState({ chit_content: text })
     }
+
+    _onRefresh = () => {
+     
+      this.UsersChits();
+    }
+
     search(){
         console.log("name: " +this.state.given_name)
         return fetch('http://10.0.2.2:3333/api/v0.0.5/search_user?q='+this.state.given_name)
@@ -57,6 +70,15 @@ class NewsFeed extends Component{
         .catch((error) =>{
         console.log(error);
         });
+    }
+
+    storeUserId= async (user_id) => {
+      try {
+        await AsyncStorage.setItem('userid', JSON.stringify(user_id))
+        console.log("user id => " + user_id);
+        this.props.navigation.navigate('UserDetails');
+      } catch (e) {
+      }
     }
 
     getData = async () => {
@@ -103,44 +125,12 @@ class NewsFeed extends Component{
         .catch((error) => {
         console.error(error);
         });
-        }
-        findCoordinates = () => {
-            if(!this.state.locationPermission){
-               this.state.locationPermission = requestLocationPermission();
-              } 
-            Geolocation.getCurrentPosition(
-            (position) => {
-            const location = JSON.stringify(position);
+    }
           
-            this.setState({location},() =>{
-            const altitude = position.coords.altitude;
-            const latitude = position.coords.latitude;
-            const timestamp = position.timestamp;
-
-            this.setState({altitude :altitude });
-            this.setState({latitude :latitude });
-            this.setState({timestamp :timestamp });
-
-            console.log((position.coords.latitude));
-            console.log((position.coords.altitude));
-            console.log((position.timestamp));
-
-          }
-          );
-             },
-             (error) => {
-             Alert.alert(error.message)
-             },
-             {
-             enableHighAccuracy: true,
-             timeout: 20000,
-             maximumAge: 1000
-             }
-             );
-             }
 
         componentDidMount(){
             this.getData();
+            this.UsersChits();
            }
         logout = async  () => {
              await AsyncStorage.clear();
@@ -151,8 +141,26 @@ class NewsFeed extends Component{
            this.props.navigation.navigate('Chits');
        }
 
-        
+       UsersChits(){
+        return fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
+        .then((response) => response.json())
+        .then((responseData) => {
+        const user_id = responseData;
+        //console.log(responseData)
+        //console.log("h"+(responseData.user.user_id))
+        this.setState({
+        isLoading: false,
+        UserData: responseData,
+        });
+        })
+        .catch((error) =>{
+        console.log(error);
+        });
+      }
 
+      toPostChit =()=>{
+        this.props.navigation.navigate('PostChit');
+    }
        
  render(){
     if(this.state.isLoading){
@@ -164,48 +172,33 @@ class NewsFeed extends Component{
     }
  return(
 <View style = {{ flex : 1, alignItems :'stretch'}}> 
-    <TextInput style = {styles.input} placeholder="Search for users" onChangeText={this.handleSearch} value={this.state.given_name}/>
-    <Button style = {styles.input} title="Search" 
-    onPress={() => this.search()}/>
-
-<FlatList
-    data={this.state.userInfo}
+<Text style= {styles.textStyle}>Followed users chits</Text>
+    <FlatList      
+    refreshControl={
+      <RefreshControl
+        refreshing={this.state.refreshing}
+        onRefresh={this._onRefresh}
+        />
+      }
+    data={this.state.UserData}
     renderItem={({item})=>
-  <View style={{flexDirection: 'row',flex:1,justifyContent:'space-evenly', alignItems : 'center' }}>
-    <Text style= {styles.chits}>{item.given_name}</Text>
-    <Text style= {styles.chits}>{item.family_name}</Text>
-    <Text style= {styles.chits}>{item.email}</Text>
+  <View>
+<TouchableOpacity onPress={() =>this.storeUserId(item.user.user_id)} >
+<Card>
+<Text style= {styles.chits}>{item.user.given_name + ' '+ item.user.family_name}</Text>
+<Text style= {styles.chits}>{item.chit_content + item.user.user_id}</Text>
+</Card>
+</TouchableOpacity>
   </View>
+    
   }
   keyExtractor={({id}, index) => id}
- />
-
-    <View style = {{ flex : 1, justifyContent : 'flex-start', alignItems:'baseline'}}> 
-    <Text style = {styles.post}> what's on your mind</Text>
-    <TextInput style = {styles.input} placeholder="Type a chit" onChangeText={this.handleChits} value={this.state.chit_content} maxLength={40}/>
-    <View style = {{ flex : 1,flexDirection:'row', justifyContent :'space-around',alignSelf:'center',alignItems:'flex-start'}}> 
-
-    <TouchableOpacity title="Post" style = {styles.postchit}
-    onPress={() => this.postChit()}>
-    <Text style={{ fontSize: 16 }}>
-    POST
-    </Text>
-    </TouchableOpacity>
- 
-
-     {/* <Button  title="Tag location" 
-    onPress={() => this.findCoordinates()}/> */}
-
-<TouchableOpacity  title="Tag location" style = {styles.postchit}
-    onPress={() => this.findCoordinates()}>
-    <Text style={{ fontSize: 16 }}>
-    Tag location
-    </Text>      
- </TouchableOpacity>
+  />
+  
 
 
-    {/* <Button title="Logout" 
-    onPress={this.logout}/>  */}
+
+    <View style = {{ flex : 1, flexDirection : 'row', justifyContent :'space-around', alignItems:'flex-end'}}> 
 
 <TouchableOpacity title="Logout" style = {styles.postchit}
     onPress={this.logout}>
@@ -213,65 +206,49 @@ class NewsFeed extends Component{
     Logout
     </Text>
 </TouchableOpacity>
- 
 
-<TouchableOpacity  title="view chits" style = {styles.postchit}
-    onPress={this.Chits}> 
+<TouchableOpacity title="Post" style = {styles.postchit}
+    onPress={() => this.toPostChit()}>
     <Text style={{ fontSize: 16 }}>
-    view chits
+    POST
     </Text>
-</TouchableOpacity>
+    </TouchableOpacity>
+
  
     </View>
     </View>
     
-</View>
  );
  }
 }
 
-async function requestLocationPermission(){
-    try {
-    const granted = await PermissionsAndroid.request(
-    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    {
-    title: 'Lab04 Location Permission',
-    message:
-    'This app requires access to your location.',
-    buttonNeutral: 'Ask Me Later',
-    buttonNegative: 'Cancel',
-    buttonPositive: 'OK',
-    },
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-    console.log('You can access location');
-    return true;
-    } else {
-    console.log('Location permission denied');
-    return false;
-    }
-    } catch (err) {
-    console.warn(err);
-    }
-   }
+const TabNavigator = createBottomTabNavigator({
+  NewsFeed :{
+    screen : NewsFeed
+  },
+  Search :{
+    screen : Search
+  }
+});
+export default createAppContainer(TabNavigator);
 
-const MyDrawerNavigator = createDrawerNavigator({
-    Newsfeed: {
-      screen: NewsFeed,
-    },
-    MyProfile: {
-        screen: MyProfile,
-    },
-    MyPhoto: {
-        screen: MyPhoto,
-    },
-    Logout: {
-        screen: Homescreen,
-    },
-  });
+// const MyDrawerNavigator = createDrawerNavigator({
+//     Newsfeed: {
+//       screen: NewsFeed,
+//     },
+//     MyProfile: {
+//         screen: MyProfile,
+//     },
+//     MyPhoto: {
+//         screen: MyPhoto,
+//     },
+//     Logout: {
+//         screen: GuestPage,
+//     },
+//   });
 
-const MyApp = createAppContainer(MyDrawerNavigator);
-export default MyApp;
+// const MyApp = createAppContainer(MyDrawerNavigator);
+// export default MyApp;
 
 const styles = StyleSheet.create({
     title: {
@@ -280,11 +257,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
     },
     postchit: {
-    flex:1,
-    flexDirection:'row',
-    alignSelf:'center',
-    alignItems:'flex-start',
-    justifyContent : 'space-around',
     backgroundColor: '#DDDDDD',
     borderWidth: 1,
     borderColor: '#336633',
@@ -308,5 +280,13 @@ const styles = StyleSheet.create({
     fontSize: 30,
     alignSelf: 'center',
     marginBottom: 30
+      },
+      textStyle: {
+        fontSize : 30,
+        alignSelf:'center',
+        color : '#007aff',
+        fontWeight : '600',
+        paddingTop : 10,
+        paddingBottom : 10 
       },
 });

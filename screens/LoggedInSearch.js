@@ -4,7 +4,7 @@ import Card from './Cards';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
 
-class HomeScreen extends Component{
+class LoggedInSearch extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -36,16 +36,6 @@ class HomeScreen extends Component{
    }
     
 
-   storeUserId= async (user_id) => {
-    try {
-      console.log('hey')
-      await AsyncStorage.setItem('userid', JSON.stringify(user_id))
-      console.log("user id => " + user_id);
-      this.props.navigation.navigate('UserInfo');
-    } catch (e) {
-    }
-  }
-
     search(){
         return fetch('http://10.0.2.2:3333/api/v0.0.5/search_user?q='+this.state.given_name)
         .then((response) => response.json())
@@ -58,6 +48,16 @@ class HomeScreen extends Component{
         .catch((error) =>{
         console.log(error);
         });
+      }
+
+      storeUserId= async (user_id) => {
+        try {
+          await AsyncStorage.setItem('userid', JSON.stringify(user_id))
+          console.log("user id => " + user_id);
+          this.props.navigation.navigate('UserDetails');
+        } catch (e) {
+          console.log(e)
+        }
       }
 
       componentDidMount(){
@@ -75,6 +75,9 @@ class HomeScreen extends Component{
 return(
  <View style = {{ flex : 1}}> 
     <Text style = {styles.textStyle} >Search for a user </Text>
+    <TouchableOpacity>
+        
+    </TouchableOpacity>
     <TextInput style = {styles.textInput} placeholder="user" onChangeText={this.handleSearch} value={this.state.given_name}/>
     <FlatList
     data={this.state.userInfo}
@@ -94,7 +97,7 @@ return(
  );
  }
 }
-export default HomeScreen;
+export default LoggedInSearch;
 
 const styles = StyleSheet.create({
     title: {

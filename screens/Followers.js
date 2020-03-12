@@ -3,7 +3,7 @@ import { TouchableOpacity,Text, View,Button,TextInput,StyleSheet,ActivityIndicat
 import AsyncStorage from '@react-native-community/async-storage';
 import Card from './Cards';
 
-class Following extends Component{
+class Followers extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -12,9 +12,6 @@ class Following extends Component{
         family_name: '',
         text : '',
         email: '',
-        password: '',
-        loginEmail:'',
-        loginPass:'',
         chit_id: '',
         chit_content:'',
         timestamp: '',
@@ -41,7 +38,7 @@ class Following extends Component{
               user_id: value
             });
         }
-        this.following(this.state.user_id);
+        this.followers(this.state.user_id);
       } catch(e) {
         // error reading value
       }
@@ -58,9 +55,9 @@ class Following extends Component{
   }
 
   
-      following(user_id){
-        console.log( `http://10.0.2.2:3333/api/v0.0.5/user/${JSON.parse(user_id)}/following`)
-        return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${JSON.parse(user_id)}/following`)
+      followers(user_id){
+        console.log( `http://10.0.2.2:3333/api/v0.0.5/user/${JSON.parse(user_id)}/followers`)
+        return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${JSON.parse(user_id)}/followers`)
         .then((response) => response.json())
         .then((responseJson) => {
         this.setState({
@@ -87,7 +84,7 @@ class Following extends Component{
     }
 return(   
 <View style = {{ flex : 1}}> 
-    <Text style= {styles.textStyle}>Following users</Text>
+    <Text style= {styles.textStyle}>Followers users</Text>
 <FlatList
     data={this.state.userInfo}
     renderItem={({item})=>
@@ -105,7 +102,7 @@ return(
  );
  }
 }
-export default Following;
+export default Followers;
 
 const styles = StyleSheet.create({
   textStyle: {

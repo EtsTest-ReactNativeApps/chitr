@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
-import { HomeIconWithBadge,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
+import { RefreshControl,HomeIconWithBadge,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 import Card from './Cards';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer } from 'react-navigation';
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 import Search from './Search'
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 
-class HomeScreen extends Component{
+class GuestPage extends Component{
     constructor(props){
         super(props);
         this.state = {
+        refreshing: false,
+        setRefreshing : false,
+        user_id : '',
         given_name: '',
         family_name: '',
         text : '',
@@ -24,13 +28,18 @@ class HomeScreen extends Component{
         chit_content:'',
         timestamp: '',
         longitude: '',
-        latitude: ''
+        latitude: '',
+        chitsContent:'',
         };  
     }
     
-    Show =()=>{
-        this.props.navigation.navigate('UserProfile');
+    Show =(user_id)=>{
+      var userr_id =''
+      this.setState({ userr_id: user_id })
+        this.props.navigation.navigate('UserInfo');
+
       }
+
     
     handleGivenName = (text) => {
         this.setState({ given_name: text })
@@ -39,17 +48,30 @@ class HomeScreen extends Component{
     handleSearch = (text) => {
         this.setState({ given_name: text })
     }
-    
-//     handleSearch = (value) => {
-//     this.setState({ given_name: value}, this.search)
-//    }
+    _onRefresh = () => {
+     
+      this.getChits();
+    }
+  
+
+
+storeUserId= async (user_id) => {
+  try {
+    await AsyncStorage.setItem('userid', JSON.stringify(user_id))
+    console.log("user id => " + user_id);
+    this.props.navigation.navigate('UserInfo');
+  } catch (e) {
+  }
+}
+
+
     getChits(){
         return fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
         .then((response) => response.json())
-        .then((responseJson) => {
+        .then((responseData) => {
         this.setState({
         isLoading: false,
-        chitsContent: responseJson,
+        chitsContent: responseData,
         });
         })
         .catch((error) =>{
@@ -57,23 +79,10 @@ class HomeScreen extends Component{
         });
       }
 
-      search(){
-        return fetch('http://10.0.2.2:3333/api/v0.0.5/search_user?q='+this.state.given_name)
-        .then((response) => response.json())
-        .then((responseJson) => {
-        this.setState({
-        isLoading: false,
-        userInfo: responseJson,
-        });
-        })
-        .catch((error) =>{
-        console.log(error);
-        });
-      }
 
       componentDidMount(){
         this.getChits();
-       } 
+      } 
           
  render(){
     if(this.state.isLoading){
@@ -87,13 +96,19 @@ return(
 <View> 
     <Text style= {styles.textStyle}>Most recent chits</Text>
     <FlatList
+    refreshControl={
+      <RefreshControl
+        refreshing={this.state.refreshing}
+        onRefresh={this._onRefresh}
+        />
+      }
     data={this.state.chitsContent}
     renderItem={({item})=>
   <View>
-<TouchableOpacity>
+<TouchableOpacity onPress={() =>this.storeUserId(item.user.user_id)} >
 <Card>
 <Text style= {styles.chits}>{item.user.given_name + ' '+ item.user.family_name}</Text>
-<Text style= {styles.chits}>{item.chit_content}</Text>
+<Text style= {styles.chits}>{item.chit_content + item.user.user_id}</Text>
 </Card>
 </TouchableOpacity>
   </View>
@@ -106,8 +121,12 @@ return(
 }
 
 const TabNavigator = createBottomTabNavigator({
-  Settings: HomeScreen,
-  Home: Search,
+  RecentChits :{
+    screen : GuestPage
+  },
+  Search :{
+    screen : Search
+  }
 });
 export default createAppContainer(TabNavigator);
 
