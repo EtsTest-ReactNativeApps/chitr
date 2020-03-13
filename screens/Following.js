@@ -31,7 +31,6 @@ class Following extends Component{
         this.setState({ given_name: text })
     }
     
-
     getData = async () => {
       try {
         const value = await AsyncStorage.getItem('UserID')
@@ -59,7 +58,6 @@ class Following extends Component{
 
   
       following(user_id){
-        console.log( `http://10.0.2.2:3333/api/v0.0.5/user/${JSON.parse(user_id)}/following`)
         return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${JSON.parse(user_id)}/following`)
         .then((response) => response.json())
         .then((responseJson) => {

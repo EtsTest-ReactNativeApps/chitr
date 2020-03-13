@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HomeIconWithBadge,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
+import { Alert,HomeIconWithBadge,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 import Card from './Cards';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -13,6 +13,7 @@ class UserInfo extends Component{
     constructor(props){
         super(props);
         this.state = {
+        token : '',
         user_id : '',
         given_name: '',
         family_name: '',
@@ -37,6 +38,75 @@ class UserInfo extends Component{
     handleGivenName = (text) => {
         this.setState({ given_name: text })
     }
+
+    followUser(user_id){
+      let result = JSON.stringify({
+          user_id: this.state.user_id,
+      })
+      console.log('RESULT'+result) 
+      console.log(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}/follow`)  
+      return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}/follow`,
+      {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'X-Authorization':this.state.token ,
+        },
+      body: result
+      })
+      .then((response) => {
+      console.log("response"+response)
+  
+      if(response.status === 200){
+      Alert.alert("You're following the user now");
+      }
+      else if (response.status === 404){
+      console.log('Not found user')
+      }
+      else if (response.status === 401){
+        console.log('Not found user') 
+      Alert.alert("Unauthorised operation");
+      }
+      })  
+      .catch((error) => {
+      console.error(error);
+      });
+  }
+
+  unFollowUser(user_id){
+    let result = JSON.stringify({
+        user_id: this.state.user_id,
+    })
+    console.log('RESULT'+result) 
+    console.log(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}/follow`)  
+    return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}/follow`,
+    {
+    method: 'DELETE',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-Authorization':this.state.token ,
+      },
+    body: result
+    })
+    .then((response) => {
+    console.log("response"+response)
+
+    if(response.status === 200){
+    Alert.alert("You have unfollowed this user");
+    }
+    else if (response.status === 404){
+    console.log('Not found user')
+    }
+    else if (response.status === 401){
+      console.log('Not found user') 
+    Alert.alert("Unauthorised operation");
+    }
+    })  
+    .catch((error) => {
+    console.error(error);
+    });
+}
+
 
     getUserInfo(user_id){
       const user_ID = '';
@@ -95,8 +165,23 @@ class UserInfo extends Component{
         }
     }
 
+    getToken = async () => {
+      try {
+        const value = await AsyncStorage.getItem('token')
+        console.log("getdata"+value)
+        if(value !== null) {
+          this.setState({
+              token: value
+            });
+        }
+      } catch(e) {
+        // error reading value
+      }
+  }
+
       componentDidMount(){
         this.getData();
+        this.getToken();
        } 
           
  render(){
@@ -112,7 +197,7 @@ return(
 
     <Text style= {styles.textStyle}>UserInfo</Text>
 
-    <Text style= {styles.userNameStyle} >{this.state.UserInfo.given_name + ' ' + this.state.UserInfo.family_name}</Text>
+    <Text style= {styles.userNameStyle} >{this.state.UserInfo.given_name + ' ' + this.state.UserInfo.family_name + '     ' + this.state.UserInfo.email}</Text>
     
     <TouchableOpacity  style = {styles.buttonStyle}
             onPress={() =>this.toFollowing(this.state.user_id)}>
@@ -130,14 +215,14 @@ return(
         </TouchableOpacity> 
 
         <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.following()}>
+            onPress={() =>this.followUser(this.state.user_id)}>
             <Text style={styles.textStyle}>
             Follow
             </Text>
         </TouchableOpacity> 
 
         <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.following()}>
+            onPress={() =>this.unFollowUser(this.state.user_id)}>
             <Text style={styles.textStyle}>
             Unfollow
             </Text>
@@ -173,7 +258,7 @@ const styles = StyleSheet.create({
     paddingBottom : 10 
   },
   userNameStyle: {
-    fontSize : 30,
+    fontSize : 22,
     alignSelf:'flex-start',
     marginLeft : 20,
     color : 'purple',

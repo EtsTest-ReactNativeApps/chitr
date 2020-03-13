@@ -76,7 +76,7 @@ class NewsFeed extends Component{
       try {
         await AsyncStorage.setItem('userid', JSON.stringify(user_id))
         console.log("user id => " + user_id);
-        this.props.navigation.navigate('UserDetails');
+        this.props.navigation.navigate('UserInfo');
       } catch (e) {
       }
     }

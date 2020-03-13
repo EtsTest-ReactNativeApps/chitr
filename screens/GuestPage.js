@@ -53,13 +53,11 @@ class GuestPage extends Component{
       this.getChits();
     }
   
-
-
 storeUserId= async (user_id) => {
   try {
     await AsyncStorage.setItem('userid', JSON.stringify(user_id))
     console.log("user id => " + user_id);
-    this.props.navigation.navigate('UserInfo');
+    this.props.navigation.navigate('UserDetails');
   } catch (e) {
   }
 }
