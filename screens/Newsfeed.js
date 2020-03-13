@@ -9,6 +9,8 @@ import MyProfile from './MyProfile'
 import Card from './Cards';
 import Search from './Search'
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import ActionButton from 'react-native-circular-action-menu';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 
 
@@ -171,24 +173,42 @@ class NewsFeed extends Component{
         )
     }
  return(
-<View style = {{ flex : 1, alignItems :'stretch'}}> 
+<View style = {{ flex : 1, alignItems :'stretch', backgroundColor : '#f3f3f3'}}> 
+{/* <ActionButton  buttonColor="rgba(231,76,60,1)" style = {styles.actionButton} >
+          <ActionButton.Item  buttonColor='#9b59b6' title="New Task" onPress={() => console.log("notes tapped!")}>
+            <Icon name="android-create" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor='#3498db' title="Notifications" onPress={() => {}}>
+            <Icon name="android-notifications-none" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>
+            <Icon name="android-done-all" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+        </ActionButton> */}
 <Text style= {styles.textStyle}>Followed users chits</Text>
     <FlatList      
+    
     refreshControl={
       <RefreshControl
         refreshing={this.state.refreshing}
         onRefresh={this._onRefresh}
         />
       }
+      
     data={this.state.UserData}
     renderItem={({item})=>
+    
   <View>
+    
 <TouchableOpacity onPress={() =>this.storeUserId(item.user.user_id)} >
+  
 <Card>
 <Text style= {styles.chits}>{item.user.given_name + ' '+ item.user.family_name}</Text>
 <Text style= {styles.chits}>{item.chit_content + item.user.user_id}</Text>
 </Card>
+
 </TouchableOpacity>
+
   </View>
     
   }
@@ -251,6 +271,12 @@ export default createAppContainer(TabNavigator);
 // export default MyApp;
 
 const styles = StyleSheet.create({
+
+  actionButton:{
+
+    position : 'absolute',
+
+  },
     title: {
     color: 'green',
     fontSize: 50,
@@ -288,5 +314,16 @@ const styles = StyleSheet.create({
         fontWeight : '600',
         paddingTop : 10,
         paddingBottom : 10 
+      },
+      actionButtonIcon: {
+        fontSize: 20,
+        height: 22,
+        color: 'white',
+      },
+
+      actionButton: {
+        position :'absolute',
+        fontSize: 20,
+        height: 22,
       },
 });

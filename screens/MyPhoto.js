@@ -44,6 +44,7 @@ export default class MyPhoto extends React.Component {
         this.setState({ loginPass: text })
       }
 
+     
 
  render(){
  return (

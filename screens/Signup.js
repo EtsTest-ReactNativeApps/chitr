@@ -84,7 +84,6 @@ storeToken = async (token) => {
    
  return (
 <View style = {{ flex : 1,justifyContent:'space-evenly'  }}>   
-
         <Text style = {styles.textStyle} >Sign up for an account </Text>
         <TextInput style = {styles.fields} placeholder="First name" onChangeText={this.handleGivenName} value={this.state.given_name}/>
         <TextInput style = {styles.fields} placeholder="Last Name" onChangeText={this.handleLastName} value={this.state.family_name}/>

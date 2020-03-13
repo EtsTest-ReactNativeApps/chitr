@@ -30,6 +30,40 @@ class UserInfo extends Component{
         UserInfo : '',
         };  
     }
+
+    postPhoto(){
+      let photo = JSON.stringify({
+      })
+  
+      console.log(result)
+  
+      console.log("post" +this.state.token)
+      return fetch("http://10.0.2.2:3333/api/v0.0.5/chits",
+      {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'image/jpeg',
+          'X-Authorization':this.state.token ,
+        },
+      body: result
+  })
+      .then((response) => {
+      console.log("response"+response)
+  
+      if(response.status === 201){
+      Alert.alert("photo Added!");
+      }
+      else if (response.status === 401){
+      console.log('Aunuhtorised ! no photos have been added') 
+      Alert.alert("This photo is not added");
+      }
+      })
+      
+      .catch((error) => {
+      console.error(error);
+      });
+  }
+
     
     Show =()=>{
         this.props.navigation.navigate('UserProfile');
@@ -107,7 +141,6 @@ class UserInfo extends Component{
     });
 }
 
-
     getUserInfo(user_id){
       const user_ID = '';
         return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}`)
@@ -126,7 +159,7 @@ class UserInfo extends Component{
         .catch((error) =>{
         console.log(error);
         });
-      }
+    }
 
       toFollowing= async (user_id) => {
         try {
@@ -148,7 +181,17 @@ class UserInfo extends Component{
         }
       }
 
-      
+      toUpdate= async (user_id) => {
+        try {
+          await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
+          console.log("user id => " + user_id);
+          //this.props.navigation.dispach();
+          this.props.navigation.navigate('Update');
+        } catch (e) {
+        }
+      }
+
+
     
     getData = async () => {
         try {
@@ -228,6 +271,20 @@ return(
             </Text>
         </TouchableOpacity> 
 
+        <TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.toUpdate(this.state.user_id)}>
+            <Text style={styles.textStyle}>
+            Update account
+            </Text>
+        </TouchableOpacity> 
+
+        <TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.props.navigation.navigate('UserPhoto'),this.state.user_id}>
+            <Text style={styles.textStyle}>
+            View photo
+            </Text>
+        </TouchableOpacity> 
+
     <FlatList
     data={this.state.UserInfo.recent_chits}
     renderItem={({item})=>
@@ -293,6 +350,7 @@ const styles = StyleSheet.create({
 
       
 });
+
 
 
 

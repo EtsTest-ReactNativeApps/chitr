@@ -37,7 +37,6 @@ class GuestPage extends Component{
       var userr_id =''
       this.setState({ userr_id: user_id })
         this.props.navigation.navigate('UserInfo');
-
       }
 
     

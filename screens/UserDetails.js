@@ -73,6 +73,15 @@ class UserDetails extends Component{
         }
     }
 
+    toUserPhoto= async (user_id) => {
+      try {
+        await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
+        console.log("user id => " + user_id);
+        this.props.navigation.navigate('UserPhoto');
+      } catch (e) {
+      }
+    }
+
       componentDidMount(){
         this.getData();
        } 
@@ -89,6 +98,12 @@ return(
 <View> 
     <Text style= {styles.textStyle}>UserInfo</Text>
     <Text style= {styles.userNameStyle} >{this.state.UserInfo.given_name + ' ' + this.state.UserInfo.family_name}</Text>
+    <TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.toUserPhoto(this.state.user_id)}>
+            <Text style={styles.textStyle}>
+            View photo
+            </Text>
+        </TouchableOpacity> 
     <FlatList
     data={this.state.UserInfo.recent_chits}
     renderItem={({item})=>

@@ -15,6 +15,9 @@ import Chits from './screens/Chits'
 import UserInfo from './screens/UserInfo'
 import LoggedInSearch from './screens/LoggedInSearch'
 import UserDetails from './screens/UserDetails'
+import Update from './screens/Update'
+import UserPhoto from './screens/UserPhoto'
+
 
 
 import 'react-native-gesture-handler';
@@ -22,8 +25,12 @@ import 'react-native-gesture-handler';
 
 const AppStackNav = createStackNavigator({
   
+  
   Start: {
     screen: Start
+      },
+      Update: {
+        screen: Update
       },
     UserInfo: {
       screen: UserInfo
@@ -65,6 +72,12 @@ const AppStackNav = createStackNavigator({
   Followers: {
     screen: Followers
   },
+  UserPhoto: {
+    screen: UserPhoto
+  },
+
+  
+  
   
   
   
