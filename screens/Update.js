@@ -130,21 +130,21 @@ export default class Update extends React.Component {
         }
     }
 
-      getData = async () => {
-        try {
-          const value = await AsyncStorage.getItem('userid')
-          console.log("value "+value)
-          if(value !== null) {
-            this.setState({
-                user_id: value
-              });
-              this.getUserInfo(value);
-          }
-        } catch(e) {
-          // error reading value
+    getData = async () => {
+      try {
+        const value = await AsyncStorage.getItem('user_id')
+        console.log("user_id getData "+ (value))
+        if(value !== null) {
+          this.setState({
+              user_id: value
+            });
+            this.getUserInfo(value);   
         }
-    }
-
+      } catch(e) {
+        // error reading value
+      }
+  }
+  
     componentDidMount(){
         this.getData();
         this.getToken();

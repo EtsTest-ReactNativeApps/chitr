@@ -8,6 +8,7 @@ import MyPhoto from './TakePhoto'
 import MyProfile from './MyProfile'
 import Card from './Cards';
 import Search from './Search'
+
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import ActionButton from 'react-native-circular-action-menu';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -248,6 +249,9 @@ const TabNavigator = createBottomTabNavigator({
   },
   Search :{
     screen : Search
+  },
+  MyProfile :{
+    screen : MyProfile
   }
 });
 export default createAppContainer(TabNavigator);

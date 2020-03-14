@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {TouchableOpacity,StyleSheet, Text, View } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import CircleButton from 'react-native-circle-button';
 class StartPage extends Component {
@@ -8,7 +9,16 @@ class StartPage extends Component {
         this.props.navigation.navigate('Newsfeed');
 
         }
+
+        logout = async  () => {
+            await AsyncStorage.clear();
+       }
+
+        componentDidMount(){
+            this.logout();
+        }
     
+        
  render(){
  return (
          

@@ -39,76 +39,11 @@ class UserInfo extends Component{
         this.setState({ given_name: text })
     }
 
-    followUser(user_id){
-      let result = JSON.stringify({
-          user_id: this.state.user_id,
-      })
-      console.log('RESULT'+result) 
-      console.log(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}/follow`)  
-      return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}/follow`,
-      {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-          'X-Authorization':this.state.token ,
-        },
-      body: result
-      })
-      .then((response) => {
-      console.log("response"+response)
-  
-      if(response.status === 200){
-      Alert.alert("You're following the user now");
-      }
-      else if (response.status === 404){
-      console.log('Not found user')
-      }
-      else if (response.status === 401){
-        console.log('Not found user') 
-      Alert.alert("Unauthorised operation");
-      }
-      })  
-      .catch((error) => {
-      console.error(error);
-      });
-  }
-
-  unFollowUser(user_id){
-    let result = JSON.stringify({
-        user_id: this.state.user_id,
-    })
-    console.log('RESULT'+result) 
-    console.log(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}/follow`)  
-    return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}/follow`,
-    {
-    method: 'DELETE',
-    headers: {
-        'Content-Type': 'application/json',
-        'X-Authorization':this.state.token ,
-      },
-    body: result
-    })
-    .then((response) => {
-    console.log("response"+response)
-
-    if(response.status === 200){
-    Alert.alert("You have unfollowed this user");
-    }
-    else if (response.status === 404){
-    console.log('Not found user')
-    }
-    else if (response.status === 401){
-      console.log('Not found user') 
-    Alert.alert("Unauthorised operation");
-    }
-    })  
-    .catch((error) => {
-    console.error(error);
-    });
-}
-
+    
 
     getUserInfo(user_id){
+      console.log("start")
+      console.log(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}`)
       const user_ID = '';
         return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}`)
 
@@ -127,39 +62,17 @@ class UserInfo extends Component{
         console.log(error);
         });
       }
-
-      toFollowing= async (user_id) => {
-        try {
-          await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
-          console.log("user id => " + user_id);
-          //this.props.navigation.dispach();
-          this.props.navigation.replace('Following');
-        } catch (e) {
-        }
-      }
-
-      toFollowers= async (user_id) => {
-        try {
-          await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
-          console.log("user id => " + user_id);
-          //this.props.navigation.dispach();
-          this.props.navigation.replace('Followers');
-        } catch (e) {
-        }
-      }
-
-      
-    
+  
     getData = async () => {
         try {
-          const value = await AsyncStorage.getItem('userid')
-          console.log("value "+value)
+          const value = await AsyncStorage.getItem('user_id')
+          console.log("user_id getData "+ (value))
           if(value !== null) {
             this.setState({
                 user_id: value
               });
+              this.getUserInfo(value);   
           }
-          this.getUserInfo(this.state.user_id);
         } catch(e) {
           // error reading value
         }
@@ -179,6 +92,45 @@ class UserInfo extends Component{
       }
   }
 
+  toFollowing= async (user_id) => {
+    try {
+      await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
+      console.log("user id => " + user_id);
+      //this.props.navigation.dispach();
+      this.props.navigation.navigate('Following');
+    } catch (e) {
+    }
+  }
+
+  toFollowers= async (user_id) => {
+    try {
+      await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
+      console.log("user id => " + user_id);
+      //this.props.navigation.dispach();
+      this.props.navigation.navigate('Followers');
+    } catch (e) {
+    }
+  }
+
+  toUpdate= async (user_id) => {
+    try {
+      await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
+      console.log("user id => " + user_id);
+      //this.props.navigation.dispach();
+      this.props.navigation.navigate('Update');
+    } catch (e) {
+    }
+  }
+
+  toUserPhoto= async (user_id) => {
+    try {
+      await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
+      console.log("user id => " + user_id);
+      this.props.navigation.navigate('UserPhoto');
+    } catch (e) {
+    }
+  }
+
       componentDidMount(){
         this.getData();
         this.getToken();
@@ -195,7 +147,7 @@ class UserInfo extends Component{
 return( 
 <View > 
 
-    <Text style= {styles.textStyle}>UserInfo</Text>
+    <Text style= {styles.textStyle}>My profile</Text>
 
     <Text style= {styles.userNameStyle} >{this.state.UserInfo.given_name + ' ' + this.state.UserInfo.family_name + '     ' + this.state.UserInfo.email}</Text>
     
@@ -213,21 +165,21 @@ return(
             Followers
             </Text>
         </TouchableOpacity> 
+        
+        <TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.toUpdate(this.state.user_id)}>
+            <Text style={styles.textStyle}>
+            Update account
+            </Text>
+        </TouchableOpacity>
 
         <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.followUser(this.state.user_id)}>
+            onPress={() =>this.toUserPhoto(this.state.user_id)}>
             <Text style={styles.textStyle}>
-            Follow
+            View photo
             </Text>
         </TouchableOpacity> 
-
-        <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.unFollowUser(this.state.user_id)}>
-            <Text style={styles.textStyle}>
-            Unfollow
-            </Text>
-        </TouchableOpacity> 
-
+        
     <FlatList
     data={this.state.UserInfo.recent_chits}
     renderItem={({item})=>

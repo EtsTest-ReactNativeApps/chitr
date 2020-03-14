@@ -8,6 +8,7 @@ class HomeScreen extends Component{
     constructor(props){
         super(props);
         this.state = {
+        isVisible : true,
         given_name: '',
         family_name: '',
         text : '',
@@ -22,6 +23,16 @@ class HomeScreen extends Component{
         latitude: ''
         };  
     }
+
+    ToggleFunction = () => {
+
+      this.setState(state => ({
+  
+        isVisible: !state.isVisible
+  
+      }));
+  
+    };
     
     Show =()=>{
         this.props.navigation.navigate('UserProfile');
@@ -62,6 +73,8 @@ class HomeScreen extends Component{
 
       componentDidMount(){
         this.search();
+
+        this.ToggleFunction();
        } 
           
  render(){
@@ -74,7 +87,9 @@ class HomeScreen extends Component{
     }
 return(
  <View style = {{ flex : 1}}> 
-    <Text style = {styles.textStyle} >Search for a user </Text>
+ 
+<Text style = {styles.textStyle} >Search for a user </Text> 
+ 
     <TextInput style = {styles.textInput} placeholder="user" onChangeText={this.handleSearch} value={this.state.given_name}/>
     <FlatList
     data={this.state.userInfo}

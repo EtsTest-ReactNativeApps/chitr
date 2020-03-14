@@ -10,6 +10,8 @@ export default class ChittrApp extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+        loggedIn : false,
+        user_id : '',
         token : '',
         email: '',
         password: '',
@@ -37,9 +39,25 @@ storeToken = async (token) => {
   } catch (e) {
   }
 }
+
+storeId = async (user_id) => {
+  try {
+    await AsyncStorage.setItem('user_id', JSON.stringify(user_id))
+    // console.log("store user_id " + user_id);
+  } catch (e) {
+  }
+}
+
+// storeLoginStatus = async (loggedIn) => {
+//   try {
+//     await AsyncStorage.setItem('loggedIn', (loggedIn))
+//   } catch (e) {
+//   }
+// }
   
     login(){
       var token = '';
+
        fetch('http://10.0.2.2:3333/api/v0.0.5/login',{
         method: "POST",
         headers: {
@@ -47,22 +65,29 @@ storeToken = async (token) => {
           'X-Authorization': token
         },     
         body: JSON.stringify({  
-           email: 'john@gmail.com',
-           password: 'john',
+           email: 'yamenedel@gmail.com',
+           password: 'yamen',
           // email: this.state.loginEmail,
           // password: this.state.loginPass,
        })
     })
       .then((response) => {
-        return response.json()
+      return response.json()
       .then((responseData) => {
-        const JsonToken = responseData.token;  
+        const JsonToken = responseData.token; 
+        const user = responseData.id;
         this.setState({
-          token: JsonToken
+          token: JsonToken,
+          user_id : user
         });
-        console.log(this.state.token)
-
         if (response.status === 200){
+          // this.setState({
+          //   loggedIn: true,
+          // });
+          //this.storeLoginStatus(this.state.loggedIn);
+          this.storeId(this.state.user_id);
+          console.log (" Login  user id" + this.state.user_id)
+
           this.storeToken(this.state.token);
           this.props.navigation.navigate('Newsfeed');//navigate to a page
           console.log ("YOU'RE iN")

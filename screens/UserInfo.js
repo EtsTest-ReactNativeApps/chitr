@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Alert,HomeIconWithBadge,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 import Card from './Cards';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, State } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer } from 'react-navigation';
 // import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,7 +13,8 @@ class UserInfo extends Component{
     constructor(props){
         super(props);
         this.state = {
-        token : '',
+        isVisible : true,
+        token : null,
         user_id : '',
         given_name: '',
         family_name: '',
@@ -192,7 +193,25 @@ class UserInfo extends Component{
       }
 
 
-    
+      ToggleFunction = (token) => {
+        if (token === undefined){
+          this.setState(state=>({
+            isVisible: !state.isVisible,
+            }));  
+      }
+
+      else {
+        this.setState(state => ({
+          isVisible: state.isVisible
+        }));
+        console.log("else "+this.state.isVisible)
+
+      }
+        console.log(this.state.isVisible)
+
+      
+      };
+
     getData = async () => {
         try {
           const value = await AsyncStorage.getItem('userid')
@@ -213,20 +232,34 @@ class UserInfo extends Component{
         const value = await AsyncStorage.getItem('token')
         console.log("getdata"+value)
         if(value !== null) {
+          this.ToggleFunction(value);
           this.setState({
               token: value
             });
-        }
+          }
+            else {
+            this.ToggleFunction();
+            }
+        
       } catch(e) {
         // error reading value
       }
   }
 
+  toUserPhoto= async (user_id) => {
+    try {
+      await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
+      console.log("user id => " + user_id);
+      this.props.navigation.navigate('UserPhoto');
+    } catch (e) {
+    }
+  }
+
       componentDidMount(){
         this.getData();
         this.getToken();
-       } 
-          
+      } 
+
  render(){
     if(this.state.isLoading){
         return(
@@ -235,6 +268,7 @@ class UserInfo extends Component{
         </View>
         )
     }
+
 return( 
 <View > 
 
@@ -257,29 +291,26 @@ return(
             </Text>
         </TouchableOpacity> 
 
-        <TouchableOpacity  style = {styles.buttonStyle}
+        {
+       this.state.isVisible ? <TouchableOpacity  style = {styles.buttonStyle}
             onPress={() =>this.followUser(this.state.user_id)}>
             <Text style={styles.textStyle}>
             Follow
             </Text>
-        </TouchableOpacity> 
-
+        </TouchableOpacity> :null
+        }
+        {
+        this.state.isVisible ?
         <TouchableOpacity  style = {styles.buttonStyle}
             onPress={() =>this.unFollowUser(this.state.user_id)}>
             <Text style={styles.textStyle}>
             Unfollow
             </Text>
-        </TouchableOpacity> 
-
+        </TouchableOpacity> : null
+        }
+     
         <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.toUpdate(this.state.user_id)}>
-            <Text style={styles.textStyle}>
-            Update account
-            </Text>
-        </TouchableOpacity> 
-
-        <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.props.navigation.navigate('UserPhoto'),this.state.user_id}>
+            onPress={() =>this.toUserPhoto(this.state.user_id)}>
             <Text style={styles.textStyle}>
             View photo
             </Text>
