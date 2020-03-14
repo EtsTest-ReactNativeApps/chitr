@@ -1,5 +1,5 @@
 import React,{ Component} from 'react';
-import {RefreshControl,TouchableOpacity,FlatList,Alert,Button,StyleSheet, Text, View,TextInput,PermissionsAndroid } from 'react-native';
+import {Image,RefreshControl,TouchableOpacity,FlatList,Alert,Button,StyleSheet, Text, View,TextInput,PermissionsAndroid } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -12,9 +12,6 @@ import Search from './Search'
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import ActionButton from 'react-native-circular-action-menu';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-
-
 
 class NewsFeed extends Component{
 
@@ -135,10 +132,6 @@ class NewsFeed extends Component{
             this.getData();
             this.UsersChits();
            }
-        logout = async  () => {
-             await AsyncStorage.clear();
-            this.props.navigation.navigate('Start');
-        }
 
         Chits =  () => {
            this.props.navigation.navigate('Chits');
@@ -148,9 +141,6 @@ class NewsFeed extends Component{
         return fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
         .then((response) => response.json())
         .then((responseData) => {
-        const user_id = responseData;
-        //console.log(responseData)
-        //console.log("h"+(responseData.user.user_id))
         this.setState({
         isLoading: false,
         UserData: responseData,
@@ -174,18 +164,8 @@ class NewsFeed extends Component{
         )
     }
  return(
-<View style = {{ flex : 1, alignItems :'stretch', backgroundColor : '#f3f3f3'}}> 
-{/* <ActionButton  buttonColor="rgba(231,76,60,1)" style = {styles.actionButton} >
-          <ActionButton.Item  buttonColor='#9b59b6' title="New Task" onPress={() => console.log("notes tapped!")}>
-            <Icon name="android-create" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
-          <ActionButton.Item buttonColor='#3498db' title="Notifications" onPress={() => {}}>
-            <Icon name="android-notifications-none" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
-          <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>
-            <Icon name="android-done-all" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
-        </ActionButton> */}
+<View style = {{ flex : 1, backgroundColor : '#f3f3f3'}}> 
+
 <Text style= {styles.textStyle}>Followed users chits</Text>
     <FlatList      
     
@@ -203,9 +183,13 @@ class NewsFeed extends Component{
     
 <TouchableOpacity onPress={() =>this.storeUserId(item.user.user_id)} >
   
-<Card>
-<Text style= {styles.chits}>{item.user.given_name + ' '+ item.user.family_name}</Text>
-<Text style= {styles.chits}>{item.chit_content + item.user.user_id}</Text>
+<Card >
+<Image
+   style = {styles.container}
+     source = {require('../photo/profile.png')}
+   />
+<Text style= {styles.chits}>{item.user.given_name +' '+ item.user.family_name}</Text>
+<Text style= {styles.chits}>{item.chit_content}</Text>
 </Card>
 
 </TouchableOpacity>
@@ -215,29 +199,17 @@ class NewsFeed extends Component{
   }
   keyExtractor={({id}, index) => id}
   />
+    <ActionButton  buttonColor="rgba(231,76,60,1)" style = {styles.actionButton} >
+          <ActionButton.Item  buttonColor='#9b59b6' title="Post" onPress={() => this.toPostChit()}>
+            <Icon name="android-create" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          
+          {/* <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>
+            <Icon name="android-done-all" style={styles.actionButtonIcon} />
+          </ActionButton.Item> */}
+  </ActionButton>
   
-
-
-
-    <View style = {{ flex : 1, flexDirection : 'row', justifyContent :'space-around', alignItems:'flex-end'}}> 
-
-<TouchableOpacity title="Logout" style = {styles.postchit}
-    onPress={this.logout}>
-    <Text style={{ fontSize: 16 }}>
-    Logout
-    </Text>
-</TouchableOpacity>
-
-<TouchableOpacity title="Post" style = {styles.postchit}
-    onPress={() => this.toPostChit()}>
-    <Text style={{ fontSize: 16 }}>
-    POST
-    </Text>
-    </TouchableOpacity>
-
- 
-    </View>
-    </View>
+  </View>
     
  );
  }
@@ -256,31 +228,8 @@ const TabNavigator = createBottomTabNavigator({
 });
 export default createAppContainer(TabNavigator);
 
-// const MyDrawerNavigator = createDrawerNavigator({
-//     Newsfeed: {
-//       screen: NewsFeed,
-//     },
-//     MyProfile: {
-//         screen: MyProfile,
-//     },
-//     MyPhoto: {
-//         screen: MyPhoto,
-//     },
-//     Logout: {
-//         screen: GuestPage,
-//     },
-//   });
-
-// const MyApp = createAppContainer(MyDrawerNavigator);
-// export default MyApp;
-
 const styles = StyleSheet.create({
 
-  actionButton:{
-
-    position : 'absolute',
-
-  },
     title: {
     color: 'green',
     fontSize: 50,
@@ -297,6 +246,7 @@ const styles = StyleSheet.create({
     textShadowColor: 'gray',
     fontFamily: 'sans-serif',
     textShadowRadius: 19,
+
     },
     input: {
     backgroundColor: '#48BBEC',
@@ -305,29 +255,40 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 10,
     alignSelf: 'flex-start',
-      },
-      post: {
+    },
+    post: {
     fontSize: 30,
     alignSelf: 'center',
     marginBottom: 30
-      },
-      textStyle: {
-        fontSize : 30,
-        alignSelf:'center',
-        color : '#007aff',
-        fontWeight : '600',
-        paddingTop : 10,
-        paddingBottom : 10 
-      },
-      actionButtonIcon: {
-        fontSize: 20,
-        height: 22,
-        color: 'white',
-      },
+    },
+    textStyle: {
+    fontSize : 30,
+    alignSelf:'center',
+    color : '#007aff',
+    fontWeight : '600',
+    paddingTop : 10,
+    paddingBottom : 10 
+    },
+    actionButton: {
+      position: 'absolute',
+      
+      width: 50,
+      height: 50,
+      right: 30,
+      bottom: 30,
+    },
+    actionButtonIcon: {
+      
 
-      actionButton: {
-        position :'absolute',
-        fontSize: 20,
-        height: 22,
-      },
+    },
+
+    container: {
+      flex : 1,
+      justifyContent : 'flex-start',
+      width : 60,
+      height : 80,
+      position : 'absolute',
+      right : 150,
+    },
+      
 });

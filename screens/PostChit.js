@@ -3,6 +3,7 @@ import { PermissionsAndroid,Alert,Text, View,Button,TextInput,StyleSheet,Activit
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Geolocation from 'react-native-geolocation-service';
 import AsyncStorage from '@react-native-community/async-storage';
+import Toast from 'react-native-simple-toast';
 
 class HomeScreen extends Component{
     constructor(props){
@@ -81,7 +82,9 @@ class HomeScreen extends Component{
      );
 }
 
-
+  toNewsfeed =()=>{
+    this.props.navigation.navigate('Newsfeed');
+  }
    postChit(){
     let result = JSON.stringify({
         chit_content: this.state.chit_content,
@@ -108,7 +111,8 @@ class HomeScreen extends Component{
     console.log("response"+response)
 
     if(response.status === 201){
-    Alert.alert("Item Added!");
+    Alert.alert("Post added!");
+    this.toNewsfeed();
     }
     else if (response.status === 401){
     console.log('Aunuhtorised ! no posts have been added') 
@@ -135,7 +139,7 @@ class HomeScreen extends Component{
 return(
  <View style = {{ flex : 1}}> 
     <Text style = {styles.textStyle} >What's on your mind </Text>
-    <TextInput style = {styles.textInput} placeholder="Post" onChangeText={this.handlePost} value={this.state.chit_content} maxLength={142}/>
+    <TextInput style = {styles.textInput} placeholder="Post" onChangeText={this.handlePost} value={this.state.chit_content} maxLength={141}/>
     <TouchableOpacity title="Post" style = {styles.buttonStyle}
     onPress={() => this.postChit()}>
     <Text style={styles.textStyle}>

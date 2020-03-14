@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { RefreshControl,HomeIconWithBadge,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
+import { Image,RefreshControl,HomeIconWithBadge,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 import Card from './Cards';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -104,8 +104,12 @@ return(
   <View>
 <TouchableOpacity onPress={() =>this.storeUserId(item.user.user_id)} >
 <Card>
+<Image
+   style = {styles.container}
+     source = {require('../photo/profile.png')}
+   />
 <Text style= {styles.chits}>{item.user.given_name + ' '+ item.user.family_name}</Text>
-<Text style= {styles.chits}>{item.chit_content + item.user.user_id}</Text>
+<Text style= {styles.chits}>{item.chit_content}</Text>
 </Card>
 </TouchableOpacity>
   </View>
@@ -152,6 +156,14 @@ const styles = StyleSheet.create({
         height: 40,
         borderBottomWidth: 1,
         borderBottomColor: 'gray',
+      },
+      container: {
+        flex : 1,
+        justifyContent : 'flex-start',
+        width : 60,
+        height : 80,
+        position : 'absolute',
+        right : 150,
       },
 
       

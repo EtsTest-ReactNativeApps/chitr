@@ -42,6 +42,9 @@ export default class ChittrApp extends React.Component {
       this.setState({ password: text })
       }
          
+      toStart =()=>{
+        this.props.navigation.navigate('Start');
+      }
 createAccount(){
     return fetch("http://10.0.2.2:3333/api/v0.0.5/user",
     {
@@ -61,6 +64,7 @@ createAccount(){
     .then((response) => {
     if (response.status === 201){
       Alert.alert("Account created!");
+      this.toStart();
     }
     else if (response.status === 400){
       Alert.alert(" Failed to create the account !");

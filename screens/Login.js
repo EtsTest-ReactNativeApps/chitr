@@ -10,7 +10,6 @@ export default class ChittrApp extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-        loggedIn : false,
         user_id : '',
         token : '',
         email: '',
@@ -19,8 +18,6 @@ export default class ChittrApp extends React.Component {
         loginPass:'',
         };
     } 
-    
-    
     
     handleLoginEmail = (text) => {
         this.setState({ loginEmail: text })
@@ -43,21 +40,12 @@ storeToken = async (token) => {
 storeId = async (user_id) => {
   try {
     await AsyncStorage.setItem('user_id', JSON.stringify(user_id))
-    // console.log("store user_id " + user_id);
   } catch (e) {
   }
 }
-
-// storeLoginStatus = async (loggedIn) => {
-//   try {
-//     await AsyncStorage.setItem('loggedIn', (loggedIn))
-//   } catch (e) {
-//   }
-// }
   
     login(){
       var token = '';
-
        fetch('http://10.0.2.2:3333/api/v0.0.5/login',{
         method: "POST",
         headers: {
@@ -81,10 +69,6 @@ storeId = async (user_id) => {
           user_id : user
         });
         if (response.status === 200){
-          // this.setState({
-          //   loggedIn: true,
-          // });
-          //this.storeLoginStatus(this.state.loggedIn);
           this.storeId(this.state.user_id);
           console.log (" Login  user id" + this.state.user_id)
 
@@ -92,7 +76,6 @@ storeId = async (user_id) => {
           this.props.navigation.navigate('Newsfeed');//navigate to a page
           console.log ("YOU'RE iN")
 
-          //AsyncStorage.setItem('token',token)
         } else if(response.status === 400){
           console.log ("Something wrong")
         }

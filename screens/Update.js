@@ -1,8 +1,9 @@
 import * as React from 'react';
-import {FlatList,TouchableOpacity,StyleSheet, ActivityIndicator,StatusBar,Text, View,Button,TextInput,Alert,KeyboardAvoidingView } from 'react-native';
+import {Toast,FlatList,TouchableOpacity,StyleSheet, ActivityIndicator,StatusBar,Text, View,Button,TextInput,Alert,KeyboardAvoidingView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {createSwitchNavigator } from 'react-navigation';
 import Newsfeed from './Newsfeed'
+import MyProfile from './MyProfile'
 
 export default class Update extends React.Component {
 
@@ -48,8 +49,6 @@ export default class Update extends React.Component {
 
    
       updateAccount(){
-
-      
         let result = JSON.stringify({
             given_name: this.state.UserInfo.given_name,
             family_name: this.state.UserInfo.family_name,
@@ -144,11 +143,14 @@ export default class Update extends React.Component {
         // error reading value
       }
   }
-  
+
+    Cancel = () => {
+      this.props.navigation.replace('MyProfile');
+      }
     componentDidMount(){
-        this.getData();
-        this.getToken();
-       } 
+    this.getData();
+    this.getToken();
+  } 
       
  render(){
     if(this.state.isLoading){
@@ -173,7 +175,8 @@ export default class Update extends React.Component {
   </TouchableOpacity>
 
   <TouchableOpacity  style = {styles.buttonStyle}
-    onPress={() =>this.updateAccount()}>
+        onPress={() =>this.Cancel()}>
+        
     <Text style={styles.textStyle}>
     Cancel
     </Text>

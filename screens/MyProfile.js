@@ -131,6 +131,11 @@ class UserInfo extends Component{
     }
   }
 
+  logout = async  () => {
+    await AsyncStorage.clear();
+   this.props.navigation.navigate('Start');
+    }
+
       componentDidMount(){
         this.getData();
         this.getToken();
@@ -180,6 +185,13 @@ return(
             </Text>
         </TouchableOpacity> 
         
+        <TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.logout()}>
+            <Text style={styles.textStyle}>
+            Logout
+            </Text>
+        </TouchableOpacity> 
+
     <FlatList
     data={this.state.UserInfo.recent_chits}
     renderItem={({item})=>

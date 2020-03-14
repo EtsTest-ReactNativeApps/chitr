@@ -13,6 +13,8 @@ import Chits from './screens/Chits'
 import UserInfo from './screens/UserInfo'
 import Update from './screens/Update'
 import UserPhoto from './screens/UserPhoto'
+import MyProfile from './screens/MyProfile'
+
 import 'react-native-gesture-handler';
 
 
@@ -39,9 +41,9 @@ const AppStackNav = createStackNavigator({
       },
   Newsfeed: {
     screen: Newsfeed,
-      navigationOptions:  {
-      title: 'Newsfeed',
-      headerLeft:()=> null
+    navigationOptions:  {
+    title: 'Chittr',
+    headerLeft:()=> null
   }
     },
   RecentChits: {
@@ -61,6 +63,9 @@ const AppStackNav = createStackNavigator({
   },
   UserPhoto: {
     screen: UserPhoto
+  },
+  MyProfile: {
+    screen: MyProfile
   },
   
   

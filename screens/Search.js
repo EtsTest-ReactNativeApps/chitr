@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
+import {Image, Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 import Card from './Cards';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -89,7 +89,6 @@ return(
  <View style = {{ flex : 1}}> 
  
 <Text style = {styles.textStyle} >Search for a user </Text> 
- 
     <TextInput style = {styles.textInput} placeholder="user" onChangeText={this.handleSearch} value={this.state.given_name}/>
     <FlatList
     data={this.state.userInfo}
@@ -97,6 +96,10 @@ return(
   <View style={{flexDirection: 'row',justifyContent:'space-evenly', alignItems : 'center' }}>
     <TouchableOpacity onPress={() =>this.storeUserId(item.user_id)} >
     <Card>
+    <Image
+   style = {styles.container}
+     source = {require('../photo/profile.png')}
+   />
     <Text style= {styles.chits}>{item.given_name + ' '+ item.family_name}</Text>
     <Text style= {styles.chits}>{item.email}</Text>
     </Card>
@@ -141,7 +144,14 @@ const styles = StyleSheet.create({
         marginTop : 20,
         fontSize : 20
         },
-
+        container: {
+          flex : 1,
+          justifyContent : 'flex-start',
+          width : 60,
+          height : 80,
+          position : 'absolute',
+          right : 150,
+        },
         textStyle: {
             fontSize : 30,
             alignSelf:'center',
