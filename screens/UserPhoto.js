@@ -99,7 +99,7 @@ export default class UserPhoto extends React.Component {
 <Text style = {styles.textStyle} >User profile picture</Text>
 
 <Image
-     source = {require('../photo/profile.png')}
+    //  source = {require('../photo/profile.png')}
 
   style={{width: '100%', height: '100%'}}        
   source={{uri : this.state.src}}
