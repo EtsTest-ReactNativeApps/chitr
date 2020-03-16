@@ -52,7 +52,7 @@ class Following extends Component{
       console.log('hey')
       await AsyncStorage.setItem('userid', JSON.stringify(user_id))
       console.log("user id => " + user_id);
-      this.props.navigation.navigate('UserInfo');
+      this.props.navigation.replace('UserInfo'); // when clicking on any following user, the next page woud be the current user becasue the page wasn't closed . Applied replace to close it making sure to load up the new opened page without caching it 
     } catch (e) {
     }
   }
@@ -91,14 +91,13 @@ return(
     data={this.state.userInfo}
     renderItem={({item})=>
   <View >
+
   <TouchableOpacity onPress={() =>this.storeUserId(item.user_id)} >
   <Card style = {styles.card}>
   <Image
    style = {styles.container}
      source = {require('../photo/profile.png')}
    />
-
-   
 <Card.Content>
 <Text style = {styles.chits}>{item.given_name + ' '+ item.family_name}</Text>
 <Paragraph style= {styles.chits} >{item.email}</Paragraph>

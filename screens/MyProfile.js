@@ -132,6 +132,24 @@ class UserInfo extends Component{
     }
   }
 
+  toChitPhoto= async (user_id) => {
+    try {
+      await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
+      console.log("user id => " + user_id);
+      this.props.navigation.navigate('ViewChitPhoto');
+    } catch (e) {
+    }
+  }
+
+  
+
+  toUplaodChitPic= async () => {
+    try {
+      this.props.navigation.navigate('ChitPhoto');
+    } catch (e) {
+    }
+  }
+
   toUpdatePhoto= async () => {
     try {
       this.props.navigation.navigate('UpdatePhoto');
@@ -190,23 +208,40 @@ return(
         <TouchableOpacity  style = {styles.buttonStyle}
             onPress={() =>this.toUserPhoto(this.state.user_id)}>
             <Text style={styles.textStyle}>
-            View photo
+            View profile photo
             </Text>
         </TouchableOpacity> 
 
         <TouchableOpacity  style = {styles.buttonStyle}
             onPress={() =>this.toUpdatePhoto()}>
             <Text style={styles.textStyle}>
-            Update Photo
+            Update profile Photo
             </Text>
         </TouchableOpacity> 
         
+        <TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.toUplaodChitPic()}>
+            <Text style={styles.textStyle}>
+            Upload chit photo
+            </Text>
+        </TouchableOpacity> 
+
+
+        <TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.toChitPhoto(this.state.user_id)}>
+            <Text style={styles.textStyle}>
+            Get chit photo
+            </Text>
+        </TouchableOpacity> 
+
         <TouchableOpacity  style = {styles.buttonStyle}
             onPress={() =>this.logout()}>
             <Text style={styles.textStyle}>
             Logout
             </Text>
         </TouchableOpacity> 
+
+        
 
     <FlatList
     data={this.state.UserInfo.recent_chits}

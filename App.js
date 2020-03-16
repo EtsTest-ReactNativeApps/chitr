@@ -15,8 +15,9 @@ import Update from './screens/Update'
 import UserPhoto from './screens/UserPhoto'
 import MyProfile from './screens/MyProfile'
 import UpdatePhoto from './screens/UpdatePhoto'
-
 import Geolocation from './screens/GeoLocation'
+import ChitPhoto from './screens/UploadPicChit'
+import ViewChitPhoto from './screens/ChitPhoto'
 
 
 import 'react-native-gesture-handler';
@@ -78,6 +79,12 @@ const AppStackNav = createStackNavigator({
     screen: UpdatePhoto
   },
 
+  ChitPhoto : {
+    screen : ChitPhoto
+  },
+  ViewChitPhoto : {
+    screen : ViewChitPhoto
+  }
   
 
   

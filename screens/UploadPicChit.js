@@ -3,13 +3,32 @@ import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import AsyncStorage from '@react-native-community/async-storage';
 
-class UpdatePhoto extends Component {
+class ChitPhoto extends Component {
  constructor(props){
  super(props);
  this.state = {
     token : '',
+    user_id : '',
     };  
  }
+
+ 
+
+ getuserID = async () => {
+    try {
+      const value = await AsyncStorage.getItem('user_id')
+      // console.log("value "+value)
+      if(value !== null) {
+        this.setState({
+            user_id: value,
+          });           
+      }
+     
+
+    } catch(e) {
+      // error reading value
+    }
+}
 
  getToken = async () => {
     try {
@@ -19,7 +38,8 @@ class UpdatePhoto extends Component {
         this.setState({
             token: value
           });
-          console.log("token" + this.state.token) 
+          this.getuserID();
+
       }
     } catch(e) {
       // error reading value
@@ -27,31 +47,30 @@ class UpdatePhoto extends Component {
 }
 
 componentDidMount(){
-  this.getToken();
+this.getToken();
 } 
 
 
-takePic = async()=>{
-  console.log("start");
-
-  console.log(this.state.user_id )
-
-  console.log(this.state.token )
+takePic = async(user_id)=>{
+  console.log("user id "+user_id )
+  console.log("token " +this.state.token )
     if (this.camera){
         const options = {quality : 0.5, base64 : true}
         const data = await this.camera.takePictureAsync(options);
         console.log(data.uri, this.state.token);
-        console.log(`http://10.0.2.2:3333/api/v0.0.5/user/photo`);
-
-        return fetch (`http://10.0.2.2:3333/api/v0.0.5/user/photo`,
+        console.log(`http://10.0.2.2:3333/api/v0.0.5/chits/${user_id}/photo`);
+        return fetch (`http://10.0.2.2:3333/api/v0.0.5/chits/${user_id}/photo`,
         {
             method : 'POST',
             headers : {
                 "Content-Type" : "image/jpeg",
                 "X-Authorization" : this.state.token
+                
             },
+            
             body : data
         })
+        
         .then((response) =>{
           console.log("response status : "+response.status)
           if (response.status === 201){
@@ -93,7 +112,7 @@ takePic = async()=>{
  const options = { quality: 0.5, base64: true };
  const data = await this.camera.takePictureAsync(options);
  console.log(data.uri);
- this.takePic();
+ this.takePic(this.state.user_id);
  }
  };
 }
@@ -103,4 +122,4 @@ const styles = StyleSheet.create({
  capture: { flex: 0, borderRadius: 5, padding: 15, paddingHorizontal: 20,
  alignSelf: 'center', margin: 20, }
 });
-export default UpdatePhoto
+export default ChitPhoto

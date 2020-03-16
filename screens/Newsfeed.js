@@ -138,19 +138,41 @@ class NewsFeed extends Component{
            this.props.navigation.navigate('Chits');
        }
 
-       UsersChits(){
-        return fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
-        .then((response) => response.json())
-        .then((responseData) => {
-        this.setState({
-        isLoading: false,
-        UserData: responseData,
-        });
-        })
-        .catch((error) =>{
-        console.log(error);
-        });
-      }
+        
+
+        UsersChits(){
+          console.log("token test" + this.state.token)
+        fetch('http://10.0.2.2:3333/api/v0.0.5/chits',{
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Authorization': this.state.token
+        }})
+          .then((response) => response.json())
+          .then((responseData) => {
+          this.setState({
+          isLoading: false,
+          UserData: responseData,
+          });
+          })
+          .catch((error) =>{
+          console.log(error);
+          });
+        }
+
+      //  UsersChits(){
+      //   return fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
+      //   .then((response) => response.json())
+      //   .then((responseData) => {
+      //   this.setState({
+      //   isLoading: false,
+      //   UserData: responseData,
+      //   });
+      //   })
+      //   .catch((error) =>{
+      //   console.log(error);
+      //   });
+      // }
 
       toPostChit =()=>{
         this.props.navigation.navigate('PostChit');

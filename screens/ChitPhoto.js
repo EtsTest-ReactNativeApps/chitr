@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {createSwitchNavigator, ThemeColors } from 'react-navigation';
 import Newsfeed from './Newsfeed'
 
-export default class UserPhoto extends React.Component {
+export default class ChitPhoto extends React.Component {
 
 
     constructor(props){
@@ -32,7 +32,7 @@ export default class UserPhoto extends React.Component {
           if(value !== null) {
             this.setState({
                 user_id: value,
-                src : `http://10.0.2.2:3333/api/v0.0.5/user/${value}/photo`
+                src : `http://10.0.2.2:3333/api/v0.0.5/chits/${value}/photo`
               });
           }
           console.log("user id " + this.state.user_id)
@@ -52,27 +52,14 @@ export default class UserPhoto extends React.Component {
  return (
      
 <View style = {{ flex : 1,justifyContent:'flex-start'}}>   
-<Text style = {styles.textStyle} >User profile picture</Text>
+<Text style = {styles.textStyle} >User Chits' Photo</Text>
 
 <Image 
 
   style={{width: '100%', height: '100%'}}        
-  // source={{uri : this.state.src}}
   source={{uri : this.state.src}}
 
   />
-           {/* source={this.photo()} */}
-
-      
-
-  {/* <TouchableOpacity  style = {styles.buttonStyle}
-    onPress={() =>this.props.navigation.navigate('UserInfo')}>
-    <Text style={styles.textStyle}>
-    Cancel
-    </Text>
-  </TouchableOpacity> */}
-  
-
 </View>
   );
  }

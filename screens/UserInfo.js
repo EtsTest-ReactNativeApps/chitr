@@ -254,11 +254,19 @@ class UserInfo extends Component{
     try {
       await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
       console.log("user id => " + user_id);
-      this.props.navigation.navigate('UserPhoto');
+      this.props.navigation.replace('UserPhoto');
     } catch (e) {
     }
   }
 
+  toChitPhoto= async (user_id) => {
+    try {
+      await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
+      console.log("user id => " + user_id);
+      this.props.navigation.navigate('ViewChitPhoto');
+    } catch (e) {
+    }
+  }
       componentDidMount(){
         this.getData();
         this.getToken();
@@ -318,9 +326,19 @@ return(
         <TouchableOpacity  style = {styles.buttonStyle}
             onPress={() =>this.toUserPhoto(this.state.user_id)}>
             <Text style={styles.textStyle}>
-            View photo
+            View profile photo
             </Text>
         </TouchableOpacity> 
+
+        
+        <TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.toChitPhoto(this.state.user_id)}>
+            <Text style={styles.textStyle}>
+            View chit photo
+            </Text>
+        </TouchableOpacity> 
+
+
 
     <FlatList
     data={this.state.UserInfo.recent_chits}
