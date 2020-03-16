@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {Image, Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
-import Card from './Cards';
+// import Card from './Cards';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
+import { Card, Title, Paragraph } from 'react-native-paper';
 
 class HomeScreen extends Component{
     constructor(props){
@@ -87,21 +88,24 @@ class HomeScreen extends Component{
     }
 return(
  <View style = {{ flex : 1}}> 
- 
 <Text style = {styles.textStyle} >Search for a user </Text> 
     <TextInput style = {styles.textInput} placeholder="user" onChangeText={this.handleSearch} value={this.state.given_name}/>
     <FlatList
     data={this.state.userInfo}
     renderItem={({item})=>
-  <View style={{flexDirection: 'row',justifyContent:'space-evenly', alignItems : 'center' }}>
+  <View >
     <TouchableOpacity onPress={() =>this.storeUserId(item.user_id)} >
-    <Card>
+    <Card style = {styles.card}>
     <Image
    style = {styles.container}
      source = {require('../photo/profile.png')}
    />
+
+    <Card.Content>
     <Text style= {styles.chits}>{item.given_name + ' '+ item.family_name}</Text>
-    <Text style= {styles.chits}>{item.email}</Text>
+    <Paragraph style= {styles.chits} >{item.email}</Paragraph>
+    </Card.Content>
+
     </Card>
     </TouchableOpacity>
   </View>
@@ -115,18 +119,30 @@ return(
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+
+  textStyle: {
+    fontSize : 30,
+    alignSelf:'center',
+    color : '#007aff',
+    fontWeight : '600',
+    paddingTop : 10,
+    paddingBottom : 10 
+  },
+    chits: {
+    fontSize : 18,
+    textAlign : 'center',
+    color: 'black',
+    textShadowColor: 'gray',
+    fontFamily: 'sans-serif',
+    textShadowRadius: 19,
+    },
+
     title: {
     color: 'green',
     fontSize: 50,
     fontWeight: 'bold'
     },
-    chits: {
-    color: 'black',
-    fontSize: 20,
-    textShadowColor: 'gray',
-    fontFamily: 'sans-serif',
-    textShadowRadius: 19,
-    },
+
     input: {
         margin: 10,
         height: 40,
@@ -144,23 +160,19 @@ const styles = StyleSheet.create({
         marginTop : 20,
         fontSize : 20
         },
+
+     
         container: {
           flex : 1,
           justifyContent : 'flex-start',
           width : 60,
-          height : 80,
+          height : 63,
           position : 'absolute',
-          right : 150,
-        },
-        textStyle: {
-            fontSize : 30,
-            alignSelf:'center',
-            color : '#007aff',
-            fontWeight : '600',
-            paddingTop : 10,
-            paddingBottom : 10,
-            marginTop : 30,
+          left : 20
           },
+        card: {
+          margin : 5
+        },
 });
 
 // style={{flexDirection: 'row',flex:1,justifyContent:'space-evenly', alignItems : 'center' }}

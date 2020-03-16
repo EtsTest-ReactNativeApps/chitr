@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Alert,HomeIconWithBadge,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
-import Card from './Cards';
+// import Card from './Cards';
 import { TouchableOpacity, State } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer } from 'react-navigation';
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-community/async-storage';
+import { Card, Title, Paragraph } from 'react-native-paper';
 
 
 
@@ -167,7 +168,7 @@ class UserInfo extends Component{
           await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
           console.log("user id => " + user_id);
           //this.props.navigation.dispach();
-          this.props.navigation.replace('Following');
+          this.props.navigation.navigate('Following');
         } catch (e) {
         }
       }
@@ -177,7 +178,7 @@ class UserInfo extends Component{
           await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
           console.log("user id => " + user_id);
           //this.props.navigation.dispach();
-          this.props.navigation.replace('Followers');
+          this.props.navigation.navigate('Followers');
         } catch (e) {
         }
       }
@@ -193,6 +194,9 @@ class UserInfo extends Component{
       }
 
 
+      toGeoLocation =()=>{
+        this.props.navigation.navigate('Geolocation');
+      }
       ToggleFunction = (token) => {
         if (token === undefined){
           this.setState(state=>({
@@ -269,6 +273,8 @@ class UserInfo extends Component{
         )
     }
 
+    
+
 return( 
 <View > 
 
@@ -320,9 +326,11 @@ return(
     data={this.state.UserInfo.recent_chits}
     renderItem={({item})=>
   <View>
-<TouchableOpacity>
-<Card>
-<Text style= {styles.chits}>{item.chit_content + '\n'+ 'timestamp'+ item.timestamp + 'location' + item.location}</Text>
+<TouchableOpacity onPress={() =>this.toGeoLocation()} >
+<Card style = {styles.card}>
+<Card.Content>
+<Paragraph style= {styles.chits}>{item.chit_content + '\n'+ 'timestamp'+ item.timestamp + 'location' + item.location}</Paragraph>
+    </Card.Content>
 </Card>
 </TouchableOpacity>
   </View>
@@ -337,14 +345,24 @@ return(
   export default UserInfo;
 
 const styles = StyleSheet.create({
+
   textStyle: {
-    fontSize : 30,
+    fontSize : 40,
     alignSelf:'center',
     color : '#007aff',
     fontWeight : '600',
     paddingTop : 10,
     paddingBottom : 10 
   },
+    chits: {
+    fontSize : 18,
+    textAlign : 'center',
+    color: 'black',
+    textShadowColor: 'gray',
+    fontFamily: 'sans-serif',
+    textShadowRadius: 19,
+    },
+
   userNameStyle: {
     fontSize : 22,
     alignSelf:'flex-start',
@@ -354,14 +372,7 @@ const styles = StyleSheet.create({
     paddingTop : 10,
     paddingBottom : 10 
   },
-  
-    chits: {
-    color: 'black',
-    fontSize: 20,
-    textShadowColor: 'gray',
-    fontFamily: 'sans-serif',
-    textShadowRadius: 19,
-    },
+ 
     textStyle: {
     fontSize : 22,
     alignSelf:'center',
@@ -379,7 +390,10 @@ const styles = StyleSheet.create({
     marginBottom : 10,
     },
 
-      
+    card: {
+      margin : 5
+    },
+    
 });
 
 

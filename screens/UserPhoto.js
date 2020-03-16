@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Image,FlatList,TouchableOpacity,StyleSheet, ActivityIndicator,StatusBar,Text, View,Button,TextInput,Alert,KeyboardAvoidingView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import {createSwitchNavigator } from 'react-navigation';
+import {createSwitchNavigator, ThemeColors } from 'react-navigation';
 import Newsfeed from './Newsfeed'
 
 export default class UserPhoto extends React.Component {
@@ -10,6 +10,7 @@ export default class UserPhoto extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+        src : 'No photo',
         pic: '',
         token : '',
         given_name: '',
@@ -37,41 +38,50 @@ export default class UserPhoto extends React.Component {
         });
       }
 
-      photo (user_id){
-          var outside
-        console.log(`http://10.0.2.2:3333/api/v0.0.5/user/${JSON.parse(user_id)}/photo`)
-        fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${JSON.parse(user_id)}/photo`, {
+      photo (){
+        console.log(`http://10.0.2.2:3333/api/v0.0.5/user/${this.state.user_id}/photo`)
+        fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${this.state.user_id}/photo`, {
             method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            // headers: {
+            //   'Content-Type': 'image/jpeg',
+            // },
           })
-          .then((response) => response.blob())           
-          .then((responseData) => {
-            this.setState({
-            pic: JSON.parse(responseData)                
-            })
-            outside = URL.createObjectURL(pic)
-            console.log("status "+outside)
 
-            console.log("status "+response.status)
-            console.log(data)
-            console.log(JSON.parse(responseData) )
-        });
+        //   .then((response) => response.blob())           
+        //   .then((responseData) => {
+        //     // const blob = responseData.blobId;
+        //     console.log(responseData.data.blobId)
+        //     const blob  = responseData.data.blobId
+        //     var blobUrl = URL.createObjectURL(blob);
+        //     console.log(blobUrl)
+
+        //     this.setState({
+        //      pic: blobUrl                
+        //     })
+        //     outside = URL.createObjectURL(pic)
+        //     console.log("status "+outside)
+
+        //     console.log("status "+response.status)
+        //     console.log(data)
+        //     console.log(JSON.parse(responseData) )
+        // });
         }
     
-      
- 
+        
       getData = async () => {
         try {
           const value = await AsyncStorage.getItem('userid')
           console.log("value "+value)
           if(value !== null) {
             this.setState({
-                user_id: value
+                user_id: value,
+                src : `http://10.0.2.2:3333/api/v0.0.5/user/${value}/photo`
               });
-              this.photo(value);
+              //this.photo(value);
           }
+          console.log("user id " + this.state.user_id)
+          console.log("source " + this.state.src)
+
         } catch(e) {
           // error reading value
         }
@@ -89,9 +99,14 @@ export default class UserPhoto extends React.Component {
 <Text style = {styles.textStyle} >User profile picture</Text>
 
 <Image
-          style={{width: 50, height: 50}}
-          src={ this.state.pic}
-        />
+     source = {require('../photo/profile.png')}
+
+  style={{width: '100%', height: '100%'}}        
+  source={{uri : this.state.src}}
+  />
+           {/* source={this.photo()} */}
+
+      
 
   {/* <TouchableOpacity  style = {styles.buttonStyle}
     onPress={() =>this.props.navigation.navigate('UserInfo')}>

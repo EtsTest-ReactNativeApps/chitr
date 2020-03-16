@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Alert,HomeIconWithBadge,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
-import Card from './Cards';
+// import Card from './Cards';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer } from 'react-navigation';
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-community/async-storage';
 
+import { Card, Title, Paragraph } from 'react-native-paper';
 
 
 class UserInfo extends Component{
@@ -131,6 +132,13 @@ class UserInfo extends Component{
     }
   }
 
+  toUpdatePhoto= async () => {
+    try {
+      this.props.navigation.navigate('UpdatePhoto');
+    } catch (e) {
+    }
+  }
+
   logout = async  () => {
     await AsyncStorage.clear();
    this.props.navigation.navigate('Start');
@@ -150,7 +158,7 @@ class UserInfo extends Component{
         )
     }
 return( 
-<View > 
+<View> 
 
     <Text style= {styles.textStyle}>My profile</Text>
 
@@ -160,16 +168,17 @@ return(
             onPress={() =>this.toFollowing(this.state.user_id)}>
             <Text style={styles.textStyle}>
             Following
-            </Text>
+            </Text> 
+      </TouchableOpacity> 
     
-        </TouchableOpacity> 
+    <TouchableOpacity  style = {styles.buttonStyle}
+        onPress={() =>this.toFollowers(this.state.user_id)}>
+        <Text style={styles.textStyle}>
+        Followers
+        </Text>
+    </TouchableOpacity> 
     
-        <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.toFollowers(this.state.user_id)}>
-            <Text style={styles.textStyle}>
-            Followers
-            </Text>
-        </TouchableOpacity> 
+        
         
         <TouchableOpacity  style = {styles.buttonStyle}
             onPress={() =>this.toUpdate(this.state.user_id)}>
@@ -182,6 +191,13 @@ return(
             onPress={() =>this.toUserPhoto(this.state.user_id)}>
             <Text style={styles.textStyle}>
             View photo
+            </Text>
+        </TouchableOpacity> 
+
+        <TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.toUpdatePhoto()}>
+            <Text style={styles.textStyle}>
+            Update Photo
             </Text>
         </TouchableOpacity> 
         
@@ -197,8 +213,10 @@ return(
     renderItem={({item})=>
   <View>
 <TouchableOpacity>
-<Card>
-<Text style= {styles.chits}>{item.chit_content + '\n'+ 'timestamp'+ item.timestamp + 'location' + item.location}</Text>
+<Card style = {styles.card}>
+<Card.Content>
+<Paragraph style= {styles.chits}>{item.chit_content + '\n'+ 'timestamp'+ item.timestamp + 'location' + item.location}</Paragraph>
+    </Card.Content>
 </Card>
 </TouchableOpacity>
   </View>
@@ -213,14 +231,7 @@ return(
   export default UserInfo;
 
 const styles = StyleSheet.create({
-  textStyle: {
-    fontSize : 30,
-    alignSelf:'center',
-    color : '#007aff',
-    fontWeight : '600',
-    paddingTop : 10,
-    paddingBottom : 10 
-  },
+
   userNameStyle: {
     fontSize : 22,
     alignSelf:'flex-start',
@@ -231,28 +242,40 @@ const styles = StyleSheet.create({
     paddingBottom : 10 
   },
   
-    chits: {
-    color: 'black',
-    fontSize: 20,
-    textShadowColor: 'gray',
-    fontFamily: 'sans-serif',
-    textShadowRadius: 19,
-    },
-    textStyle: {
+  textStyle: {
     fontSize : 22,
     alignSelf:'center',
     color : '#007aff',
-    fontWeight : '600',    
+    fontWeight : '600',
+    paddingTop : 10,
+    paddingBottom : 10 ,
+
+  },
+    chits: {
+    textAlign : 'center',
+    color: 'black',
+    textShadowColor: 'gray',
+    fontFamily: 'sans-serif',
+    textShadowRadius: 19,
+    fontSize : 20,
+
     },
     buttonStyle: {
-    alignSelf:'flex-start',
-    borderRadius : 25,
-    borderColor: '#007aff',
-    marginLeft : 20,
-    paddingLeft:10,
-    paddingRight : 10,
-    marginRight : 20,
-    marginBottom : 10,
+      flexDirection : 'row',
+      alignSelf:'flex-start',
+      borderRadius : 25,
+      borderColor: '#007aff',
+      marginLeft : 20,
+      paddingLeft:10,
+      paddingRight : 10,
+      marginRight : 20,
+      marginBottom : 10,
+    //   justifyContent: 'center',
+    // alignItems: 'center',
+    textAlignVertical : 'center',
+      },
+    card: {
+      margin : 5
     },
 
       

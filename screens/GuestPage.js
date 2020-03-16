@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Image,RefreshControl,HomeIconWithBadge,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
-import Card from './Cards';
+// import Card from './Cards';
+// import { Title, Paragraph } from 'react-native-paper';
+import { Card, Title, Paragraph } from 'react-native-paper';
+
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer } from 'react-navigation';
@@ -103,13 +106,20 @@ return(
     renderItem={({item})=>
   <View>
 <TouchableOpacity onPress={() =>this.storeUserId(item.user.user_id)} >
-<Card>
+<Card style = {styles.card}>
 <Image
    style = {styles.container}
      source = {require('../photo/profile.png')}
    />
+{/* <Card.Content>
 <Text style= {styles.chits}>{item.user.given_name + ' '+ item.user.family_name}</Text>
 <Text style= {styles.chits}>{item.chit_content}</Text>
+</Card.Content> */}
+
+<Card.Content>
+<Title style= {styles.chits} >{item.user.given_name + ' '+ item.user.family_name}</Title>
+<Paragraph style= {styles.chits} >{item.chit_content}</Paragraph>
+    </Card.Content>
 </Card>
 </TouchableOpacity>
   </View>
@@ -132,7 +142,6 @@ const TabNavigator = createBottomTabNavigator({
 export default createAppContainer(TabNavigator);
 
 
-
 //  export default HomeScreen;
 
 const styles = StyleSheet.create({
@@ -145,27 +154,30 @@ const styles = StyleSheet.create({
     paddingBottom : 10 
   },
     chits: {
+    textAlign : 'center',
     color: 'black',
-    fontSize: 20,
     textShadowColor: 'gray',
     fontFamily: 'sans-serif',
     textShadowRadius: 19,
     },
     input: {
-        margin: 10,
-        height: 40,
-        borderBottomWidth: 1,
-        borderBottomColor: 'gray',
+    margin: 10,
+    height: 40,
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
+    },
+    container: {
+    flex : 1,
+    justifyContent : 'flex-start',
+    width : 60,
+    height : 80,
+    position : 'absolute',
+    left : 20
+    },
+    card: {
+      margin : 5
       },
-      container: {
-        flex : 1,
-        justifyContent : 'flex-start',
-        width : 60,
-        height : 80,
-        position : 'absolute',
-        right : 150,
-      },
-
+    
       
 });
 

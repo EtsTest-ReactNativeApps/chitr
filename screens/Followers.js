@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { TouchableOpacity,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
+import { Image,TouchableOpacity,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import Card from './Cards';
+// import Card from './Cards';
+import { Card, Title, Paragraph } from 'react-native-paper';
 
 class Followers extends Component{
     constructor(props){
@@ -88,10 +89,17 @@ return(
 <FlatList
     data={this.state.userInfo}
     renderItem={({item})=>
-  <View style={{flexDirection: 'row',flex:1,justifyContent:'space-evenly', alignItems : 'center' }}>
+  <View>
   <TouchableOpacity onPress={() =>this.storeUserId(item.user_id)} >
-  <Card>
-  <Text style = {styles.chits}>{item.given_name + ' '+ item.family_name + '- ' + item.email}</Text>
+  <Card style = {styles.card}>
+  <Image
+   style = {styles.container}
+     source = {require('../photo/profile.png')}
+   />
+   <Card.Content>
+<Text style= {styles.chits}>{item.given_name +' '+ 'timestamp'+ item.family_name}</Text>
+  <Paragraph style = {styles.chits}>{item.email}</Paragraph>  
+    </Card.Content>    
   </Card>
   </TouchableOpacity>
   </View>
@@ -113,18 +121,20 @@ const styles = StyleSheet.create({
     paddingTop : 10,
     paddingBottom : 10 
   },
+    chits: {
+    textAlign : 'center',
+    color: 'black',
+    textShadowColor: 'gray',
+    fontFamily: 'sans-serif',
+    textShadowRadius: 19,
+    fontSize : 20,
+    },
     title: {
     color: 'green',
     fontSize: 50,
     fontWeight: 'bold'
     },
-    chits: {
-    color: 'black',
-    fontSize: 16,
-    textShadowColor: 'gray',
-    fontFamily: 'sans-serif',
-    textShadowRadius: 19,
-    },
+  
     input: {
         margin: 10,
         height: 40,
@@ -135,5 +145,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#DDDDDD',
         padding: 5,
         margin : 10,
-      }
+      },
+      container: {
+        flex : 1,
+        justifyContent : 'flex-start',
+        width : 60,
+        height : 70,
+        position : 'absolute',
+        left : 20
+        },
+        card: {
+          margin : 5
+          },
 });

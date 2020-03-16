@@ -53,8 +53,8 @@ storeId = async (user_id) => {
           'X-Authorization': token
         },     
         body: JSON.stringify({  
-           email: 'yamenedel@gmail.com',
-           password: 'yamen',
+           email: 'john@gmail.com',
+           password: 'john',
           // email: this.state.loginEmail,
           // password: this.state.loginPass,
        })

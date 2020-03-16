@@ -14,6 +14,10 @@ import UserInfo from './screens/UserInfo'
 import Update from './screens/Update'
 import UserPhoto from './screens/UserPhoto'
 import MyProfile from './screens/MyProfile'
+import UpdatePhoto from './screens/UpdatePhoto'
+
+import Geolocation from './screens/GeoLocation'
+
 
 import 'react-native-gesture-handler';
 
@@ -67,6 +71,16 @@ const AppStackNav = createStackNavigator({
   MyProfile: {
     screen: MyProfile
   },
+  Geolocation: {
+    screen: Geolocation
+  },
+  UpdatePhoto: {
+    screen: UpdatePhoto
+  },
+
+  
+
+  
   
   
   

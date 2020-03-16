@@ -174,10 +174,10 @@ export default class Update extends React.Component {
     </Text>
   </TouchableOpacity>
 
-  <TouchableOpacity  style = {styles.buttonStyle}
+  <TouchableOpacity  style = {styles.cancelStyle}
         onPress={() =>this.Cancel()}>
         
-    <Text style={styles.textStyle}>
+    <Text style={styles.cancelText}>
     Cancel
     </Text>
   </TouchableOpacity>
@@ -207,10 +207,28 @@ const styles = StyleSheet.create({
     paddingBottom : 10 
   },
 
+  cancelText: {
+    fontSize : 22,
+    alignSelf:'center',
+    color : 'red',
+    fontWeight : '600',
+    paddingTop : 10,
+    paddingBottom : 10 
+  },
+
   buttonStyle: {
     borderRadius : 25,
     borderWidth: 2,
     borderColor: '#007aff',
+    marginLeft : 20,
+    marginRight : 20,
+    padding :9,
+    marginBottom : 15,
+  },
+  cancelStyle: {
+    borderRadius : 25,
+    borderWidth: 2,
+    borderColor: 'red',
     marginLeft : 20,
     marginRight : 20,
     padding :9,

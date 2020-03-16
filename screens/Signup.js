@@ -87,7 +87,7 @@ storeToken = async (token) => {
  render(){
    
  return (
-<View style = {{ flex : 1,justifyContent:'space-evenly'  }}>   
+<View style = {{ flex : 1,justifyContent:'space-around'  }}>   
         <Text style = {styles.textStyle} >Sign up for an account </Text>
         <TextInput style = {styles.fields} placeholder="First name" onChangeText={this.handleGivenName} value={this.state.given_name}/>
         <TextInput style = {styles.fields} placeholder="Last Name" onChangeText={this.handleLastName} value={this.state.family_name}/>
@@ -103,7 +103,6 @@ storeToken = async (token) => {
     Create account
     </Text>
   </TouchableOpacity>
-
 </View>
   );
  }
@@ -139,6 +138,6 @@ const styles = StyleSheet.create({
     padding : 10,
     marginBottom : 10,
   },
-  
+ 
 })
 

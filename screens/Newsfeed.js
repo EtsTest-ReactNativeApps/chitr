@@ -6,8 +6,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 import GuestPage from './GuestPage'
 import MyPhoto from './TakePhoto'
 import MyProfile from './MyProfile'
-import Card from './Cards';
+// import Card from './Cards';
 import Search from './Search'
+import { Card, Title, Paragraph } from 'react-native-paper';
 
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import ActionButton from 'react-native-circular-action-menu';
@@ -183,13 +184,17 @@ class NewsFeed extends Component{
     
 <TouchableOpacity onPress={() =>this.storeUserId(item.user.user_id)} >
   
-<Card >
+<Card style = {styles.card}>
 <Image
    style = {styles.container}
      source = {require('../photo/profile.png')}
    />
+
+<Card.Content>
 <Text style= {styles.chits}>{item.user.given_name +' '+ item.user.family_name}</Text>
-<Text style= {styles.chits}>{item.chit_content}</Text>
+<Paragraph style= {styles.chits} >{item.chit_content}</Paragraph>
+    </Card.Content>
+
 </Card>
 
 </TouchableOpacity>
@@ -199,15 +204,9 @@ class NewsFeed extends Component{
   }
   keyExtractor={({id}, index) => id}
   />
-    <ActionButton  buttonColor="rgba(231,76,60,1)" style = {styles.actionButton} >
-          <ActionButton.Item  buttonColor='#9b59b6' title="Post" onPress={() => this.toPostChit()}>
-            <Icon name="android-create" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
-          
-          {/* <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>
-            <Icon name="android-done-all" style={styles.actionButtonIcon} />
-          </ActionButton.Item> */}
-  </ActionButton>
+    <ActionButton  buttonColor="rgba(231,76,60,1)" style = {styles.actionButton} onPress={() => this.toPostChit()} >
+  
+    </ActionButton>
   
   </View>
     
@@ -230,65 +229,101 @@ export default createAppContainer(TabNavigator);
 
 const styles = StyleSheet.create({
 
-    title: {
-    color: 'green',
-    fontSize: 50,
-    fontWeight: 'bold'
-    },
-    postchit: {
-    backgroundColor: '#DDDDDD',
-    borderWidth: 1,
-    borderColor: '#336633',
-    },
-    chits: {
-    color: 'black',
-    fontSize: 19,
-    textShadowColor: 'gray',
-    fontFamily: 'sans-serif',
-    textShadowRadius: 19,
-
-    },
-    input: {
-    backgroundColor: '#48BBEC',
-    borderColor: '#48BBEC',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 10,
-    alignSelf: 'flex-start',
-    },
-    post: {
-    fontSize: 30,
-    alignSelf: 'center',
-    marginBottom: 30
-    },
-    textStyle: {
+  textStyle: {
     fontSize : 30,
     alignSelf:'center',
     color : '#007aff',
     fontWeight : '600',
     paddingTop : 10,
     paddingBottom : 10 
-    },
-    actionButton: {
-      position: 'absolute',
-      
-      width: 50,
-      height: 50,
-      right: 30,
-      bottom: 30,
-    },
-    actionButtonIcon: {
-      
+  },
+    chits: {
+      fontSize : 18,
 
+    textAlign : 'center',
+    color: 'black',
+    textShadowColor: 'gray',
+    fontFamily: 'sans-serif',
+    textShadowRadius: 19,
     },
-
+    input: {
+    margin: 10,
+    height: 40,
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
+    },
     container: {
-      flex : 1,
-      justifyContent : 'flex-start',
-      width : 60,
-      height : 80,
-      position : 'absolute',
-      right : 150,
+    flex : 1,
+    justifyContent : 'flex-start',
+    width : 60,
+    height : 63,
+    position : 'absolute',
+    left : 20
     },
+    card: {
+      margin : 5
+    },
+    
+    // title: {
+    // color: 'green',
+    // fontSize: 50,
+    // fontWeight: 'bold'
+    // },
+    // postchit: {
+    // backgroundColor: '#DDDDDD',
+    // borderWidth: 1,
+    // borderColor: '#336633',
+    // },
+    // chits: {
+    //   textAlign : 'center',
+    //   color: 'black',
+    //   textShadowColor: 'gray',
+    //   fontFamily: 'sans-serif',
+    //   textShadowRadius: 19,
+    //   },
+    // input: {
+    // backgroundColor: '#48BBEC',
+    // borderColor: '#48BBEC',
+    // borderWidth: 1,
+    // borderRadius: 8,
+    // marginBottom: 10,
+    // alignSelf: 'flex-start',
+    // },
+    // post: {
+    // fontSize: 30,
+    // alignSelf: 'center',
+    // marginBottom: 30
+    // },
+    // textStyle: {
+    // fontSize : 30,
+    // alignSelf:'center',
+    // color : '#007aff',
+    // fontWeight : '600',
+    // paddingTop : 10,
+    // paddingBottom : 10 
+    // },
+    // actionButton: {
+    //   position: 'absolute',
+    //   width: 50,
+    //   height: 50,
+    //   right: 30,
+    //   bottom: 30,
+    // },
+    // actionButtonIcon: {
+      
+
+    // },
+    // card: {
+    //   margin : 5
+    //   },
+
+    //   container: {
+    //   flex : 1,
+    //   justifyContent : 'flex-start',
+    //   width : 60,
+    //   height : 80,
+    //   position : 'absolute',
+    //   left : 20
+    // },
       
 });
