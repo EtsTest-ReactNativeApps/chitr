@@ -1,9 +1,6 @@
 import * as React from 'react';
 import {Image,FlatList,TouchableOpacity,StyleSheet, ActivityIndicator,StatusBar,Text, View,Button,TextInput,Alert,KeyboardAvoidingView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import {createSwitchNavigator, ThemeColors } from 'react-navigation';
-import Newsfeed from './Newsfeed'
-
 export default class ChitPhoto extends React.Component {
 
 
@@ -27,12 +24,12 @@ export default class ChitPhoto extends React.Component {
         
       getData = async () => {
         try {
-          const value = await AsyncStorage.getItem('userid')
+          const value = await AsyncStorage.getItem('UserID')
           console.log("value "+value)
           if(value !== null) {
             this.setState({
                 user_id: value,
-                src : `http://10.0.2.2:3333/api/v0.0.5/chits/${value}/photo`
+                src : `http://10.0.2.2:3333/api/v0.0.5/chits/${JSON.parse(value)}/photo`
               });
           }
           console.log("user id " + this.state.user_id)
@@ -43,10 +40,12 @@ export default class ChitPhoto extends React.Component {
         }
     }
 
+
     componentDidMount(){
         this.getData();   
        } 
-      
+    
+       
  render(){
    
  return (

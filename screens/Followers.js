@@ -50,7 +50,7 @@ class Followers extends Component{
       console.log('hey')
       await AsyncStorage.setItem('userid', JSON.stringify(user_id))
       console.log("user id => " + user_id);
-      this.props.navigation.navigate('UserInfo');
+      this.props.navigation.replace('UserInfo');
     } catch (e) {
     }
   }

@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { Alert,HomeIconWithBadge,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
-// import Card from './Cards';
+import { RefreshControl,Alert,Text, View,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 import { TouchableOpacity, State } from 'react-native-gesture-handler';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { createAppContainer } from 'react-navigation';
-// import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Card, Title, Paragraph } from 'react-native-paper';
+import { Card, Paragraph } from 'react-native-paper';
 
 
 
@@ -15,8 +11,12 @@ class UserInfo extends Component{
         super(props);
         this.state = {
         isVisible : true,
+        isVisible2: true,
+        refreshing: false,
+        setRefreshing : false,
         token : null,
         user_id : '',
+        loggedUserID : '',
         given_name: '',
         family_name: '',
         text : '',
@@ -66,11 +66,7 @@ class UserInfo extends Component{
       });
   }
 
-    
-    Show =()=>{
-        this.props.navigation.navigate('UserProfile');
-      }
-    
+  
     handleGivenName = (text) => {
         this.setState({ given_name: text })
     }
@@ -144,7 +140,7 @@ class UserInfo extends Component{
 }
 
     getUserInfo(user_id){
-      const user_ID = '';
+      // const user_ID = '';
         return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}`)
 
         .then((response) => response.json())
@@ -154,7 +150,7 @@ class UserInfo extends Component{
           
         isLoading: false,
         UserInfo: responseJson,
-        user_ID : this.state.UserInfo.user_id,
+        // user_ID : this.state.UserInfo.user_id,
         });
         })
         
@@ -187,7 +183,6 @@ class UserInfo extends Component{
         try {
           await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
           console.log("user id => " + user_id);
-          //this.props.navigation.dispach();
           this.props.navigation.navigate('Update');
         } catch (e) {
         }
@@ -197,53 +192,83 @@ class UserInfo extends Component{
       toGeoLocation =()=>{
         this.props.navigation.navigate('Geolocation');
       }
-      ToggleFunction = (token) => {
-        if (token === undefined){
+
+
+      ToggleFunction = (user_id,loggeduserID) => {
+        if (user_id != loggeduserID || this.state.token === undefined){
           this.setState(state=>({
             isVisible: !state.isVisible,
             }));  
       }
-
-      else {
-        this.setState(state => ({
-          isVisible: state.isVisible
-        }));
-        console.log("else "+this.state.isVisible)
-
-      }
-        console.log(this.state.isVisible)
-
-      
+         
       };
 
-    getData = async () => {
+      ToggleFunction2 = (user_id,loggeduserID) => {
+        if (user_id == loggeduserID){
+          this.setState(state=>({
+            isVisible2: !state.isVisible2,
+            }));    
+      }    
+      };
+
+    getLoggedUserID = async () => {
+      this.getToken();
+      try {
+        const value = await AsyncStorage.getItem('user_id')
+        if(value !== null) {
+          this.setState({
+            loggedUserID: value
+            });
+        }
+           this.ToggleFunction(this.state.user_id,this.state.loggedUserID);
+           this.ToggleFunction2(this.state.user_id,this.state.loggedUserID);
+
+      } catch(e) {
+      }
+  }
+
+    getUserID = async () => {
+  
         try {
           const value = await AsyncStorage.getItem('userid')
-          console.log("value "+value)
-          if(value !== null) {
+          console.log("getuserID fun" + value)
+          if(value != null) {
             this.setState({
                 user_id: value
               });
+              this.getLoggedUserID();  
+              this.getUserInfo(value);
+
           }
-          this.getUserInfo(this.state.user_id);
+          else if (value = null){
+            this.setState({
+              value: loggedUserID
+            });
+            console.log("not here ")
+            this.getLoggedUserID();  
+            this.getUserInfo(value);
+          }
+
         } catch(e) {
           // error reading value
         }
     }
+
+    
+
+    
+   
 
     getToken = async () => {
       try {
         const value = await AsyncStorage.getItem('token')
         console.log("getdata"+value)
         if(value !== null) {
-          this.ToggleFunction(value);
+          // this.ToggleFunction(value);
           this.setState({
               token: value
             });
-          }
-            else {
-            this.ToggleFunction();
-            }
+          } 
         
       } catch(e) {
         // error reading value
@@ -267,10 +292,38 @@ class UserInfo extends Component{
     } catch (e) {
     }
   }
+
+  toUpdate= async (user_id) => {
+    try {
+      await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
+      console.log("user id => " + user_id);
+      //this.props.navigation.dispach();
+      this.props.navigation.navigate('Update');
+    } catch (e) {
+    }
+  }
+
+  logout = async  () => {
+    await AsyncStorage.clear();
+   this.props.navigation.navigate('Start');
+    }
       componentDidMount(){
-        this.getData();
-        this.getToken();
+        this.getUserID();
       } 
+
+      toUplaodChitPic= async () => {
+        try {
+          this.props.navigation.navigate('ChitPhoto');
+        } catch (e) {
+        }
+      }
+
+      toUpdatePhoto= async () => {
+        try {
+          this.props.navigation.navigate('UpdatePhoto');
+        } catch (e) {
+        }
+      }
 
  render(){
     if(this.state.isLoading){
@@ -281,12 +334,12 @@ class UserInfo extends Component{
         )
     }
 
-    
+   
 
 return( 
 <View > 
 
-    <Text style= {styles.textStyle}>UserInfo</Text>
+    <Text style= {styles.headerText}>UserInfo</Text>
 
     <Text style= {styles.userNameStyle} >{this.state.UserInfo.given_name + ' ' + this.state.UserInfo.family_name + '     ' + this.state.UserInfo.email}</Text>
     
@@ -306,22 +359,23 @@ return(
         </TouchableOpacity> 
 
         {
-       this.state.isVisible ? <TouchableOpacity  style = {styles.buttonStyle}
+        this.state.isVisible2? <TouchableOpacity  style = {styles.buttonStyle}
             onPress={() =>this.followUser(this.state.user_id)}>
             <Text style={styles.textStyle}>
             Follow
             </Text>
-        </TouchableOpacity> :null
-        }
+        </TouchableOpacity> : null
+        } 
+        
+        
         {
-        this.state.isVisible ?
-        <TouchableOpacity  style = {styles.buttonStyle}
+        this.state.isVisible2 ? <TouchableOpacity  style = {styles.buttonStyle}
             onPress={() =>this.unFollowUser(this.state.user_id)}>
             <Text style={styles.textStyle}>
             Unfollow
             </Text>
-        </TouchableOpacity> : null
-        }
+        </TouchableOpacity> :null
+          }
      
         <TouchableOpacity  style = {styles.buttonStyle}
             onPress={() =>this.toUserPhoto(this.state.user_id)}>
@@ -338,9 +392,51 @@ return(
             </Text>
         </TouchableOpacity> 
 
+        {
+        this.state.isVisible ?<TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.toUpdate(this.state.user_id)}>
+            <Text style={styles.textStyle}>
+              Update account
+            </Text>
+        </TouchableOpacity>: null
+        }
 
+        {
+        this.state.isVisible ?  
+        <TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.toUpdatePhoto()}>
+            <Text style={styles.textStyle}>
+            Update profile Photo
+            </Text>
+        </TouchableOpacity> : null
+        }
+        {
+          
+        this.state.isVisible ?<TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.toUplaodChitPic()}>
+            <Text style={styles.textStyle}>
+            Upload chit photo
+            </Text>
+        </TouchableOpacity> : null
+        }
+
+        {
+        this.state.isVisible ? <TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.logout()}>
+            <Text style={styles.textStyle}>
+            Logout
+            </Text>
+        </TouchableOpacity> : null
+        }
 
     <FlatList
+    refreshControl={
+      <RefreshControl
+        refreshing={this.state.refreshing}
+        onRefresh={this._onRefresh}
+        />
+      }
+
     data={this.state.UserInfo.recent_chits}
     renderItem={({item})=>
   <View>
@@ -364,13 +460,18 @@ return(
 
 const styles = StyleSheet.create({
 
-  textStyle: {
-    fontSize : 40,
+  headerText: {
+    fontSize : 27,
     alignSelf:'center',
     color : '#007aff',
     fontWeight : '600',
-    paddingTop : 10,
-    paddingBottom : 10 
+  },
+
+  textStyle: {
+    fontSize : 22,
+    alignSelf:'flex-start',
+    color : '#007aff',
+    fontWeight : '600',
   },
     chits: {
     fontSize : 18,
@@ -383,7 +484,7 @@ const styles = StyleSheet.create({
 
   userNameStyle: {
     fontSize : 22,
-    alignSelf:'flex-start',
+    alignSelf:'center',
     marginLeft : 20,
     color : 'purple',
     fontWeight : '600',
@@ -391,21 +492,13 @@ const styles = StyleSheet.create({
     paddingBottom : 10 
   },
  
-    textStyle: {
-    fontSize : 22,
-    alignSelf:'center',
-    color : '#007aff',
-    fontWeight : '600',    
-    },
-    buttonStyle: {
+    buttonStyle: {     
     alignSelf:'flex-start',
     borderRadius : 25,
     borderColor: '#007aff',
     marginLeft : 20,
     paddingLeft:10,
     paddingRight : 10,
-    marginRight : 20,
-    marginBottom : 10,
     },
 
     card: {

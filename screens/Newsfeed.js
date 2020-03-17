@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import GuestPage from './GuestPage'
 import MyPhoto from './TakePhoto'
 import MyProfile from './MyProfile'
-// import Card from './Cards';
+import UserInfo from './UserInfo'
 import Search from './Search'
 import { Card, Title, Paragraph } from 'react-native-paper';
 
@@ -45,6 +45,7 @@ class NewsFeed extends Component{
         }; 
     }
 
+    
     handleSearch = (text) => {
         this.setState({ given_name: text })
     }
@@ -73,7 +74,7 @@ class NewsFeed extends Component{
         });
     }
 
-    storeUserId= async (user_id) => {
+    toUserInfo= async (user_id) => {
       try {
         await AsyncStorage.setItem('userid', JSON.stringify(user_id))
         console.log("user id => " + user_id);
@@ -82,6 +83,7 @@ class NewsFeed extends Component{
       }
     }
 
+    
     getData = async () => {
         try {
           const value = await AsyncStorage.getItem('token')
@@ -90,9 +92,11 @@ class NewsFeed extends Component{
                 token: value
               });
           }
+          this.UsersChits();
         } catch(e) {
           // error reading value
         }
+
       }
 
     postChit(){
@@ -127,11 +131,11 @@ class NewsFeed extends Component{
         console.error(error);
         });
     }
-          
+     
 
         componentDidMount(){
             this.getData();
-            this.UsersChits();
+            
            }
 
         Chits =  () => {
@@ -141,8 +145,8 @@ class NewsFeed extends Component{
         
 
         UsersChits(){
-          console.log("token test" + this.state.token)
-        fetch('http://10.0.2.2:3333/api/v0.0.5/chits',{
+        console.log("token test" + this.state.token)
+        return fetch('http://10.0.2.2:3333/api/v0.0.5/chits',{
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -159,20 +163,6 @@ class NewsFeed extends Component{
           console.log(error);
           });
         }
-
-      //  UsersChits(){
-      //   return fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
-      //   .then((response) => response.json())
-      //   .then((responseData) => {
-      //   this.setState({
-      //   isLoading: false,
-      //   UserData: responseData,
-      //   });
-      //   })
-      //   .catch((error) =>{
-      //   console.log(error);
-      //   });
-      // }
 
       toPostChit =()=>{
         this.props.navigation.navigate('PostChit');
@@ -204,7 +194,7 @@ class NewsFeed extends Component{
     
   <View>
     
-<TouchableOpacity onPress={() =>this.storeUserId(item.user.user_id)} >
+<TouchableOpacity onPress={() =>this.toUserInfo(item.user.user_id)} >
   
 <Card style = {styles.card}>
 <Image
@@ -236,10 +226,11 @@ class NewsFeed extends Component{
  }
 }
 
-const TabNavigator = createBottomTabNavigator({
+const  TabNavigator = createBottomTabNavigator({
   NewsFeed :{
-    screen : NewsFeed
-  },
+    screen : NewsFeed,
+
+},
   Search :{
     screen : Search
   },
@@ -284,68 +275,5 @@ const styles = StyleSheet.create({
     },
     card: {
       margin : 5
-    },
-    
-    // title: {
-    // color: 'green',
-    // fontSize: 50,
-    // fontWeight: 'bold'
-    // },
-    // postchit: {
-    // backgroundColor: '#DDDDDD',
-    // borderWidth: 1,
-    // borderColor: '#336633',
-    // },
-    // chits: {
-    //   textAlign : 'center',
-    //   color: 'black',
-    //   textShadowColor: 'gray',
-    //   fontFamily: 'sans-serif',
-    //   textShadowRadius: 19,
-    //   },
-    // input: {
-    // backgroundColor: '#48BBEC',
-    // borderColor: '#48BBEC',
-    // borderWidth: 1,
-    // borderRadius: 8,
-    // marginBottom: 10,
-    // alignSelf: 'flex-start',
-    // },
-    // post: {
-    // fontSize: 30,
-    // alignSelf: 'center',
-    // marginBottom: 30
-    // },
-    // textStyle: {
-    // fontSize : 30,
-    // alignSelf:'center',
-    // color : '#007aff',
-    // fontWeight : '600',
-    // paddingTop : 10,
-    // paddingBottom : 10 
-    // },
-    // actionButton: {
-    //   position: 'absolute',
-    //   width: 50,
-    //   height: 50,
-    //   right: 30,
-    //   bottom: 30,
-    // },
-    // actionButtonIcon: {
-      
-
-    // },
-    // card: {
-    //   margin : 5
-    //   },
-
-    //   container: {
-    //   flex : 1,
-    //   justifyContent : 'flex-start',
-    //   width : 60,
-    //   height : 80,
-    //   position : 'absolute',
-    //   left : 20
-    // },
-      
+    },      
 });

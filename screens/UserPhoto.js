@@ -1,8 +1,6 @@
 import * as React from 'react';
-import {Image,FlatList,TouchableOpacity,StyleSheet, ActivityIndicator,StatusBar,Text, View,Button,TextInput,Alert,KeyboardAvoidingView } from 'react-native';
+import {Image,StyleSheet,Text, View } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import {createSwitchNavigator, ThemeColors } from 'react-navigation';
-import Newsfeed from './Newsfeed'
 
 export default class UserPhoto extends React.Component {
 
@@ -25,26 +23,44 @@ export default class UserPhoto extends React.Component {
     }
          
         
-      getData = async () => {
-        try {
-          const value = await AsyncStorage.getItem('userid')
-          console.log("value "+value)
-          if(value !== null) {
-            this.setState({
-                user_id: value,
-                src : `http://10.0.2.2:3333/api/v0.0.5/user/${value}/photo`
-              });
-          }
-          console.log("user id " + this.state.user_id)
-          console.log("source " + this.state.src)
+    //   getData = async () => {
+    //     try {
+    //       const value = await AsyncStorage.getItem('user_id')
+    //       console.log("value "+value)
+    //       if(value !== null) {
+    //         this.setState({
+    //             user_id: value,
+    //             src : `http://10.0.2.2:3333/api/v0.0.5/user/${value}/photo`
+    //           });
+    //       }
+    //       console.log("user id " + this.state.user_id)
+    //       console.log("source " + this.state.src)
 
-        } catch(e) {
-          // error reading value
+    //     } catch(e) {
+    //       // error reading value
+    //     }
+    // }
+
+    getUserID = async () => {
+      try {
+        const value = await AsyncStorage.getItem('UserID')
+        console.log("value "+value)
+        if(value !== null) {
+          this.setState({
+              user_id: value,
+              src : `http://10.0.2.2:3333/api/v0.0.5/user/${JSON.parse(value)}/photo`
+            });
         }
-    }
+        console.log("user id " + JSON.parse(this.state.user_id))
+        console.log("source " + this.state.src)
+
+      } catch(e) {
+        // error reading value
+      }
+  }
 
     componentDidMount(){
-        this.getData();   
+        this.getUserID();   
        } 
       
  render(){
@@ -57,11 +73,10 @@ export default class UserPhoto extends React.Component {
 <Image 
 
   style={{width: '100%', height: '100%'}}        
-  // source={{uri : this.state.src}}
   source={{uri : this.state.src}}
+  // source={{uri : 'http://10.0.2.2:3333/api/v0.0.5/user/5/photo'}}
 
   />
-           {/* source={this.photo()} */}
 
       
 

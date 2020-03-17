@@ -21,7 +21,7 @@ class ChitPhoto extends Component {
       if(value !== null) {
         this.setState({
             user_id: value,
-          });           
+          });      
       }
      
 
@@ -38,8 +38,7 @@ class ChitPhoto extends Component {
         this.setState({
             token: value
           });
-          this.getuserID();
-
+        //   this.getuserID();
       }
     } catch(e) {
       // error reading value
@@ -47,25 +46,24 @@ class ChitPhoto extends Component {
 }
 
 componentDidMount(){
-this.getToken();
+this.getuserID();
+this.getToken();     
 } 
 
 
-takePic = async(user_id)=>{
-  console.log("user id "+user_id )
+takePic = async()=>{
   console.log("token " +this.state.token )
     if (this.camera){
         const options = {quality : 0.5, base64 : true}
         const data = await this.camera.takePictureAsync(options);
         console.log(data.uri, this.state.token);
-        console.log(`http://10.0.2.2:3333/api/v0.0.5/chits/${user_id}/photo`);
-        return fetch (`http://10.0.2.2:3333/api/v0.0.5/chits/${user_id}/photo`,
+        console.log(`http://10.0.2.2:3333/api/v0.0.5/chits/${this.state.user_id}/photo`);
+        return fetch (`http://10.0.2.2:3333/api/v0.0.5/chits/${this.state.user_id}/photo`,
         {
             method : 'POST',
             headers : {
                 "Content-Type" : "image/jpeg",
-                "X-Authorization" : this.state.token
-                
+                "X-Authorization" : this.state.token       
             },
             
             body : data
@@ -112,7 +110,7 @@ takePic = async(user_id)=>{
  const options = { quality: 0.5, base64: true };
  const data = await this.camera.takePictureAsync(options);
  console.log(data.uri);
- this.takePic(this.state.user_id);
+ this.takePic();
  }
  };
 }

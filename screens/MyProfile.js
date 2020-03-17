@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-import { Alert,HomeIconWithBadge,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
+import { TouchableOpacity,Alert,Text, View,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 // import Card from './Cards';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { createAppContainer } from 'react-navigation';
-// import Ionicons from 'react-native-vector-icons/Ionicons';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
-
-import { Card, Title, Paragraph } from 'react-native-paper';
+import { Card, Paragraph } from 'react-native-paper';
 
 
 class UserInfo extends Component{
@@ -176,9 +172,9 @@ class UserInfo extends Component{
         )
     }
 return( 
-<View> 
+<View style = {{flex : 1 , justifyContent : 'flex-start'}}> 
 
-    <Text style= {styles.textStyle}>My profile</Text>
+    <Text style= {styles.headerText}>My profile</Text>
 
     <Text style= {styles.userNameStyle} >{this.state.UserInfo.given_name + ' ' + this.state.UserInfo.family_name + '     ' + this.state.UserInfo.email}</Text>
     
@@ -241,7 +237,6 @@ return(
             </Text>
         </TouchableOpacity> 
 
-        
 
     <FlatList
     data={this.state.UserInfo.recent_chits}
@@ -267,10 +262,16 @@ return(
 
 const styles = StyleSheet.create({
 
+  headerText: {
+    fontSize : 27,
+    alignSelf:'center',
+    color : '#007aff',
+    fontWeight : '600',
+  },
+
   userNameStyle: {
     fontSize : 22,
-    alignSelf:'flex-start',
-    marginLeft : 20,
+    alignSelf:'center',
     color : 'purple',
     fontWeight : '600',
     paddingTop : 10,
@@ -278,16 +279,14 @@ const styles = StyleSheet.create({
   },
   
   textStyle: {
+    
     fontSize : 22,
-    alignSelf:'center',
+    alignSelf:'flex-start',
     color : '#007aff',
     fontWeight : '600',
-    paddingTop : 10,
-    paddingBottom : 10 ,
-
+    
   },
     chits: {
-    textAlign : 'center',
     color: 'black',
     textShadowColor: 'gray',
     fontFamily: 'sans-serif',
@@ -295,19 +294,16 @@ const styles = StyleSheet.create({
     fontSize : 20,
 
     },
-    buttonStyle: {
-      flexDirection : 'row',
-      alignSelf:'flex-start',
-      borderRadius : 25,
-      borderColor: '#007aff',
-      marginLeft : 20,
+    buttonStyle: { 
+      justifyContent : 'flex-start',  
+     borderRadius : 25,
+     borderColor: '#007aff',
+     marginLeft : 10,
       paddingLeft:10,
       paddingRight : 10,
-      marginRight : 20,
-      marginBottom : 10,
     //   justifyContent: 'center',
     // alignItems: 'center',
-    textAlignVertical : 'center',
+    
       },
     card: {
       margin : 5

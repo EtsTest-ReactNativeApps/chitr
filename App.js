@@ -13,7 +13,7 @@ import Chits from './screens/Chits'
 import UserInfo from './screens/UserInfo'
 import Update from './screens/Update'
 import UserPhoto from './screens/UserPhoto'
-import MyProfile from './screens/MyProfile'
+// import MyProfile from './screens/MyProfile'
 import UpdatePhoto from './screens/UpdatePhoto'
 import Geolocation from './screens/GeoLocation'
 import ChitPhoto from './screens/UploadPicChit'
@@ -69,9 +69,9 @@ const AppStackNav = createStackNavigator({
   UserPhoto: {
     screen: UserPhoto
   },
-  MyProfile: {
-    screen: MyProfile
-  },
+  // MyProfile: {
+  //   screen: MyProfile
+  // },
   Geolocation: {
     screen: Geolocation
   },
