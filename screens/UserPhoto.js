@@ -41,6 +41,16 @@ export default class UserPhoto extends React.Component {
     //     }
     // }
 
+    getChits(value){
+      return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${JSON.parse(value)}/photo`)
+      .then((response) => {
+       console.log("response" + response.status)
+      })
+      .catch((error) =>{
+      console.log(error);
+      });
+  }
+
     getUserID = async () => {
       try {
         const value = await AsyncStorage.getItem('UserID')
@@ -51,9 +61,9 @@ export default class UserPhoto extends React.Component {
               src : `http://10.0.2.2:3333/api/v0.0.5/user/${JSON.parse(value)}/photo`
             });
         }
+        this.getChits(value);
         console.log("user id " + JSON.parse(this.state.user_id))
         console.log("source " + this.state.src)
-
       } catch(e) {
         // error reading value
       }
@@ -67,26 +77,20 @@ export default class UserPhoto extends React.Component {
    
  return (
      
-<View style = {{ flex : 1,justifyContent:'flex-start'}}>   
-<Text style = {styles.textStyle} >User profile picture</Text>
-
+     
+<View style = {{ flex : 1,justifyContent:'flex-start'}}> 
 <Image 
 
   style={{width: '100%', height: '100%'}}        
-  source={{uri : this.state.src}}
-  // source={{uri : 'http://10.0.2.2:3333/api/v0.0.5/user/5/photo'}}
+  source={{uri :'http://10.0.2.2:3333/api/v0.0.5/user/3/photo'}}
+  resizeMode={'cover'} // cover or contain its upto you view look
 
-  />
 
-      
 
-  {/* <TouchableOpacity  style = {styles.buttonStyle}
-    onPress={() =>this.props.navigation.navigate('UserInfo')}>
-    <Text style={styles.textStyle}>
-    Cancel
-    </Text>
-  </TouchableOpacity> */}
-  
+  />  
+<Text style = {styles.textStyle} >User profile picture</Text>
+
+
 
 </View>
   );

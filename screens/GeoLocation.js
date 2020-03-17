@@ -1,29 +1,14 @@
 import React, { Component } from 'react';
-import { PermissionsAndroid,Alert,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {Text, View,StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import Toast from 'react-native-simple-toast';
-import MapView from 'react-native-maps';
-import Geocoder from 'react-native-geocoding';
+import MapView,{PROVIDER_GOOGLE,Marker} from 'react-native-maps';
 
-Geocoder.init('AIzaSyAZx7S0ngRA5ncVGocFOY1ndc57tG_Fvt8'); // use a valid API key
-Geocoder.init('AIzaSyAZx7S0ngRA5ncVGocFOY1ndc57tG_Fvt8', {language : "en"}); // set the language , {language : “en”}); // set the language
 
 class Geolocation extends Component{
     constructor(props){
         super(props);
         this.state = {
-        token : '',
         locationPermission : false,
-        given_name: '',
-        family_name: '',
-        text : '',
-        email: '',
-        password: '',
-        loginEmail:'',
-        loginPass:'',
-        chit_id: '',
-        chit_content:'',
         timestamp: '',
         longitude: '',
         latitude: ''
@@ -36,13 +21,15 @@ class Geolocation extends Component{
 
     getData = async () => {
         try {
-          const value = await AsyncStorage.getItem('token')
-          console.log("getdata"+value)
+          const value = await AsyncStorage.getItem('location')
+          console.log("location"+value)
           if(value !== null) {
             this.setState({
-                token: value
+              timestamp: value
               });
           }
+          console.log("timestamp"+this.state.timestamp)
+
         } catch(e) {
           // error reading value
         }
@@ -58,62 +45,47 @@ class Geolocation extends Component{
           
  render(){
 return(
- <View> 
+  <View style = {{flex : 1}}>
+  <Text style= {styles.headerText}>Post's location </Text>
+ <View style = {styles.container}> 
    <MapView
-    initialRegion={{
-      latitude: 37.78825,
-      longitude: -122.4324,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    }}
-  />
+   provider = {PROVIDER_GOOGLE}
+   style = {styles.map}
+
+   region={{
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+   }}
+   >
+  </MapView>
  </View>
+       </View>
+
  );
  }
 }
 
    export default Geolocation;
 
-const styles = StyleSheet.create({
-    title: {
-    color: 'green',
-    fontSize: 50,
-    fontWeight: 'bold'
+   const styles = StyleSheet.create({
+    container: {
+      ...StyleSheet.absoluteFillObject,
+      top: 50,
+      justifyContent: 'flex-end',
+      alignItems: 'center'
     },
-    chits: {
-    color: 'black',
-    fontSize: 20,
-    textShadowColor: 'gray',
-    fontFamily: 'sans-serif',
-    textShadowRadius: 19,
+    map: {
+      ...StyleSheet.absoluteFillObject,
+      
     },
-    input: {
-        margin: 10,
-        height: 40,
-        borderBottomWidth: 1,
-        borderBottomColor: 'gray',
-      },
-
-      textInput: {
-        borderRadius : 25,
-        borderWidth: 2,
-        borderColor: '#007aff',
-        marginLeft : 20,
-        marginRight : 20,
-        padding : 30,
-        marginTop : 20,
-        fontSize : 20
-        },
-
-        textStyle: {
-            fontSize : 30,
-            alignSelf:'center',
-            color : '#007aff',
-            fontWeight : '600',
-            paddingTop : 10,
-            paddingBottom : 10,
-            marginTop : 30,
-          },
-});
+    headerText: {
+      fontSize : 27,
+      alignSelf:'center',
+      color : '#007aff',
+      fontWeight : '600',
+    },
+  });
 
 // style={{flexDirection: 'row',flex:1,justifyContent:'space-evenly', alignItems : 'center' }}

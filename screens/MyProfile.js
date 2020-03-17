@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { TouchableOpacity,Alert,Text, View,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
-// import Card from './Cards';
-// import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Card, Paragraph } from 'react-native-paper';
-
 
 class UserInfo extends Component{
     constructor(props){
@@ -158,11 +155,16 @@ class UserInfo extends Component{
    this.props.navigation.navigate('Start');
     }
 
+    toGeoLocation =async(location)=>{
+      await AsyncStorage.setItem('location', (location).toString());
+      this.props.navigation.navigate('Geolocation');
+    }
+
       componentDidMount(){
         this.getData();
         this.getToken();
        } 
-          
+
  render(){
     if(this.state.isLoading){
         return(
@@ -173,27 +175,23 @@ class UserInfo extends Component{
     }
 return( 
 <View style = {{flex : 1 , justifyContent : 'flex-start'}}> 
-
     <Text style= {styles.headerText}>My profile</Text>
-
     <Text style= {styles.userNameStyle} >{this.state.UserInfo.given_name + ' ' + this.state.UserInfo.family_name + '     ' + this.state.UserInfo.email}</Text>
     
-    <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.toFollowing(this.state.user_id)}>
+        <TouchableOpacity  style = {styles.buttonStyle}
+          onPress={() =>this.toFollowing(this.state.user_id)}>
             <Text style={styles.textStyle}>
-            Following
+              Following
             </Text> 
-      </TouchableOpacity> 
+        </TouchableOpacity> 
     
-    <TouchableOpacity  style = {styles.buttonStyle}
-        onPress={() =>this.toFollowers(this.state.user_id)}>
-        <Text style={styles.textStyle}>
-        Followers
-        </Text>
-    </TouchableOpacity> 
-    
-        
-        
+        <TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.toFollowers(this.state.user_id)}>
+            <Text style={styles.textStyle}>
+            Followers
+            </Text>
+        </TouchableOpacity> 
+       
         <TouchableOpacity  style = {styles.buttonStyle}
             onPress={() =>this.toUpdate(this.state.user_id)}>
             <Text style={styles.textStyle}>
@@ -238,22 +236,22 @@ return(
         </TouchableOpacity> 
 
 
-    <FlatList
-    data={this.state.UserInfo.recent_chits}
-    renderItem={({item})=>
-  <View>
-<TouchableOpacity>
-<Card style = {styles.card}>
-<Card.Content>
-<Paragraph style= {styles.chits}>{item.chit_content + '\n'+ 'timestamp'+ item.timestamp + 'location' + item.location}</Paragraph>
-    </Card.Content>
-</Card>
-</TouchableOpacity>
+      <FlatList
+      data={this.state.UserInfo.recent_chits}
+      renderItem={({item})=>
+      <View>
+        <TouchableOpacity onPress={() =>this.toGeoLocation(item.timestamp)}>
+          <Card style = {styles.card}>
+            <Card.Content>
+              <Paragraph style= {styles.chits}>{item.chit_content}</Paragraph>
+            </Card.Content>
+          </Card>
+        </TouchableOpacity>
+      </View>
+      }
+      keyExtractor={({id}, index) => id}
+      />
   </View>
-  }
-  keyExtractor={({id}, index) => id}
-  />
- </View>
  );
  }
 }
@@ -263,51 +261,45 @@ return(
 const styles = StyleSheet.create({
 
   headerText: {
-    fontSize : 27,
-    alignSelf:'center',
-    color : '#007aff',
-    fontWeight : '600',
+  fontSize : 27,
+  alignSelf:'center',
+  color : '#007aff',
+  fontWeight : '600',
   },
 
   userNameStyle: {
-    fontSize : 22,
-    alignSelf:'center',
-    color : 'purple',
-    fontWeight : '600',
-    paddingTop : 10,
-    paddingBottom : 10 
+  fontSize : 22,
+  alignSelf:'center',
+  color : 'purple',
+  fontWeight : '600',
+  paddingTop : 10,
+  paddingBottom : 10 
   },
   
-  textStyle: {
-    
-    fontSize : 22,
-    alignSelf:'flex-start',
-    color : '#007aff',
-    fontWeight : '600',
-    
+  textStyle: {  
+  fontSize : 22,
+  alignSelf:'flex-start',
+  color : '#007aff',
+  fontWeight : '600',  
   },
-    chits: {
-    color: 'black',
-    textShadowColor: 'gray',
-    fontFamily: 'sans-serif',
-    textShadowRadius: 19,
-    fontSize : 20,
-
-    },
-    buttonStyle: { 
-      justifyContent : 'flex-start',  
-     borderRadius : 25,
-     borderColor: '#007aff',
-     marginLeft : 10,
-      paddingLeft:10,
-      paddingRight : 10,
-    //   justifyContent: 'center',
-    // alignItems: 'center',
-    
-      },
-    card: {
-      margin : 5
-    },
+  chits: {
+  color: 'black',
+  textShadowColor: 'gray',
+  fontFamily: 'sans-serif',
+  textShadowRadius: 19,
+  fontSize : 20,
+  },
+  buttonStyle: { 
+  justifyContent : 'flex-start',  
+  borderRadius : 25,
+  borderColor: '#007aff',
+  marginLeft : 10,
+  paddingLeft:10,
+  paddingRight : 10,
+  },
+  card: {
+  margin : 5
+  },
 
       
 });

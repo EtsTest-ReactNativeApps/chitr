@@ -24,9 +24,7 @@ export default class ChittrApp extends React.Component {
         longitude: '',
         latitude: ''
         }
-        
         };  
-
     }
     
     handleGivenName = (text) => {

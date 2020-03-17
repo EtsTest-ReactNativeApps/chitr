@@ -53,14 +53,18 @@ storeId = async (user_id) => {
           'X-Authorization': token
         },     
         body: JSON.stringify({  
-           email: 'ola@gmail.com',
-           password: 'ola',
+           email: 'khaled@gmail.com',
+           password: 'khaled',
           // email: this.state.loginEmail,
           // password: this.state.loginPass,
        })
     })
+
       .then((response) => {
+        console.log("response status " +response.status)
+
       return response.json()
+      
       .then((responseData) => {
         const JsonToken = responseData.token; 
         const user = responseData.id;
@@ -76,7 +80,10 @@ storeId = async (user_id) => {
           this.props.navigation.navigate('Newsfeed');//navigate to a page
           console.log ("YOU'RE iN")
 
-        } else if(response.status === 400){
+        }
+ 
+        else if(response.status === 400){
+          Alert.alert("Invalid email/password supplied")
           console.log ("Something wrong")
         }
     })
@@ -91,7 +98,6 @@ storeId = async (user_id) => {
  return (
 <View style = {{ flex : 1,justifyContent:'space-evenly'  }}>   
         <Text style={styles.textStyle}>Log in into your account </Text>
-
         <TextInput
           value={this.state.loginEmail}
           onChangeText={this.handleLoginEmail}
@@ -111,8 +117,7 @@ storeId = async (user_id) => {
             Login
             </Text>
         </TouchableOpacity> 
-    
-</View> 
+    </View>
   );
  }
 }

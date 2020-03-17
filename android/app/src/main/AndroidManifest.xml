@@ -17,12 +17,14 @@
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="adjustResize">
-        <intent-filter>
+        <intent-filter>/
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+    <meta-data android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyAZx7S0ngRA5ncVGocFOY1ndc57tG_Fvt8"/>
     </application>
 
 </manifest>

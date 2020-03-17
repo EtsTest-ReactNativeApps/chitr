@@ -189,7 +189,8 @@ class UserInfo extends Component{
       }
 
 
-      toGeoLocation =()=>{
+      toGeoLocation =async(location)=>{
+        await AsyncStorage.setItem('location', (location).toString());
         this.props.navigation.navigate('Geolocation');
       }
 
@@ -279,7 +280,7 @@ class UserInfo extends Component{
     try {
       await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
       console.log("user id => " + user_id);
-      this.props.navigation.replace('UserPhoto');
+      this.props.navigation.navigate('UserPhoto');
     } catch (e) {
     }
   }
@@ -440,10 +441,10 @@ return(
     data={this.state.UserInfo.recent_chits}
     renderItem={({item})=>
   <View>
-<TouchableOpacity onPress={() =>this.toGeoLocation()} >
+<TouchableOpacity onPress={() =>this.toGeoLocation(item.timestamp)} >
 <Card style = {styles.card}>
 <Card.Content>
-<Paragraph style= {styles.chits}>{item.chit_content + '\n'+ 'timestamp'+ item.timestamp + 'location' + item.location}</Paragraph>
+<Paragraph style= {styles.chits}>{item.chit_content}</Paragraph>
     </Card.Content>
 </Card>
 </TouchableOpacity>
