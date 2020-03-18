@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import AsyncStorage from '@react-native-community/async-storage';
-
 class ChitPhoto extends Component {
  constructor(props){
  super(props);
@@ -17,7 +16,6 @@ class ChitPhoto extends Component {
  getuserID = async () => {
     try {
       const value = await AsyncStorage.getItem('user_id')
-      // console.log("value "+value)
       if(value !== null) {
         this.setState({
             user_id: value,
@@ -33,12 +31,10 @@ class ChitPhoto extends Component {
  getToken = async () => {
     try {
       const value = await AsyncStorage.getItem('token')
-      // console.log("getdata"+value)
       if(value !== null) {
         this.setState({
             token: value
           });
-        //   this.getuserID();
       }
     } catch(e) {
       // error reading value
@@ -73,6 +69,7 @@ takePic = async()=>{
           console.log("response status : "+response.status)
           if (response.status === 201){
             Alert.alert("Picture added !")
+            this.props.navigation.navigate('MyProfile');
           }
         })
 
@@ -85,22 +82,22 @@ takePic = async()=>{
  render() {
  return (
  <View style={styles.container}>
- <RNCamera
- ref={ref => {
- this.camera = ref;
- }}
- style={styles.preview}
- />
- <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
- <TouchableOpacity
- onPress={this.takePicture.bind(this)}
- style={styles.capture}
- >
- <Text style={{ fontSize: 16 }}>
- CAPTURE
- </Text>
- </TouchableOpacity>
- </View>
+    <RNCamera
+        ref={ref => {
+        this.camera = ref;
+        }}
+        style={styles.preview}
+    />
+    <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
+        <TouchableOpacity
+            onPress={this.takePicture.bind(this)}
+            style={styles.capture}
+            >
+            <Text style={{ fontSize: 16 }}>
+                CAPTURE
+            </Text>
+        </TouchableOpacity>
+    </View>
  </View>
  );
  }

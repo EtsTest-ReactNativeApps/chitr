@@ -1,10 +1,6 @@
 import * as React from 'react';
-import {Toast,FlatList,TouchableOpacity,StyleSheet, ActivityIndicator,StatusBar,Text, View,Button,TextInput,Alert,KeyboardAvoidingView } from 'react-native';
+import {TouchableOpacity,StyleSheet, ActivityIndicator,Text, View,TextInput,Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import {createSwitchNavigator } from 'react-navigation';
-import Newsfeed from './Newsfeed'
-import MyProfile from './MyProfile'
-
 export default class Update extends React.Component {
 
 
@@ -75,6 +71,7 @@ export default class Update extends React.Component {
       console.log("response status " + response.status)
         if(response.status === 201){
         Alert.alert("User info updated!");
+        this.props.navigation.navigate('MyProfile');
         }
         else if (response.status === 401){
         console.log('Unauthtorised access!') 
@@ -91,30 +88,19 @@ export default class Update extends React.Component {
       }
 
       getUserInfo(user_id){
-        
-        let result = JSON.stringify({
-            given_name: this.state.given_name,
-            family_name: this.state.family_name,
-            email: this.state.email,
-            password: this.state.password,
-        })
-        const user_ID = '';
-          return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}`)
+            return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}`)
           .then((response) => response.json())
           .then((responseJson) => {
           this.setState({
           isLoading: false,
           UserInfo: responseJson,
-        //  given_name : responseJson.given_name
-          user_ID : this.state.UserInfo.given_name,
-
           });
           })
           .catch((error) =>{
           console.log(error);
-          });
-          
+          });        
       }
+
 
       getToken = async () => {
         try {
@@ -145,7 +131,7 @@ export default class Update extends React.Component {
   }
 
     Cancel = () => {
-      this.props.navigation.replace('MyProfile');
+      this.props.navigation.navigate('MyProfile');
       }
     componentDidMount(){
     this.getData();
@@ -162,21 +148,20 @@ export default class Update extends React.Component {
     }
  return (
 <View style = {{ flex : 1,justifyContent:'space-evenly'}}>   
-<Text style = {styles.textStyle} >Update user info</Text>
-<TextInput style = {styles.fields} placeholder="First name" onChangeText={this.handleGivenName} value = {this.state.UserInfo.given_name}/>
-        <TextInput style = {styles.fields}  placeholder="Last Name" onChangeText={this.handleLastName} value = {this.state.UserInfo.family_name} />
-        <TextInput style = {styles.fields} placeholder="Email" onChangeText={this.handleEmail} value = {this.state.UserInfo.email} />
-        <TextInput style = {styles.fields} placeholder="Password" onChangeText={this.handlePass}value = {this.state.UserInfo.password} secureTextEntry />
+  <Text style = {styles.textStyle} >Update user info</Text>
+  <TextInput style = {styles.fields} placeholder="First name" onChangeText={this.handleGivenName} value = {this.state.UserInfo.given_name}/>
+  <TextInput style = {styles.fields}  placeholder="Last Name" onChangeText={this.handleLastName} value = {this.state.UserInfo.family_name} />
+  <TextInput style = {styles.fields} placeholder="Email" onChangeText={this.handleEmail} value = {this.state.UserInfo.email} />
+  <TextInput style = {styles.fields} placeholder="Password" onChangeText={this.handlePass}value = {this.state.UserInfo.password} secureTextEntry />
   <TouchableOpacity  style = {styles.buttonStyle}
-    onPress={() =>this.updateAccount()}>
-    <Text style={styles.textStyle}>
-    Update
-    </Text>
+      onPress={() =>this.updateAccount()}>
+      <Text style={styles.textStyle}>
+      Update
+      </Text>
   </TouchableOpacity>
 
   <TouchableOpacity  style = {styles.cancelStyle}
-        onPress={() =>this.Cancel()}>
-        
+    onPress={() =>this.Cancel()}>       
     <Text style={styles.cancelText}>
     Cancel
     </Text>

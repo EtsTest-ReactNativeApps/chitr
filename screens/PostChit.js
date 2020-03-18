@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { PermissionsAndroid,Alert,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
+import { PermissionsAndroid,Alert,Text, View,TextInput,StyleSheet,ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Geolocation from 'react-native-geolocation-service';
 import AsyncStorage from '@react-native-community/async-storage';
-import Toast from 'react-native-simple-toast';
 
 class HomeScreen extends Component{
     constructor(props){
@@ -185,45 +184,29 @@ async function requestLocationPermission(){
    export default HomeScreen;
 
 const styles = StyleSheet.create({
-    title: {
-    color: 'green',
-    fontSize: 50,
-    fontWeight: 'bold'
-    },
-    chits: {
-    color: 'black',
-    fontSize: 20,
-    textShadowColor: 'gray',
-    fontFamily: 'sans-serif',
-    textShadowRadius: 19,
-    },
-    input: {
-        margin: 10,
-        height: 40,
-        borderBottomWidth: 1,
-        borderBottomColor: 'gray',
-      },
+  title: {
+  color: 'green',
+  fontSize: 50,
+  fontWeight: 'bold'
+  },
+  textInput: {
+  borderRadius : 25,
+  borderWidth: 2,
+  borderColor: '#007aff',
+  marginLeft : 20,
+  marginRight : 20,
+  padding : 30,
+  marginTop : 20,
+  fontSize : 20
+  },
 
-      textInput: {
-        borderRadius : 25,
-        borderWidth: 2,
-        borderColor: '#007aff',
-        marginLeft : 20,
-        marginRight : 20,
-        padding : 30,
-        marginTop : 20,
-        fontSize : 20
-        },
-
-        textStyle: {
-            fontSize : 30,
-            alignSelf:'center',
-            color : '#007aff',
-            fontWeight : '600',
-            paddingTop : 10,
-            paddingBottom : 10,
-            marginTop : 30,
-          },
+  textStyle: {
+  fontSize : 30,
+  alignSelf:'center',
+  color : '#007aff',
+  fontWeight : '600',
+  paddingTop : 10,
+  paddingBottom : 10,
+  marginTop : 30,
+  },
 });
-
-// style={{flexDirection: 'row',flex:1,justifyContent:'space-evenly', alignItems : 'center' }}

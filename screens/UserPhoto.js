@@ -3,8 +3,6 @@ import {Image,StyleSheet,Text, View } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 export default class UserPhoto extends React.Component {
-
-
     constructor(props){
         super(props);
         this.state = {
@@ -22,25 +20,6 @@ export default class UserPhoto extends React.Component {
         };  
     }
          
-        
-    //   getData = async () => {
-    //     try {
-    //       const value = await AsyncStorage.getItem('user_id')
-    //       console.log("value "+value)
-    //       if(value !== null) {
-    //         this.setState({
-    //             user_id: value,
-    //             src : `http://10.0.2.2:3333/api/v0.0.5/user/${value}/photo`
-    //           });
-    //       }
-    //       console.log("user id " + this.state.user_id)
-    //       console.log("source " + this.state.src)
-
-    //     } catch(e) {
-    //       // error reading value
-    //     }
-    // }
-
     getChits(value){
       return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${JSON.parse(value)}/photo`)
       .then((response) => {
@@ -79,19 +58,12 @@ export default class UserPhoto extends React.Component {
      
      
 <View style = {{ flex : 1,justifyContent:'flex-start'}}> 
-<Image 
-
-  style={{width: '100%', height: '100%'}}        
-  source={{uri :'http://10.0.2.2:3333/api/v0.0.5/user/3/photo'}}
-  resizeMode={'cover'} // cover or contain its upto you view look
-
-
-
+  <Image 
+      style={{width: '100%', height: '100%'}}        
+      source={{uri :'http://10.0.2.2:3333/api/v0.0.5/user/3/photo'}}
+      resizeMode={'cover'} // cover or contain its upto you view look
   />  
-<Text style = {styles.textStyle} >User profile picture</Text>
-
-
-
+  <Text style = {styles.textStyle} >User profile picture</Text>
 </View>
   );
  }

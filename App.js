@@ -9,19 +9,14 @@ import Start from './screens/StartPage'
 import PostChit from './screens/PostChit'
 import Login from './screens/Login'
 import Search from './screens/Search'
-import Chits from './screens/Chits'
 import UserInfo from './screens/UserInfo'
 import Update from './screens/Update'
 import UserPhoto from './screens/UserPhoto'
-// import MyProfile from './screens/MyProfile'
 import UpdatePhoto from './screens/UpdatePhoto'
 import Geolocation from './screens/GeoLocation'
 import ChitPhoto from './screens/UploadPicChit'
 import ViewChitPhoto from './screens/ChitPhoto'
-
-
 import 'react-native-gesture-handler';
-
 
 const AppStackNav = createStackNavigator({
   
@@ -57,9 +52,6 @@ const AppStackNav = createStackNavigator({
   PostChit: {
     screen: PostChit
   },
-  Chits: {
-    screen: Chits
-  },
   Following: {
     screen: Following
   },
@@ -69,9 +61,6 @@ const AppStackNav = createStackNavigator({
   UserPhoto: {
     screen: UserPhoto
   },
-  // MyProfile: {
-  //   screen: MyProfile
-  // },
   Geolocation: {
     screen: Geolocation
   },
@@ -85,14 +74,6 @@ const AppStackNav = createStackNavigator({
   ViewChitPhoto : {
     screen : ViewChitPhoto
   }
-  
-
-  
-  
-  
-  
-  
-  
  });
 
  const AppContainer = createAppContainer(AppStackNav)

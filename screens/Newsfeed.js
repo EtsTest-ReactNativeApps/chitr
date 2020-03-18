@@ -1,18 +1,12 @@
 import React,{ Component} from 'react';
-import {Image,RefreshControl,TouchableOpacity,FlatList,Alert,Button,StyleSheet, Text, View,TextInput,PermissionsAndroid } from 'react-native';
+import {Image,RefreshControl,TouchableOpacity,FlatList,Alert,StyleSheet, Text, View } from 'react-native';
 import { createAppContainer } from 'react-navigation';
-import { createDrawerNavigator } from 'react-navigation-drawer';
 import AsyncStorage from '@react-native-community/async-storage';
-import GuestPage from './GuestPage'
-import MyPhoto from './TakePhoto'
 import MyProfile from './MyProfile'
-import UserInfo from './UserInfo'
 import Search from './Search'
-import { Card, Title, Paragraph } from 'react-native-paper';
-
+import { Card, Paragraph } from 'react-native-paper';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import ActionButton from 'react-native-circular-action-menu';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 class NewsFeed extends Component{
 
@@ -43,14 +37,6 @@ class NewsFeed extends Component{
         latitude: '',
     
         }; 
-    }
-
-    
-    handleSearch = (text) => {
-        this.setState({ given_name: text })
-    }
-    handleChits = (text) => {
-        this.setState({ chit_content: text })
     }
 
     _onRefresh = () => {
@@ -256,18 +242,11 @@ const styles = StyleSheet.create({
   },
     chits: {
       fontSize : 18,
-
     textAlign : 'center',
     color: 'black',
     textShadowColor: 'gray',
     fontFamily: 'sans-serif',
     textShadowRadius: 19,
-    },
-    input: {
-    margin: 10,
-    height: 40,
-    borderBottomWidth: 1,
-    borderBottomColor: 'gray',
     },
     container: {
     flex : 1,

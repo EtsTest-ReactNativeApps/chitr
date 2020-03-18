@@ -132,36 +132,21 @@ const styles = StyleSheet.create({
     fontFamily: 'sans-serif',
     textShadowRadius: 19,
     fontSize : 20,
-
-    },
-
-  
+    }, 
     title: {
     color: 'green',
     fontSize: 50,
     fontWeight: 'bold'
     },
-   
-    input: {
-        margin: 10,
-        height: 40,
-        borderBottomWidth: 1,
-        borderBottomColor: 'gray',
-      },
-      button: {
-        backgroundColor: '#DDDDDD',
-        padding: 5,
-        margin : 10,
-      },
-      container: {
-        flex : 1,
-        justifyContent : 'flex-start',
-        width : 60,
-        height : 62,
-        position : 'absolute',
-        left : 20
-        },
-        card: {
-          margin : 5
-          },
+    container: {
+    flex : 1,
+    justifyContent : 'flex-start',
+    width : 60,
+    height : 62,
+    position : 'absolute',
+    left : 20
+    },
+    card: {
+     margin : 5
+    },
 });

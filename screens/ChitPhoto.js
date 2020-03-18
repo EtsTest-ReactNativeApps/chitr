@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {Image,FlatList,TouchableOpacity,StyleSheet, ActivityIndicator,StatusBar,Text, View,Button,TextInput,Alert,KeyboardAvoidingView } from 'react-native';
+import {Image,FlatList,StyleSheet,Text, View } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Card, Title, Paragraph } from 'react-native-paper';
+import { Card } from 'react-native-paper';
 
 export default class ChitPhoto extends React.Component {
 
@@ -12,13 +12,6 @@ export default class ChitPhoto extends React.Component {
         refreshing: false,
         setRefreshing : false,
         src : 'No Photo',
-        pic: '',
-        token : '',
-        given_name: '',
-        family_name: '',
-        email: '',
-        password: '',
-        UserInfo : '',  
         user_id:''  
         };  
     }
@@ -45,7 +38,7 @@ export default class ChitPhoto extends React.Component {
         this.getData();   
     }
 
-    
+
  render(){
    
  return (
@@ -66,15 +59,6 @@ export default class ChitPhoto extends React.Component {
 }
 
 const styles = StyleSheet.create({
-
-  fields: {
-    margin: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: 'gray',
-    marginVertical : 15,
-    fontSize : 20,
-
-  },
   textStyle: {
     fontSize : 22,
     alignSelf:'center',
@@ -84,16 +68,5 @@ const styles = StyleSheet.create({
     paddingBottom : 10 
   },
 
-  buttonStyle: {
-    alignItems : 'baseline',
-    borderRadius : 25,
-    borderWidth: 2,
-    borderColor: '#007aff',
-    marginLeft : 20,
-    marginRight : 20,
-    padding :9,
-    marginBottom : 15,
-  },
-  
 })
 

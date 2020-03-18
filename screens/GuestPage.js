@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-import { Image,RefreshControl,HomeIconWithBadge,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
-// import Card from './Cards';
-// import { Title, Paragraph } from 'react-native-paper';
+import { Image,RefreshControl,Text, View,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 import { Card, Title, Paragraph } from 'react-native-paper';
-
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer } from 'react-navigation';
-// import Ionicons from 'react-native-vector-icons/Ionicons';
 import Search from './Search'
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -21,37 +17,14 @@ class GuestPage extends Component{
         setRefreshing : false,
         user_id : '',
         given_name: '',
-        family_name: '',
-        text : '',
-        email: '',
-        password: '',
-        loginEmail:'',
-        loginPass:'',
+        family_name: '',    
         chit_id: '',
         chit_content:'',
-        timestamp: '',
-        longitude: '',
-        latitude: '',
         chitsContent:'',
         };  
     }
     
-    Show =(user_id)=>{
-      var userr_id =''
-      this.setState({ userr_id: user_id })
-        this.props.navigation.navigate('UserInfo');
-      }
-
-    
-    handleGivenName = (text) => {
-        this.setState({ given_name: text })
-    }
-
-    handleSearch = (text) => {
-        this.setState({ given_name: text })
-    }
-    _onRefresh = () => {
-     
+    _onRefresh = () => { 
       this.getChits();
     }
   
@@ -63,8 +36,6 @@ storeUserId= async (user_id) => {
   } catch (e) {
   }
 }
-
-
     getChits(){
         return fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
         .then((response) => response.json())
@@ -78,7 +49,6 @@ storeUserId= async (user_id) => {
         console.log(error);
         });
       }
-
 
       componentDidMount(){
         this.getChits();
@@ -94,39 +64,35 @@ storeUserId= async (user_id) => {
     }
 return( 
 <View> 
-    <Text style= {styles.textStyle}>Most recent chits</Text>
+  <Text style= {styles.textStyle}>Most recent chits</Text>
     <FlatList
-    refreshControl={
-      <RefreshControl
-        refreshing={this.state.refreshing}
-        onRefresh={this._onRefresh}
+      refreshControl={
+        <RefreshControl
+          refreshing={this.state.refreshing}
+          onRefresh={this._onRefresh}
         />
-      }
-    data={this.state.chitsContent}
-    renderItem={({item})=>
-  <View>
-<TouchableOpacity onPress={() =>this.storeUserId(item.user.user_id)} >
-<Card style = {styles.card}>
-<Image
-   style = {styles.container}
-     source = {require('../photo/profile.png')}
-   />
-{/* <Card.Content>
-<Text style= {styles.chits}>{item.user.given_name + ' '+ item.user.family_name}</Text>
-<Text style= {styles.chits}>{item.chit_content}</Text>
-</Card.Content> */}
+        }
+      data={this.state.chitsContent}
+      renderItem={({item})=>
+      <View>
+        <TouchableOpacity onPress={() =>this.storeUserId(item.user.user_id)} >
+          <Card style = {styles.card}>
+            <Image
+            style = {styles.container}
+            source = {require('../photo/profile.png')}
+            />
 
-<Card.Content>
-<Title style= {styles.chits} >{item.user.given_name + ' '+ item.user.family_name}</Title>
-<Paragraph style= {styles.chits} >{item.chit_content}</Paragraph>
-    </Card.Content>
-</Card>
-</TouchableOpacity>
+            <Card.Content>
+              <Title style= {styles.chits} >{item.user.given_name + ' '+ item.user.family_name}</Title>
+              <Paragraph style= {styles.chits} >{item.chit_content}</Paragraph>
+            </Card.Content>
+          </Card>
+        </TouchableOpacity>
+      </View>
+      }
+      keyExtractor={({id}, index) => id}
+    />
   </View>
-  }
-  keyExtractor={({id}, index) => id}
-  />
- </View>
  );
  }
 }
@@ -140,9 +106,6 @@ const TabNavigator = createBottomTabNavigator({
   }
 });
 export default createAppContainer(TabNavigator);
-
-
-//  export default HomeScreen;
 
 const styles = StyleSheet.create({
   textStyle: {
@@ -160,12 +123,6 @@ const styles = StyleSheet.create({
     fontFamily: 'sans-serif',
     textShadowRadius: 19,
     },
-    input: {
-    margin: 10,
-    height: 40,
-    borderBottomWidth: 1,
-    borderBottomColor: 'gray',
-    },
     container: {
     flex : 1,
     justifyContent : 'flex-start',
@@ -176,11 +133,7 @@ const styles = StyleSheet.create({
     },
     card: {
       margin : 5
-      },
+    },
     
       
 });
-
-
-
-// style={{flexDirection: 'row',flex:1,justifyContent:'space-evenly', alignItems : 'center' }}

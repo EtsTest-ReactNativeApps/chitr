@@ -12,11 +12,7 @@ class UserInfo extends Component{
         given_name: '',
         family_name: '',
         text : '',
-        email: '',
-        password: '',
-        loginEmail:'',
-        loginPass:'',
-        chit_id: '',
+        email: '',      
         chit_content:'',
         timestamp: '',
         longitude: '',
@@ -24,16 +20,6 @@ class UserInfo extends Component{
         UserInfo : '',
         };  
     }
-    
-    Show =()=>{
-        this.props.navigation.navigate('UserProfile');
-      }
-    
-    handleGivenName = (text) => {
-        this.setState({ given_name: text })
-    }
-
-    
 
     getUserInfo(user_id){
       console.log("start")

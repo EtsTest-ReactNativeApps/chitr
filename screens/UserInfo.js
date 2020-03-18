@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { RefreshControl,Alert,Text, View,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
-import { TouchableOpacity, State } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Card, Paragraph } from 'react-native-paper';
-
-
 
 class UserInfo extends Component{
     constructor(props){
@@ -34,11 +32,7 @@ class UserInfo extends Component{
     }
 
     postPhoto(){
-      let photo = JSON.stringify({
-      })
-  
-      console.log(result)
-  
+       
       console.log("post" +this.state.token)
       return fetch("http://10.0.2.2:3333/api/v0.0.5/chits",
       {
@@ -65,11 +59,6 @@ class UserInfo extends Component{
       console.error(error);
       });
   }
-
-  
-    handleGivenName = (text) => {
-        this.setState({ given_name: text })
-    }
 
     followUser(user_id){
       let result = JSON.stringify({
@@ -257,11 +246,6 @@ class UserInfo extends Component{
         }
     }
 
-    
-
-    
-   
-
     getToken = async () => {
       try {
         const value = await AsyncStorage.getItem('token')
@@ -326,7 +310,7 @@ class UserInfo extends Component{
           this.props.navigation.navigate('UpdatePhoto');
         } catch (e) {
         }
-      }
+    }
 
  render(){
     if(this.state.isLoading){
@@ -336,123 +320,113 @@ class UserInfo extends Component{
         </View>
         )
     }
-
-   
-
 return( 
-<View > 
+<View> 
+  <Text style= {styles.headerText}>UserInfo</Text>
+  <Text style= {styles.userNameStyle} >{this.state.UserInfo.given_name + ' ' + this.state.UserInfo.family_name + '     ' + this.state.UserInfo.email}</Text>  
+  <TouchableOpacity  style = {styles.buttonStyle}
+    onPress={() =>this.toFollowing(this.state.user_id)}>
+    <Text style={styles.textStyle}>
+      Following
+    </Text>
+  </TouchableOpacity> 
 
-    <Text style= {styles.headerText}>UserInfo</Text>
-
-    <Text style= {styles.userNameStyle} >{this.state.UserInfo.given_name + ' ' + this.state.UserInfo.family_name + '     ' + this.state.UserInfo.email}</Text>
-    
     <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.toFollowing(this.state.user_id)}>
-            <Text style={styles.textStyle}>
-            Following
-            </Text>
-    
-        </TouchableOpacity> 
-    
-        <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.toFollowers(this.state.user_id)}>
-            <Text style={styles.textStyle}>
-            Followers
-            </Text>
-        </TouchableOpacity> 
+      onPress={() =>this.toFollowers(this.state.user_id)}>
+      <Text style={styles.textStyle}>
+        Followers
+      </Text>
+    </TouchableOpacity> 
 
-        {
-        this.state.isVisible2? <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.followUser(this.state.user_id)}>
-            <Text style={styles.textStyle}>
-            Follow
-            </Text>
-        </TouchableOpacity> : null
-        } 
-        
-        
-        {
-        this.state.isVisible2 ? <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.unFollowUser(this.state.user_id)}>
-            <Text style={styles.textStyle}>
-            Unfollow
-            </Text>
-        </TouchableOpacity> :null
-          }
+      {
+      this.state.isVisible2? <TouchableOpacity  style = {styles.buttonStyle}
+      onPress={() =>this.followUser(this.state.user_id)}>
+      <Text style={styles.textStyle}>
+        Follow
+      </Text>
+      </TouchableOpacity> : null
+      } 
+             
+      {
+      this.state.isVisible2 ? <TouchableOpacity  style = {styles.buttonStyle}
+      onPress={() =>this.unFollowUser(this.state.user_id)}>
+      <Text style={styles.textStyle}>
+        Unfollow
+      </Text>
+      </TouchableOpacity> :null
+      }
      
-        <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.toUserPhoto(this.state.user_id)}>
-            <Text style={styles.textStyle}>
-            View profile photo
-            </Text>
-        </TouchableOpacity> 
-
-        
-        <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.toChitPhoto(this.state.user_id)}>
-            <Text style={styles.textStyle}>
-            View chit photo
-            </Text>
-        </TouchableOpacity> 
+      <TouchableOpacity  style = {styles.buttonStyle}
+        onPress={() =>this.toUserPhoto(this.state.user_id)}>
+        <Text style={styles.textStyle}>
+        View profile photo
+        </Text>
+      </TouchableOpacity> 
+  
+      <TouchableOpacity  style = {styles.buttonStyle}
+        onPress={() =>this.toChitPhoto(this.state.user_id)}>
+        <Text style={styles.textStyle}>
+          View chit photo
+        </Text>
+      </TouchableOpacity> 
 
         {
         this.state.isVisible ?<TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.toUpdate(this.state.user_id)}>
-            <Text style={styles.textStyle}>
-              Update account
-            </Text>
+        onPress={() =>this.toUpdate(this.state.user_id)}>
+        <Text style={styles.textStyle}>
+          Update account
+        </Text>
         </TouchableOpacity>: null
         }
 
         {
         this.state.isVisible ?  
         <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.toUpdatePhoto()}>
-            <Text style={styles.textStyle}>
+          onPress={() =>this.toUpdatePhoto()}>
+          <Text style={styles.textStyle}>
             Update profile Photo
-            </Text>
+          </Text>
         </TouchableOpacity> : null
         }
         {
-          
         this.state.isVisible ?<TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.toUplaodChitPic()}>
-            <Text style={styles.textStyle}>
-            Upload chit photo
-            </Text>
+        onPress={() =>this.toUplaodChitPic()}>
+        <Text style={styles.textStyle}>
+          Upload chit photo
+        </Text>
         </TouchableOpacity> : null
         }
 
         {
         this.state.isVisible ? <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.logout()}>
-            <Text style={styles.textStyle}>
-            Logout
-            </Text>
+        onPress={() =>this.logout()}>
+        <Text style={styles.textStyle}>
+          Logout
+        </Text>
         </TouchableOpacity> : null
         }
 
-    <FlatList
-    refreshControl={
-      <RefreshControl
-        refreshing={this.state.refreshing}
-        onRefresh={this._onRefresh}
-        />
-      }
+  <FlatList
+      refreshControl={
+        <RefreshControl
+          refreshing={this.state.refreshing}
+          onRefresh={this._onRefresh}
+          />
+        }
 
-    data={this.state.UserInfo.recent_chits}
-    renderItem={({item})=>
-  <View>
-<TouchableOpacity onPress={() =>this.toGeoLocation(item.timestamp)} >
-<Card style = {styles.card}>
-<Card.Content>
-<Paragraph style= {styles.chits}>{item.chit_content}</Paragraph>
-    </Card.Content>
-</Card>
-</TouchableOpacity>
-  </View>
-  }
-  keyExtractor={({id}, index) => id}
+      data={this.state.UserInfo.recent_chits}
+      renderItem={({item})=>
+    <View>
+      <TouchableOpacity onPress={() =>this.toGeoLocation(item.timestamp)} >
+        <Card style = {styles.card}>
+          <Card.Content>
+            <Paragraph style= {styles.chits}>{item.chit_content}</Paragraph>
+          </Card.Content>
+        </Card>
+      </TouchableOpacity>
+    </View>
+      }
+      keyExtractor={({id}, index) => id}
   />
  </View>
  );

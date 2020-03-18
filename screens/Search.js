@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import {Image, Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
-// import Card from './Cards';
+import {Image, Text, View,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Card, Title, Paragraph } from 'react-native-paper';
+import { Card, Paragraph } from 'react-native-paper';
 
 class HomeScreen extends Component{
     constructor(props){
@@ -24,25 +23,7 @@ class HomeScreen extends Component{
         latitude: ''
         };  
     }
-
-    ToggleFunction = () => {
-
-      this.setState(state => ({
-  
-        isVisible: !state.isVisible
-  
-      }));
-  
-    };
-    
-    Show =()=>{
-        this.props.navigation.navigate('UserProfile');
-      }
-    
-    handleGivenName = (text) => {
-        this.setState({ given_name: text })
-    }
-    
+          
     handleSearch = (value) => {
     this.setState({ given_name: value}, this.search)
    }
@@ -74,8 +55,6 @@ class HomeScreen extends Component{
 
       componentDidMount(){
         this.search();
-
-        this.ToggleFunction();
        } 
           
  render(){
@@ -87,31 +66,29 @@ class HomeScreen extends Component{
         )
     }
 return(
- <View style = {{ flex : 1}}> 
-<Text style = {styles.textStyle} >Search for a user </Text> 
-    <TextInput style = {styles.textInput} placeholder="user" onChangeText={this.handleSearch} value={this.state.given_name}/>
-    <FlatList
-    data={this.state.userInfo}
-    renderItem={({item})=>
-  <View >
-    <TouchableOpacity onPress={() =>this.storeUserId(item.user_id)} >
-    <Card style = {styles.card}>
-    <Image
-   style = {styles.container}
-     source = {require('../photo/profile.png')}
-   />
-
-    <Card.Content>
-    <Text style= {styles.chits}>{item.given_name + ' '+ item.family_name}</Text>
-    <Paragraph style= {styles.chits} >{item.email}</Paragraph>
-    </Card.Content>
-
-    </Card>
-    </TouchableOpacity>
-  </View>
-  }
-  keyExtractor={({id}, index) => id}
- />
+<View style = {{ flex : 1}}> 
+  <Text style = {styles.textStyle} >Search for a user </Text> 
+  <TextInput style = {styles.textInput} placeholder="user" onChangeText={this.handleSearch} value={this.state.given_name}/>
+  <FlatList
+      data={this.state.userInfo}
+      renderItem={({item})=>
+    <View>
+      <TouchableOpacity onPress={() =>this.storeUserId(item.user_id)} >
+        <Card style = {styles.card}>
+          <Image
+            style = {styles.container}
+            source = {require('../photo/profile.png')}
+          />
+          <Card.Content>
+            <Text style= {styles.chits}>{item.given_name + ' '+ item.family_name}</Text>
+            <Paragraph style= {styles.chits} >{item.email}</Paragraph>
+          </Card.Content>
+        </Card>
+      </TouchableOpacity>
+    </View>
+      }
+      keyExtractor={({id}, index) => id}
+  />
  </View>
  );
  }
@@ -121,58 +98,46 @@ export default HomeScreen;
 const styles = StyleSheet.create({
 
   textStyle: {
-    fontSize : 30,
-    alignSelf:'center',
-    color : '#007aff',
-    fontWeight : '600',
-    paddingTop : 10,
-    paddingBottom : 10 
+  fontSize : 30,
+  alignSelf:'center',
+  color : '#007aff',
+  fontWeight : '600',
+  paddingTop : 10,
+  paddingBottom : 10 
   },
-    chits: {
-    fontSize : 18,
-    textAlign : 'center',
-    color: 'black',
-    textShadowColor: 'gray',
-    fontFamily: 'sans-serif',
-    textShadowRadius: 19,
-    },
+  chits: {
+  fontSize : 18,
+  textAlign : 'center',
+  color: 'black',
+  textShadowColor: 'gray',
+  fontFamily: 'sans-serif',
+  textShadowRadius: 19,
+  },
 
-    title: {
-    color: 'green',
-    fontSize: 50,
-    fontWeight: 'bold'
-    },
-
-    input: {
-        margin: 10,
-        height: 40,
-        borderBottomWidth: 1,
-        borderBottomColor: 'gray',
-      },
-
-      textInput: {
-        borderRadius : 25,
-        borderWidth: 2,
-        borderColor: '#007aff',
-        marginLeft : 20,
-        marginRight : 20,
-        padding : 30,
-        marginTop : 20,
-        fontSize : 20
-        },
-
-     
-        container: {
-          flex : 1,
-          justifyContent : 'flex-start',
-          width : 60,
-          height : 63,
-          position : 'absolute',
-          left : 20
-          },
-        card: {
-          margin : 5
-        },
+  title: {
+  color: 'green',
+  fontSize: 50,
+  fontWeight: 'bold'
+  },
+  textInput: {
+  borderRadius : 25,
+  borderWidth: 2,
+  borderColor: '#007aff',
+  marginLeft : 20,
+  marginRight : 20,
+  padding : 30,
+  marginTop : 20,
+  fontSize : 20
+  },   
+  container: {
+  flex : 1,
+  justifyContent : 'flex-start',
+  width : 60,
+  height : 63,
+  position : 'absolute',
+  left : 20
+ },
+  card: {
+  margin : 5
+  },
 });
-
-// style={{flexDirection: 'row',flex:1,justifyContent:'space-evenly', alignItems : 'center' }}

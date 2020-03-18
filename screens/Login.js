@@ -1,8 +1,6 @@
 import * as React from 'react';
-import {TouchableOpacity,StyleSheet, ActivityIndicator,StatusBar,Text, View,Button,TextInput,Alert,KeyboardAvoidingView } from 'react-native';
+import {TouchableOpacity,StyleSheet,Text, View,TextInput,Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import {createSwitchNavigator } from 'react-navigation';
-import Newsfeed from './Newsfeed'
 
 export default class ChittrApp extends React.Component {
 
@@ -25,24 +23,21 @@ export default class ChittrApp extends React.Component {
     handleLoginPass = (text) => {
         this.setState({ loginPass: text })
       }
-Show =()=>{
-    this.props.navigation.navigate('Home');
-}
 
-storeToken = async (token) => {
-  try {
-    await AsyncStorage.setItem('token', token)
-    console.log("store token " + token);
-  } catch (e) {
+  storeToken = async (token) => {
+    try {
+      await AsyncStorage.setItem('token', token)
+      console.log("store token " + token);
+    } catch (e) {
+    }
   }
-}
 
-storeId = async (user_id) => {
-  try {
-    await AsyncStorage.setItem('user_id', JSON.stringify(user_id))
-  } catch (e) {
+  storeId = async (user_id) => {
+    try {
+      await AsyncStorage.setItem('user_id', JSON.stringify(user_id))
+    } catch (e) {
+    }
   }
-}
   
     login(){
       var token = '';
@@ -53,10 +48,10 @@ storeId = async (user_id) => {
           'X-Authorization': token
         },     
         body: JSON.stringify({  
-          //  email: 'khaled@gmail.com',
-          //  password: 'khaled',
-          email: this.state.loginEmail,
-          password: this.state.loginPass,
+           email: 'khaled@gmail.com',
+           password: 'khaled',
+          // email: this.state.loginEmail,
+          // password: this.state.loginPass,
        })
     })
 
