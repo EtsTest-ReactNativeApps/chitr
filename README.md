@@ -10,7 +10,10 @@ The logged users have even more things to do include uploading a profile photo o
 ## Visuals
 These are screenshots of the application and how it looks like include : The start screen - recent chits - user information - logged user profile - post a chit screen - search for a user
 
-<img src = "images/start.PNG" width = "200"><img src = "images/signup.PNG" width = "200"><img src = "images/Recent.PNG" width = "200"> <img src = "images/userinfo.PNG" width = "200"><img src = "images/MyProfile.PNG" width = "200"><img src = "images/post.PNG" width = "200"><img src = "images/search.PNG" width = "200">
+<img src = "images/start.PNG" width = "200"><img src = "images/signup.PNG" width = "200"><img src = "images/Recent.PNG" width = "200"> <img src = "images/userinfo.PNG" width = "200"><img src = "images/MyProfile.PNG" width = "200"><img src = "images/post.PNG" width = "200"><img src = "images/search.PNG" 
+width = "200"> <img src="screenRecording/screenrecord.gif"  width="300" height="500">
+
+
 
 ## Installation
 
@@ -38,4 +41,4 @@ I am planning on improving the responsiveness of the map and make it quicker in 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change in the application. Please feel free to email me in regards any contribution you would like to add using my email address above in support section. Follow this [link](https://github.com/YamenEdel/chitr) to download the repository on GitHub. 
 
-<img src="screenRecording/screenrecord.gif"  width="300" height="600">
+
