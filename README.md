@@ -37,3 +37,5 @@ I am planning on improving the responsiveness of the map and make it quicker in 
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change in the application. Please feel free to email me in regards any contribution you would like to add using my email address above in support section. Follow this [link](https://github.com/YamenEdel/chitr) to download the repository on GitHub. 
+
+<img src="screenRecording/screenrecord.gif">
