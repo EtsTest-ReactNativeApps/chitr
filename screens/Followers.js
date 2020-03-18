@@ -97,7 +97,7 @@ return(
      source = {require('../photo/profile.png')}
    />
    <Card.Content>
-<Text style= {styles.chits}>{item.given_name +' '+ 'timestamp'+ item.family_name}</Text>
+<Text style= {styles.chits}>{item.given_name + ' '+ item.family_name}</Text>
   <Paragraph style = {styles.chits}>{item.email}</Paragraph>  
     </Card.Content>    
   </Card>

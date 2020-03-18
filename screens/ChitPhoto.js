@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {Image,FlatList,TouchableOpacity,StyleSheet, ActivityIndicator,StatusBar,Text, View,Button,TextInput,Alert,KeyboardAvoidingView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import { Card, Title, Paragraph } from 'react-native-paper';
+
 export default class ChitPhoto extends React.Component {
 
 
@@ -20,8 +22,7 @@ export default class ChitPhoto extends React.Component {
         user_id:''  
         };  
     }
-         
-        
+
       getData = async () => {
         try {
           const value = await AsyncStorage.getItem('UserID')
@@ -40,25 +41,25 @@ export default class ChitPhoto extends React.Component {
         }
     }
 
-
     componentDidMount(){
         this.getData();   
-       } 
+    }
+
     
-       
  render(){
    
  return (
      
 <View style = {{ flex : 1,justifyContent:'flex-start'}}>   
 <Text style = {styles.textStyle} >User Chits' Photo</Text>
-
+<FlatList>
+<Card style = {styles.card}>
 <Image 
-
   style={{width: '100%', height: '100%'}}        
   source={{uri : this.state.src}}
-
   />
+    </Card>
+    </FlatList>
 </View>
   );
  }
