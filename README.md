@@ -11,7 +11,7 @@ The logged users have even more things to do include uploading a profile photo o
 These are screenshots of the application and how it looks like include : The start screen - recent chits - user information - logged user profile - post a chit screen - search for a user
 
 <img src = "images/start.PNG" width = "200"><img src = "images/signup.PNG" width = "200"><img src = "images/Recent.PNG" width = "200"> <img src = "images/userinfo.PNG" width = "200"><img src = "images/MyProfile.PNG" width = "200"><img src = "images/post.PNG" width = "200"><img src = "images/search.PNG" 
-width = "200"> <img src="screenRecording/screenrecord.gif"  width="300" height="500">
+width = "200"> <img src="screenRecording/screenrecord.gif"  width="250" height="500">
 
 
 
