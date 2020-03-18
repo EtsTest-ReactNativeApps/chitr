@@ -139,7 +139,7 @@ class HomeScreen extends Component{
 return(
  <View style = {{ flex : 1}}> 
     <Text style = {styles.textStyle} >What's on your mind </Text>
-    <TextInput style = {styles.textInput} placeholder="Post" onChangeText={this.handlePost} value={this.state.chit_content} maxLength={141}/>
+    <TextInput style = {styles.textInput} placeholder="Type chit .." onChangeText={this.handlePost} value={this.state.chit_content} maxLength={141}/>
     <TouchableOpacity title="Post" style = {styles.buttonStyle}
     onPress={() => this.postChit()}>
     <Text style={styles.textStyle}>

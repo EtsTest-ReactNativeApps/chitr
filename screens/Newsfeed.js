@@ -179,6 +179,7 @@ class NewsFeed extends Component{
  return(
 <View style = {{ flex : 1, backgroundColor : '#f3f3f3'}}> 
 
+ 
 <Text style= {styles.textStyle}>Followed users chits</Text>
     <FlatList      
     
@@ -194,9 +195,11 @@ class NewsFeed extends Component{
     
   <View>
     
+    
 <TouchableOpacity onPress={() =>this.toUserInfo(item.user.user_id)} >
   
 <Card style = {styles.card}>
+
 <Image
    style = {styles.container}
      source = {require('../photo/profile.png')}
@@ -210,17 +213,18 @@ class NewsFeed extends Component{
 </Card>
 
 </TouchableOpacity>
-
   </View>
     
   }
   keyExtractor={({id}, index) => id}
   />
+  
     <ActionButton  buttonColor="rgba(231,76,60,1)" style = {styles.actionButton} onPress={() => this.toPostChit()} >
   
     </ActionButton>
-  
+    
   </View>
+  
     
  );
  }

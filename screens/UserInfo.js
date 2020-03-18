@@ -90,7 +90,7 @@ class UserInfo extends Component{
       console.log("response"+response)
   
       if(response.status === 200){
-      Alert.alert("You're following the user now");
+      Alert.alert("You're following this user now");
       }
       else if (response.status === 404){
       console.log('Not found user')
@@ -205,7 +205,9 @@ class UserInfo extends Component{
       };
 
       ToggleFunction2 = (user_id,loggeduserID) => {
-        if (user_id == loggeduserID){
+        console.log("test token" + this.state.token)
+
+        if (user_id == loggeduserID || this.state.token ===null){
           this.setState(state=>({
             isVisible2: !state.isVisible2,
             }));    
