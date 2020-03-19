@@ -48,10 +48,10 @@ export default class ChittrApp extends React.Component {
           'X-Authorization': token
         },     
         body: JSON.stringify({  
-           email: 'yamenedel@gmail.com',
-           password: 'yamen',
-          // email: this.state.loginEmail,
-          // password: this.state.loginPass,
+          //  email: 'yamenedel@gmail.com',
+          //  password: 'yamen',
+          email: this.state.loginEmail,
+          password: this.state.loginPass,
        })
     })
 
