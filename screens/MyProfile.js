@@ -193,27 +193,26 @@ return(
         </TouchableOpacity> 
 
         <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.toUpdatePhoto()}>
+            onPress={() =>this.toChitPhoto(this.state.user_id)}>
             <Text style={styles.textStyle}>
-            Update profile Photo
+            View chit photo
             </Text>
         </TouchableOpacity> 
-        
+
+        <TouchableOpacity  style = {styles.buttonStyle}
+            onPress={() =>this.toUpdatePhoto()}>
+            <Text style={styles.textStyle}>
+            Upload profile Photo
+            </Text>
+        </TouchableOpacity> 
+             
         <TouchableOpacity  style = {styles.buttonStyle}
             onPress={() =>this.toUplaodChitPic()}>
             <Text style={styles.textStyle}>
             Upload chit photo
             </Text>
         </TouchableOpacity> 
-
-
-        <TouchableOpacity  style = {styles.buttonStyle}
-            onPress={() =>this.toChitPhoto(this.state.user_id)}>
-            <Text style={styles.textStyle}>
-            Get chit photo
-            </Text>
-        </TouchableOpacity> 
-
+        
         <TouchableOpacity  style = {styles.buttonStyle}
             onPress={() =>this.logout()}>
             <Text style={styles.textStyle}>

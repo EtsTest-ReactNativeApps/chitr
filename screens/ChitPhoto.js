@@ -16,6 +16,16 @@ export default class ChitPhoto extends React.Component {
         };  
     }
 
+    // getChits(value){
+    //     return fetch(`http://10.0.2.2:3333/api/v0.0.5/chits/${JSON.parse(value)}/photo`)
+    //     .then((response) => {
+    //      console.log("response" + response.status)
+    //     })
+    //     .catch((error) =>{
+    //     console.log(error);
+    //     });
+    // }
+
       getData = async () => {
         try {
           const value = await AsyncStorage.getItem('UserID')
@@ -26,6 +36,7 @@ export default class ChitPhoto extends React.Component {
                 src : `http://10.0.2.2:3333/api/v0.0.5/chits/${JSON.parse(value)}/photo`
               });
           }
+        //   this.getChits(value);
           console.log("user id " + this.state.user_id)
           console.log("source " + this.state.src)
 
@@ -44,15 +55,11 @@ export default class ChitPhoto extends React.Component {
  return (
      
 <View style = {{ flex : 1,justifyContent:'flex-start'}}>   
-<Text style = {styles.textStyle} >User Chits' Photo</Text>
-<FlatList>
-<Card style = {styles.card}>
-<Image 
-  style={{width: '100%', height: '100%'}}        
-  source={{uri : this.state.src}}
-  />
-    </Card>
-    </FlatList>
+    <Text style = {styles.textStyle} >User Chits' Photo</Text>
+    <Image
+        style={{width: '100%', height: '100%'}}
+        source={{uri: this.state.src + '?' + new Date()}}
+    />     
 </View>
   );
  }
