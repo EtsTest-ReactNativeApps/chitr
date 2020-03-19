@@ -54,10 +54,8 @@ export default class ChittrApp extends React.Component {
           'X-Authorization': token // store the generated token after validating the login
         },     
         body: JSON.stringify({  
-           email: 'yamenedel@gmail.com',
-           password: 'yamen',
-          // email: this.state.loginEmail,
-          // password: this.state.loginPass,
+          email: this.state.loginEmail,
+          password: this.state.loginPass,
        })
     })
 
