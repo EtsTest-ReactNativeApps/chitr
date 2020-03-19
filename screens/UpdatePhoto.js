@@ -4,14 +4,18 @@ import { RNCamera } from 'react-native-camera';
 import AsyncStorage from '@react-native-community/async-storage';
 
 class UpdatePhoto extends Component {
- constructor(props){
- super(props);
- this.state = {
-    token : '',
-    };  
- }
+  //This constructor is used to create and initialise the objects below     
+  constructor(props){
+  //super() is used to call the parent constructor, here the props is passed to the parent constructor to call React 
+  super(props);
+  //This state defines the data type of the objects below
+  this.state = {
+      token : '',
+      };  
+  }
 
- getToken = async () => {
+  //This async function gets the token stored in the local storage to attach it in the API request header
+  getToken = async () => {
     try {
       const value = await AsyncStorage.getItem('token')
       if(value !== null) {
@@ -24,12 +28,13 @@ class UpdatePhoto extends Component {
       // error reading value
     }
 }
+  //This method is called after all the elements of the page are rendered, which renders the function getToken() to get the token
+  componentDidMount(){
+    this.getToken();
+  } 
 
-componentDidMount(){
-  this.getToken();
-} 
 
-
+//This async function sends an API request to the server for the user to take a profile picture, attaching the token within the header
 takePic = async()=>{
   console.log("start");
 
@@ -47,13 +52,13 @@ takePic = async()=>{
             method : 'POST',
             headers : {
                 "Content-Type" : "image/jpeg",
-                "X-Authorization" : this.state.token
+                "X-Authorization" : this.state.token // attach the logged user's token into the header for this request to be valid
             },
             body : data
         })
         .then((response) =>{
           console.log("response status : "+response.status)
-          if (response.status === 201){
+          if (response.status === 201){ // pop up confirmation window when a picture is taken successfully and navigate the user back to their profile
             Alert.alert("Picture added !")
             this.props.navigation.navigate('MyProfile');
           }
@@ -79,7 +84,7 @@ takePic = async()=>{
       onPress={this.takePicture.bind(this)}
       style={styles.capture}
       >
-      <Text style={{ fontSize: 16 }}>
+      <Text style={styles.textStyle}>
         CAPTURE
       </Text>
     </TouchableOpacity>
@@ -101,6 +106,13 @@ const styles = StyleSheet.create({
  container: { flex: 1, flexDirection: 'column' },
  preview: { flex: 1, justifyContent: 'flex-end', alignItems: 'center' },
  capture: { flex: 0, borderRadius: 5, padding: 15, paddingHorizontal: 20,
- alignSelf: 'center', margin: 20, }
+ alignSelf: 'center', margin: 20, },
+ textStyle: {
+  fontSize : 22,
+  alignSelf:'center',
+  color : '#007aff',
+  fontWeight : '600',
+
+},
 });
 export default UpdatePhoto

@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import {Text, View,StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import MapView,{PROVIDER_GOOGLE,Marker} from 'react-native-maps';
+import MapView,{PROVIDER_GOOGLE} from 'react-native-maps';
 
 
 class Geolocation extends Component{
+    //This constructor is used to create and initialise the objects below 
     constructor(props){
+        //super() is used to call the parent constructor, here the props is passed to the parent constructor to call React 
         super(props);
+        //This state defines the data type of the objects below
         this.state = {
         locationPermission : false,
         timestamp: '',
@@ -15,10 +18,7 @@ class Geolocation extends Component{
         };  
     }
     
-    handlePost = (text) => {
-        this.setState({ chit_content: text})
-       }
-
+    //This async function returns a promise which is the location that is stored in a local storage, it needs to be retrieved to get the selected user id using the keyword await, which makes JavaScript wait until it gets the location
     getData = async () => {
         try {
           const value = await AsyncStorage.getItem('location')
@@ -35,10 +35,7 @@ class Geolocation extends Component{
         }
     }
 
-  toNewsfeed =()=>{
-    this.props.navigation.navigate('Newsfeed');
-  }
- 
+      //This method is called after all the elements of the page are rendered, which renders the function getData() to get the selected user id instantly
       componentDidMount(){
           this.getData();
        } 

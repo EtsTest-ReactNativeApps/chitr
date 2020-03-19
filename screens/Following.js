@@ -1,37 +1,23 @@
 import React, { Component } from 'react';
-import { Image,TouchableOpacity,Text, View,Button,TextInput,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
+import { Image,TouchableOpacity,Text, View,StyleSheet,ActivityIndicator,FlatList } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-// import Card from './Cards';
-import { Card, Title, Paragraph } from 'react-native-paper';
+import { Card, Paragraph } from 'react-native-paper';
 
 class Following extends Component{
+    //This constructor is used to create and initialise the objects below 
     constructor(props){
+        //super() is used to call the parent constructor, here the props is passed to the parent constructor to call React 
         super(props);
+        //This state defines the data type of the objects below
         this.state = {
         user_id: '',
         given_name: '',
         family_name: '',
-        text : '',
         email: '',
-        password: '',
-        loginEmail:'',
-        loginPass:'',
-        chit_id: '',
-        chit_content:'',
-        timestamp: '',
-        longitude: '',
-        latitude: ''
         };  
     }
     
-    handleGivenName = (text) => {
-        this.setState({ given_name: text })
-    }
-
-    handleSearch = (text) => {
-        this.setState({ given_name: text })
-    }
-    
+    //This async function returns a promise which is the user id that is stored in a local storage, it needs to be retrieved to get the selected user id using the keyword await, which makes JavaScript wait until it gets the user id
     getData = async () => {
       try {
         const value = await AsyncStorage.getItem('UserID')
@@ -41,30 +27,32 @@ class Following extends Component{
               user_id: value
             });
         }
+        //call following() function and pass in the fetched user id to show the selected user's following
         this.following(this.state.user_id);
       } catch(e) {
         // error reading value
       }
   }
 
+  //This async function is used to store the selected user id form the following list in a local storage
   storeUserId= async (user_id) => {
     try {
       console.log('hey')
       await AsyncStorage.setItem('userid', JSON.stringify(user_id))
       console.log("user id => " + user_id);
-      this.props.navigation.replace('UserInfo'); // when clicking on any following user, the next page woud be the current user becasue the page wasn't closed . Applied replace to close it making sure to load up the new opened page without caching it 
+      this.props.navigation.replace('UserInfo'); // I have used replace to navigate to the user info, otherwise the current page would be displayed again becasue it wasn't totally closed
     } catch (e) {
     }
   }
 
-  
+      //This function sends an API request to the server in order to get a user's following users 
       following(user_id){
         return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${JSON.parse(user_id)}/following`)
         .then((response) => response.json())
         .then((responseJson) => {
         this.setState({
         isLoading: false,
-        userInfo: responseJson,
+        userInfo: responseJson, // store the incoming data from server in this object and retreive below within the render
         });
         })
         .catch((error) =>{
@@ -72,6 +60,7 @@ class Following extends Component{
         });
       }
 
+      //This method is called after all the elements of the page are rendered, which renders the function getData() to get the selected user id instantly
       componentDidMount(){
         this.getData();
        } 

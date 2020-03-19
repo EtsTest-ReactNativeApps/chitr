@@ -3,15 +3,17 @@ import { TouchableOpacity,Alert,Text, View,StyleSheet,ActivityIndicator,FlatList
 import AsyncStorage from '@react-native-community/async-storage';
 import { Card, Paragraph } from 'react-native-paper';
 
-class UserInfo extends Component{
+class MyProfile extends Component{
+    //This constructor is used to create and initialise the objects below 
     constructor(props){
+        //super() is used to call the parent constructor, here the props is passed to the parent constructor to call React 
         super(props);
+        //This state defines the data type of the objects below
         this.state = {
         token : '',
         user_id : '',
         given_name: '',
         family_name: '',
-        text : '',
         email: '',      
         chit_content:'',
         timestamp: '',
@@ -21,10 +23,10 @@ class UserInfo extends Component{
         };  
     }
 
+    //This function sends an API request to the server requesting the user info using the following API url
     getUserInfo(user_id){
       console.log("start")
       console.log(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}`)
-      const user_ID = '';
         return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}`)
 
         .then((response) => response.json())
@@ -33,8 +35,7 @@ class UserInfo extends Component{
         this.setState({
           
         isLoading: false,
-        UserInfo: responseJson,
-        user_ID : this.state.UserInfo.user_id,
+        UserInfo: responseJson, // store the incoming data from server in this object and retreive below within the render
         });
         })
         
@@ -43,6 +44,7 @@ class UserInfo extends Component{
         });
       }
   
+    //This async function returns a promise which is the user id that is stored in a local storage, it needs to be retrieved to get the selected user id using the keyword await, which makes JavaScript wait until it gets the user id
     getData = async () => {
         try {
           const value = await AsyncStorage.getItem('user_id')
@@ -51,13 +53,14 @@ class UserInfo extends Component{
             this.setState({
                 user_id: value
               });
-              this.getUserInfo(value);   
+              this.getUserInfo(value); //trigger the getUserInfo() function which takes the logged user id as a parameter to get the logged user info 
           }
         } catch(e) {
           // error reading value
         }
     }
 
+    //get the token stored in the local storage in order to use it when a user navigates to MyProfile page
     getToken = async () => {
       try {
         const value = await AsyncStorage.getItem('token')
@@ -72,63 +75,67 @@ class UserInfo extends Component{
       }
   }
 
-  toFollowing= async (user_id) => {
-    try {
-      await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
-      console.log("user id => " + user_id);
-      //this.props.navigation.dispach();
-      this.props.navigation.navigate('Following');
-    } catch (e) {
-    }
+    //This async function is used to store the selected user id in a local storage in order to retrieve this user's following users
+    toFollowing= async (user_id) => {
+      try {
+        await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
+        console.log("user id => " + user_id);
+        this.props.navigation.navigate('Following'); // navigate to the following users of the selected user once the following component is clicked
+      } catch (e) {
+      }
   }
 
+
+  //This async function is used to store the selected user id in a local storage in order to retrieve this user's followers users
   toFollowers= async (user_id) => {
     try {
       await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
       console.log("user id => " + user_id);
-      //this.props.navigation.dispach();
-      this.props.navigation.navigate('Followers');
+      this.props.navigation.navigate('Followers'); // navigate to the followers' users of the selected user once the follower component is clicked
     } catch (e) {
     }
   }
 
+  //This async function is used to store the selected user id in a local storage in order to retrieve this user's info
   toUpdate= async (user_id) => {
     try {
       await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
       console.log("user id => " + user_id);
-      //this.props.navigation.dispach();
-      this.props.navigation.navigate('Update');
+      this.props.navigation.navigate('Update'); //navigate to the update component to pull up  the selected user info
     } catch (e) {
     }
   }
 
+  //This async function is used to store the selected user id in a local storage in order to retrieve this user's profile photo
   toUserPhoto= async (user_id) => {
     try {
       await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
       console.log("user id => " + user_id);
-      this.props.navigation.navigate('UserPhoto');
+      this.props.navigation.navigate('UserPhoto');//navigate to the user photo component to pull up the selected user photo
     } catch (e) {
     }
   }
 
+  //This async function is used to store the selected user id in a local storage in order to retrieve this user's chit photo
   toChitPhoto= async (user_id) => {
     try {
       await AsyncStorage.setItem('UserID', JSON.stringify(user_id))
       console.log("user id => " + user_id);
-      this.props.navigation.navigate('ViewChitPhoto');
+      this.props.navigation.navigate('ViewChitPhoto'); //navigate to the user photo component to pull up the selected user's chit photo
     } catch (e) {
     }
   }
 
-  
 
-  toUplaodChitPic= async () => {
+  //This function navigates the user to the upload chit photo once clicked on the assosicated component
+  toUplaodChitPic= () => {
     try {
-      this.props.navigation.navigate('ChitPhoto');
+      this.props.navigation.navigate('UploadChitPhoto');
     } catch (e) {
     }
   }
 
+  //This function navigates the user to the upload profile photo once clicked on the assosicated component
   toUpdatePhoto= async () => {
     try {
       this.props.navigation.navigate('UpdatePhoto');
@@ -136,20 +143,23 @@ class UserInfo extends Component{
     }
   }
 
+  //This function handles the logout by clearing the local storage from token and navigate to Start screen
   logout = async  () => {
     await AsyncStorage.clear();
    this.props.navigation.navigate('Start');
     }
 
+    //This function stores the user's post location in the local storage to retrieve it later somewhere else, and navigate to GeoLocation page to pull the map
     toGeoLocation =async(location)=>{
       await AsyncStorage.setItem('location', (location).toString());
       this.props.navigation.navigate('Geolocation');
     }
 
+      //This method is called after all the elements of the page are rendered, which renders the function getData() to get the user id and getToken to retrieve token
       componentDidMount(){
         this.getData();
         this.getToken();
-       } 
+      } 
 
  render(){
     if(this.state.isLoading){
@@ -241,7 +251,7 @@ return(
  }
 }
 
-  export default UserInfo;
+  export default MyProfile;
 
 const styles = StyleSheet.create({
 

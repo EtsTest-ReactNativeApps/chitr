@@ -4,12 +4,14 @@ import AsyncStorage from '@react-native-community/async-storage';
 class StartPage extends Component {
 
 
-        logout = async  () => {
-            await AsyncStorage.clear();
+        //Clear any data stored in local storage completley when the user is on this screen
+        ClearLocalSt = async  () => {
+        await AsyncStorage.clear();
        }
 
+        //This method is called after all the elements of the page are rendered, which renders the function ClearLocalSt().
         componentDidMount(){
-            this.logout();
+        this.ClearLocalSt();
         }
         
  render(){

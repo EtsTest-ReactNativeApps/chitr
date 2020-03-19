@@ -10,8 +10,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 class GuestPage extends Component{
+    //This constructor is used to create and initialise the objects below 
     constructor(props){
+        //super() is used to call the parent constructor, here the props is passed to the parent constructor to call React 
         super(props);
+        //This state defines the data type of the objects below
         this.state = {
         refreshing: false,
         setRefreshing : false,
@@ -20,29 +23,27 @@ class GuestPage extends Component{
         family_name: '',    
         chit_id: '',
         chit_content:'',
-        chitsContent:'',
+        DatafromServer:'',
         };  
     }
     
-    _onRefresh = () => { 
-      this.getChits();
+    //This async function is used to store the selected user id form the following list in a local storage
+    storeUserId= async (user_id) => {
+      try {
+        await AsyncStorage.setItem('userid', JSON.stringify(user_id))
+        console.log("user id => " + user_id);
+        this.props.navigation.navigate('UserInfo'); // navigate to the user info page once storeUserId is triggered to pull the selected user's details
+      } catch (e) {
+      }
     }
-  
-storeUserId= async (user_id) => {
-  try {
-    await AsyncStorage.setItem('userid', JSON.stringify(user_id))
-    console.log("user id => " + user_id);
-    this.props.navigation.navigate('UserInfo');
-  } catch (e) {
-  }
-}
+    //This fucntion sends an API request to the server to fetch chits
     getChits(){
         return fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
         .then((response) => response.json())
         .then((responseData) => {
         this.setState({
         isLoading: false,
-        chitsContent: responseData,
+        DatafromServer: responseData, // store the incoming data from server in this object and retreive below within the render
         });
         })
         .catch((error) =>{
@@ -50,6 +51,7 @@ storeUserId= async (user_id) => {
         });
       }
 
+      //This method is called after all the elements of the page are rendered, which renders the function getChits() to get users' chits instantly
       componentDidMount(){
         this.getChits();
       } 
@@ -72,7 +74,7 @@ return(
           onRefresh={this._onRefresh}
         />
         }
-      data={this.state.chitsContent}
+      data={this.state.DatafromServer}
       renderItem={({item})=>
       <View>
         <TouchableOpacity onPress={() =>this.storeUserId(item.user.user_id)} >
@@ -97,6 +99,7 @@ return(
  }
 }
 
+//create a bottom tab navigator component with two screen to navigate to
 const TabNavigator = createBottomTabNavigator({
   RecentChits :{
     screen : GuestPage

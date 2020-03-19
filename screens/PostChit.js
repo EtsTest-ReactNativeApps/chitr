@@ -4,9 +4,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Geolocation from 'react-native-geolocation-service';
 import AsyncStorage from '@react-native-community/async-storage';
 
-class HomeScreen extends Component{
+class PostChit extends Component{
+      //This constructor is used to create and initialise the objects below     
     constructor(props){
+        //super() is used to call the parent constructor, here the props is passed to the parent constructor to call React 
         super(props);
+        //This state defines the data type of the objects below
         this.state = {
         token : '',
         locationPermission : false,
@@ -15,20 +18,19 @@ class HomeScreen extends Component{
         text : '',
         email: '',
         password: '',
-        loginEmail:'',
-        loginPass:'',
-        chit_id: '',
         chit_content:'',
         timestamp: '',
         longitude: '',
         latitude: ''
         };  
     }
-    
-    handlePost = (text) => {
-        this.setState({ chit_content: text})
-       }
 
+    //This function handles the post textnput and is called everytime the post is changed
+    handlePost = (text) => {
+      this.setState({ chit_content: text})
+    }
+
+    //This async function is used to store the fetched token in a local storage in order to attach in the API request's headers
     getData = async () => {
         try {
           const value = await AsyncStorage.getItem('token')
@@ -39,13 +41,13 @@ class HomeScreen extends Component{
               });
           }
         } catch(e) {
-          // error reading value
         }
     }
 
     
    
     
+    //gets the coordinates of the current lcoation such as longitude and altitude
    findCoordinates = () => {
     if(!this.state.locationPermission){
        this.state.locationPermission = requestLocationPermission();
@@ -66,7 +68,6 @@ class HomeScreen extends Component{
     console.log((position.coords.latitude));
     console.log((position.coords.longitude));
     console.log((position.timestamp));
-
   }
   );
      },
@@ -81,10 +82,13 @@ class HomeScreen extends Component{
      );
 }
 
+  //This function navigates the user to the Newsfeed page
   toNewsfeed =()=>{
     this.props.navigation.navigate('Newsfeed');
   }
-   postChit(){
+    //This function sends an API request to the server in order to post a chit   
+    postChit(){
+      //create an object and include the relevant data to be posted, this object is placed in the body of request
     let result = JSON.stringify({
         chit_content: this.state.chit_content,
         location: {
@@ -102,15 +106,15 @@ class HomeScreen extends Component{
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
-        'X-Authorization':this.state.token ,
+        'X-Authorization':this.state.token , // attach the logged user's token into the header for this request to be valid
       },
     body: result
 })
     .then((response) => {
     console.log("response"+response)
 
-    if(response.status === 201){
-    Alert.alert("Post added!");
+    if(response.status === 201){ // pop up confirmation message when a user is added
+    Alert.alert("Post added !!!!");
     this.toNewsfeed();
     }
     else if (response.status === 401){
@@ -123,6 +127,8 @@ class HomeScreen extends Component{
     console.error(error);
     });
 }
+
+      //This method is called after all the elements of the page are rendered, which renders the function getData() to get the user id
       componentDidMount(){
           this.getData();
        } 
@@ -157,6 +163,7 @@ return(
  }
 }
 
+//gets the permissions of requesting the current location
 async function requestLocationPermission(){
     try {
     const granted = await PermissionsAndroid.request(
@@ -181,7 +188,7 @@ async function requestLocationPermission(){
     console.warn(err);
     }
    }
-   export default HomeScreen;
+   export default PostChit;
 
 const styles = StyleSheet.create({
   title: {

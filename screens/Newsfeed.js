@@ -9,28 +9,19 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import ActionButton from 'react-native-circular-action-menu';
 
 class NewsFeed extends Component{
-
-    static navigationOptions = {
-        drawerLabel: 'NewsFeed',
-        header : null,
-      };
+    //This constructor is used to create and initialise the objects below     
     constructor(props){
-      
+        //super() is used to call the parent constructor, here the props is passed to the parent constructor to call React 
         super(props);
+        //This state defines the data type of the objects below
         this.state = {
-         refreshing: false,
-         setRefreshing : false,
+        refreshing: false,
+        setRefreshing : false,
         locationPermission : false,
         location : '',
         token :'',
         given_name: '',
         family_name: '',
-        text : '',
-        email: '',
-        password: '',
-        loginEmail:'',
-        loginPass:'',
-        chit_id: '',
         chit_content:'',
         timestamp: '',
         longitude: '',
@@ -39,27 +30,29 @@ class NewsFeed extends Component{
         }; 
     }
 
+    //This function is used to refresh data by pulling down the screen, chits will be refreshed once a user pulls down the screen
     _onRefresh = () => {
-     
       this.UsersChits();
     }
 
+    //This function sends an API request to the server fetching the searched user's info 
     search(){
-        console.log("name: " +this.state.given_name)
-        return fetch('http://10.0.2.2:3333/api/v0.0.5/search_user?q='+this.state.given_name)
-        .then((response) => response.json())
-        .then((responseJson) => {
-        console.log(responseJson)
-        this.setState({
-        isLoading: false,
-        userInfo: responseJson,
-        });
-        })
-        .catch((error) =>{
-        console.log(error);
-        });
+      console.log("name: " +this.state.given_name)
+      return fetch('http://10.0.2.2:3333/api/v0.0.5/search_user?q='+this.state.given_name)
+      .then((response) => response.json())
+      .then((responseJson) => {
+      console.log(responseJson)
+      this.setState({
+      isLoading: false,
+      userInfo: responseJson, // store the incoming data from server in this object and retreive below within the render
+      });
+      })
+      .catch((error) =>{
+      console.log(error);
+      });
     }
 
+    //This async function store the user id in a local storage and navigate to the user info once the associated component is clicked
     toUserInfo= async (user_id) => {
       try {
         await AsyncStorage.setItem('userid', JSON.stringify(user_id))
@@ -69,7 +62,7 @@ class NewsFeed extends Component{
       }
     }
 
-    
+    //This async function gets the token stored in the local storage to attach it in the API request header
     getData = async () => {
         try {
           const value = await AsyncStorage.getItem('token')
@@ -78,59 +71,20 @@ class NewsFeed extends Component{
                 token: value
               });
           }
-          this.UsersChits();
+          this.UsersChits(); // call this function to retrieve the followed user's with the logged user chits
         } catch(e) {
           // error reading value
         }
 
       }
 
-    postChit(){
-        return fetch("http://10.0.2.2:3333/api/v0.0.5/chits",
-        {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Authorization':this.state.token ,
-          }, 
-        body: JSON.stringify({
-        chit_content: this.state.chit_content,
-        longitude: this.state.longitude,
-        latitude: this.state.latitude,
-        timestamp : this.state.timestamp,
-        })
-        })
-        .then((response) => {
-        console.log("response"+response)
+      //This method is called after all the elements of the page are rendered, which renders the function getData() to get the user id
+      componentDidMount(){
+        this.getData();    
+      }
 
-        if(response.status === 200){
-        Alert.alert("Item Added!");
-        }
-        else{
-
-        console.log('no posts have been added') 
-        Alert.alert("This chit is not added");
-        }
-        })
-        
-        .catch((error) => {
-        console.error(error);
-        });
-    }
-     
-
-        componentDidMount(){
-            this.getData();
-            
-           }
-
-        Chits =  () => {
-           this.props.navigation.navigate('Chits');
-       }
-
-        
-
-        UsersChits(){
+     //This fucntion sends an API request to the server to fetch chits
+      UsersChits(){
         console.log("token test" + this.state.token)
         return fetch('http://10.0.2.2:3333/api/v0.0.5/chits',{
         method: "GET",
@@ -142,7 +96,7 @@ class NewsFeed extends Component{
           .then((responseData) => {
           this.setState({
           isLoading: false,
-          UserData: responseData,
+          UserData: responseData, //store the incoming data from server in this object and retreive below within the render
           });
           })
           .catch((error) =>{
@@ -150,6 +104,7 @@ class NewsFeed extends Component{
           });
         }
 
+      //navigate to PostChit screen once the associated component is clicked
       toPostChit =()=>{
         this.props.navigation.navigate('PostChit');
     }

@@ -3,8 +3,9 @@ import {TouchableOpacity,StyleSheet, ActivityIndicator,Text, View,TextInput,Aler
 import AsyncStorage from '@react-native-community/async-storage';
 export default class Update extends React.Component {
 
-
+    //This constructor is used to create and initialise the objects below     
     constructor(props){
+        //super() is used to call the parent constructor, here the props is passed to the parent constructor to call React 
         super(props);
         this.state = {
         token : '',
@@ -16,13 +17,14 @@ export default class Update extends React.Component {
         };  
 
     }
-         
+    //This function handles the given_name textnput and is called everytime the given_name is changed
     handleGivenName = (text) => {
       this.setState({
         given_name: text,
         UserInfo: { ...this.state.UserInfo, given_name: text}
       })
     }
+      //This function handles the family_name textnput and is called everytime the family_name is changed
       handleLastName = (text) => {
         this.setState({
           family_name: text,
@@ -30,12 +32,15 @@ export default class Update extends React.Component {
         })
       }
 
+    //This function handles the email textnput and is called everytime the email is changed
       handleEmail = (text) => {
         this.setState({
           email: text,
           UserInfo: { ...this.state.UserInfo, email: text}
         })
       }
+
+      //This function handles the password textnput and is called everytime the password is changed
       handlePass = (text) => {
         this.setState({
           password: text,
@@ -44,7 +49,9 @@ export default class Update extends React.Component {
       }
 
    
+      //This function sends an API request to server in order to update the user's data
       updateAccount(){
+        //create an object and include the relevant data to be updated, this object is placed in the body of request
         let result = JSON.stringify({
             given_name: this.state.UserInfo.given_name,
             family_name: this.state.UserInfo.family_name,
@@ -69,12 +76,11 @@ export default class Update extends React.Component {
 
       console.log("response"+response)
       console.log("response status " + response.status)
-        if(response.status === 201){
+        if(response.status === 201){ // if the process was valid, pop up a confirmation window and navigate the user back to their profile
         Alert.alert("User info updated!");
         this.props.navigation.navigate('MyProfile');
         }
-        else if (response.status === 401){
-        console.log('Unauthtorised access!') 
+        else if (response.status === 401){ // if the process was invalid, pop up a confirmation window and navigate the user back to their profile
         Alert.alert("Unauthtorised access");
         }
         else if (response.status === 404){
@@ -87,13 +93,14 @@ export default class Update extends React.Component {
         });
       }
 
+      //sends an API request to the server to get the selected user's info in order to update them latley
       getUserInfo(user_id){
             return fetch(`http://10.0.2.2:3333/api/v0.0.5/user/${user_id}`)
           .then((response) => response.json())
           .then((responseJson) => {
           this.setState({
           isLoading: false,
-          UserInfo: responseJson,
+          UserInfo: responseJson,  // store the incoming data from server in this object and retreive below within the render
           });
           })
           .catch((error) =>{
@@ -102,6 +109,7 @@ export default class Update extends React.Component {
       }
 
 
+      //This async function gets the token stored in the local storage to attach it in the API request header
       getToken = async () => {
         try {
           const value = await AsyncStorage.getItem('token')
@@ -115,6 +123,7 @@ export default class Update extends React.Component {
         }
     }
 
+    //This async function retrieves the user id value from the local storage
     getData = async () => {
       try {
         const value = await AsyncStorage.getItem('user_id')
@@ -123,16 +132,18 @@ export default class Update extends React.Component {
           this.setState({
               user_id: value
             });
-            this.getUserInfo(value);   
+            this.getUserInfo(value);  // call this function once the user id value if retrieved to pull up the selected user info
         }
       } catch(e) {
         // error reading value
       }
   }
 
+    //navigate the user to their profile once the associated button is clicked
     Cancel = () => {
       this.props.navigation.navigate('MyProfile');
       }
+    //This method is called after all the elements of the page are rendered, which renders the function getData() to get the user id and getToken to get the token
     componentDidMount(){
     this.getData();
     this.getToken();

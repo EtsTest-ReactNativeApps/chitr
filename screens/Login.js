@@ -4,9 +4,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 export default class ChittrApp extends React.Component {
 
-
+    //This constructor is used to create and initialise the objects below 
     constructor(props){
+        //super() is used to call the parent constructor, here the props is passed to the parent constructor to call React 
         super(props);
+        //This state defines the data type of the objects below
         this.state = {
         user_id : '',
         token : '',
@@ -17,21 +19,24 @@ export default class ChittrApp extends React.Component {
         };
     } 
     
+    //This function handles the email textnput and is called everytime the email is changed
     handleLoginEmail = (text) => {
         this.setState({ loginEmail: text })
       }
+    //This function handles the password textnput and is called everytime the password is changed
     handleLoginPass = (text) => {
         this.setState({ loginPass: text })
       }
 
-  storeToken = async (token) => {
+    //This async function is used to store the fetched token in a local storage in order to retrieve it later on when needed
+    storeToken = async (token) => {
     try {
       await AsyncStorage.setItem('token', token)
       console.log("store token " + token);
     } catch (e) {
     }
   }
-
+  //This async function is used to store the fetched user_id in a local storage in order to retrieve it later on when needed
   storeId = async (user_id) => {
     try {
       await AsyncStorage.setItem('user_id', JSON.stringify(user_id))
@@ -39,24 +44,27 @@ export default class ChittrApp extends React.Component {
     }
   }
   
+  //This function sends an API request to the server requesting to validate the input data in order to log in
     login(){
       var token = '';
        fetch('http://10.0.2.2:3333/api/v0.0.5/login',{
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
-          'X-Authorization': token
+          'X-Authorization': token // store the generated token after validating the login
         },     
         body: JSON.stringify({  
-          //  email: 'yamenedel@gmail.com',
-          //  password: 'yamen',
-          email: this.state.loginEmail,
-          password: this.state.loginPass,
+           email: 'yamenedel@gmail.com',
+           password: 'yamen',
+          // email: this.state.loginEmail,
+          // password: this.state.loginPass,
        })
     })
 
       .then((response) => {
-        console.log("response status " +response.status)
+         if(response.status === 400){ // if the inserted data was invalid, the user will not get an access
+          Alert.alert("Invalid email/password")
+        }
 
       return response.json()
       
@@ -67,19 +75,10 @@ export default class ChittrApp extends React.Component {
           token: JsonToken,
           user_id : user
         });
-        if (response.status === 200){
+        if (response.status === 200){ // if the inserted data was valid, grant the user an access and navigate them to Newsfeed page
           this.storeId(this.state.user_id);
-          console.log (" Login  user id" + this.state.user_id)
-
           this.storeToken(this.state.token);
           this.props.navigation.navigate('Newsfeed');//navigate to a page
-          console.log ("YOU'RE iN")
-
-        }
- 
-        else if(response.status === 400){
-          Alert.alert("Invalid email/password supplied")
-          console.log ("Something wrong")
         }
     })
   })

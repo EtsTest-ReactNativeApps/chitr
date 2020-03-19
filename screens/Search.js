@@ -4,31 +4,27 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Card, Paragraph } from 'react-native-paper';
 
-class HomeScreen extends Component{
+class Search extends Component{
+    //This constructor is used to create and initialise the objects below     
     constructor(props){
+        //super() is used to call the parent constructor, here the props is passed to the parent constructor to call React 
         super(props);
+        //This state defines the data type of the objects below
         this.state = {
         isVisible : true,
         given_name: '',
         family_name: '',
-        text : '',
         email: '',
-        password: '',
-        loginEmail:'',
-        loginPass:'',
-        chit_id: '',
-        chit_content:'',
-        timestamp: '',
-        longitude: '',
-        latitude: ''
         };  
     }
-          
+        
+    //This function handles the search textnput and is called everytime the search text is changed
     handleSearch = (value) => {
     this.setState({ given_name: value}, this.search)
    }
     
 
+   //This async function store the user id in a local storage and navigate to the user info once the associated component is clicked
    storeUserId= async (user_id) => {
     try {
       console.log('hey')
@@ -39,13 +35,14 @@ class HomeScreen extends Component{
     }
   }
 
+    //This function sends an API request to the server fetching the searched user results
     search(){
         return fetch('http://10.0.2.2:3333/api/v0.0.5/search_user?q='+this.state.given_name)
         .then((response) => response.json())
         .then((responseJson) => {
         this.setState({
         isLoading: false,
-        userInfo: responseJson,
+        userInfo: responseJson,//store the incoming data from server in this object and retreive below within the render
         });
         })
         .catch((error) =>{
@@ -53,6 +50,7 @@ class HomeScreen extends Component{
         });
       }
 
+      //This method is called after all the elements of the page are rendered, which renders the function search() to trigger it
       componentDidMount(){
         this.search();
        } 
@@ -93,7 +91,7 @@ return(
  );
  }
 }
-export default HomeScreen;
+export default Search;
 
 const styles = StyleSheet.create({
 
