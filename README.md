@@ -26,6 +26,11 @@ The next step, open your terminal and navigate to the project directory. Then ru
 ```bash
 npm install
 ```
+Then to install this module :
+```bash
+npm install react-native-maps
+```
+
 Then run this command to open up the application :
 ```bash
 npx react-native run-android
