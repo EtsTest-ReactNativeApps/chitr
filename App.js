@@ -20,7 +20,7 @@ import 'react-native-gesture-handler';
 
 //create a stack navigator function to enable navigation between screens within the app. It takes 2 properties Screen and Navigator 
 const AppStackNav = createStackNavigator({
-  
+
   Start: {
     screen: Start
   },
@@ -28,7 +28,7 @@ const AppStackNav = createStackNavigator({
     screen: Update
   },
   UserInfo: {
-      screen: UserInfo
+    screen: UserInfo
   },
   Login: {
     screen: Login
@@ -41,11 +41,11 @@ const AppStackNav = createStackNavigator({
   },
   Newsfeed: {
     screen: Newsfeed,
-    navigationOptions:  {
-    title: 'Chittr',
-    headerLeft:()=> null
-  }
-    },
+    navigationOptions: {
+      title: 'Chittr',
+      headerLeft: () => null
+    }
+  },
   RecentChits: {
     screen: GuestPage
   },
@@ -68,15 +68,15 @@ const AppStackNav = createStackNavigator({
     screen: UpdatePhoto
   },
 
-  UploadChitPhoto : {
-    screen : UploadChitPhoto
+  UploadChitPhoto: {
+    screen: UploadChitPhoto
   },
-  ViewChitPhoto : {
-    screen : ViewChitPhoto
+  ViewChitPhoto: {
+    screen: ViewChitPhoto
   }
- });
+});
 
- //This function is responsible to link the top-level navigator to the app environment
- const AppContainer = createAppContainer(AppStackNav)
+//This function is responsible to link the top-level navigator to the app environment
+const AppContainer = createAppContainer(AppStackNav)
 
- export default AppContainer;
+export default AppContainer;
