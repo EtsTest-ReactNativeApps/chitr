@@ -28,7 +28,7 @@ Now you should add the following lines to the Manifests in order to allow access
 <uses-permission android:name="android.permission.SEND_SMS"/>
 ```
 
-Also add the following lines into Manifests within the <applciation>:
+Also add the following lines into Manifests within the applciation:
 ```bash
 <meta-data android:name="com.google.android.geo.API_KEY"
 android:value="YOUR API KEY"/>
