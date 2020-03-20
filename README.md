@@ -56,7 +56,7 @@ Then to install this module :
 ```bash
 npm install react-native-maps
 ```
-re-insert this command to enure all the modules are installed properly :
+Re-insert this command to enure all the modules are installed properly :
 ```bash
 npm install
 ```
