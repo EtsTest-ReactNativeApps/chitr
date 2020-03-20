@@ -21,6 +21,32 @@ I will list the required steps to run the applications but first you would need 
 
 Now open the Android studio and click on file then open from the top left android studio screen then navigator to the project folder and select android. "./TestProject/android". You will need to create a new AVD if you don't have one already. Click "Tools" > "AVD Manager" following the steps. Once it's created run the emulator by clicking the green triangle button on top.
 
+Now you should add the following lines to the Manifests in order to allow access to the internet, camera and location :
+```bash
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.SEND_SMS"/>
+```
+
+Also add the following lines into Manifests within the <applciation>:
+```bash
+<meta-data android:name="com.google.android.geo.API_KEY"
+android:value="YOUR API KEY"/>
+```
+Now click on the build.gradle(Module:app), onto the defaultConfig compare and add the missing ones from following lines:
+```bash
+defaultConfig {
+applicationId "com.chitr"
+minSdkVersion rootProject.ext.minSdkVersion
+targetSdkVersion rootProject.ext.targetSdkVersion
+missingDimensionStrategy 'react-native-camera', 'general'
+versionCode 1
+versionName "1.0"
+multiDexEnabled true
+}
+```
+Make sure now to Sync project with new changes from file on the top corner of android studio screen.
+
 The next step, open your terminal and navigate to the project directory. Then run this command to install all the modules and packages used within the project :
 
 ```bash
