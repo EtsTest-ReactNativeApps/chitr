@@ -16,19 +16,19 @@ export default class Signup extends React.Component {
     };
   }
 
-  //This function handles the given_name textnput and is called everytime the given_name is changed
+  //This function handles the given_name textnput and is called everytime the given_name text is changed
   handleGivenName = (text) => {
     this.setState({ given_name: text })
   }
-  //This function handles the family_name textnput and is called everytime the family_name is changed
+  //This function handles the family_name textnput and is called everytime the family_name text is changed
   handleLastName = (text) => {
     this.setState({ family_name: text })
   }
-  //This function handles the email textnput and is called everytime the email is changed
+  //This function handles the email textnput and is called everytime the email text is changed
   handleEmail = (text) => {
     this.setState({ email: text })
   }
-  //This function handles the password textnput and is called everytime the password is changed
+  //This function handles the password textnput and is called everytime the password text is changed
   handlePass = (text) => {
     this.setState({ password: text })
   }

@@ -33,11 +33,11 @@ class PostChit extends Component {
   //This async function is used to store the fetched token in a local storage in order to attach in the API request's headers
   getData = async () => {
     try {
-      const value = await AsyncStorage.getItem('token')
-      console.log("getdata" + value)
-      if (value !== null) {
+      const Value = await AsyncStorage.getItem('token')
+      console.log("getdata" + Value)
+      if (Value !== null) {
         this.setState({
-          token: value
+          token: Value
         });
       }
     } catch (e) {
@@ -89,7 +89,7 @@ class PostChit extends Component {
   //This function sends an API request to the server in order to post a chit   
   postChit() {
     //create an object and include the relevant data to be posted, this object is placed in the body of request
-    let result = JSON.stringify({
+    let result = JSON.stringify ({
       chit_content: this.state.chit_content,
       location: {
         longitude: this.state.longitude,

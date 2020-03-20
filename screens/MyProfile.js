@@ -22,7 +22,6 @@ class MyProfile extends Component {
       UserInfo: '',
     };
   }
-
   //This function sends an API request to the server requesting the user info using the following API url
   getUserInfo(user_id) {
     console.log("start")
@@ -44,7 +43,8 @@ class MyProfile extends Component {
       });
   }
 
-  //This async function returns a promise which is the user id that is stored in a local storage, it needs to be retrieved to get the selected user id using the keyword await, which makes JavaScript wait until it gets the user id
+  //This async function returns a promise which is the user id that is stored in a local storage,
+  //it needs to be retrieved to get the selected user id using the keyword await, which makes JavaScript wait until it gets the user id
   getData = async () => {
     try {
       const value = await AsyncStorage.getItem('user_id')
@@ -298,7 +298,3 @@ const styles = StyleSheet.create({
 
 
 });
-
-
-
-// style={{flexDirection: 'row',flex:1,justifyContent:'space-evenly', alignItems : 'center' }}

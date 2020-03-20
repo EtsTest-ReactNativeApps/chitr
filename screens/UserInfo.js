@@ -172,7 +172,7 @@ class UserInfo extends Component {
   ToggleFunction2 = (user_id, loggeduserID) => {
     console.log("test token" + this.state.token)
 
-    if (user_id == loggeduserID || this.state.token === null) {
+    if (user_id === loggeduserID || this.state.token === null) {
       this.setState(state => ({
         isVisible2: !state.isVisible2,
       }));
